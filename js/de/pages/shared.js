@@ -45,13 +45,7 @@ class SharedPageManager {
             });
         }
 
-        // Language toggle
-        const languageToggle = document.getElementById('languageToggle');
-        if (languageToggle) {
-            languageToggle.addEventListener('click', () => {
-                this.toggleLanguage();
-            });
-        }
+        // Language toggle removed - German only
     }
 
     setupThemeHandling() {
@@ -118,14 +112,7 @@ class SharedPageManager {
         }
     }
 
-    toggleLanguage() {
-        // This would integrate with the language manager
-        if (window.languageManager) {
-            const currentLang = window.languageManager.currentLanguage;
-            const newLang = currentLang === 'de' ? 'en' : 'de';
-            window.languageManager.setLanguage(newLang);
-        }
-    }
+    // toggleLanguage() removed - German only
 
     updateStats() {
         if (window.shipmentManager) {

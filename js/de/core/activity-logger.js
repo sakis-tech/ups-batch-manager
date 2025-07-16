@@ -109,12 +109,7 @@ class ActivityLogger {
             template: 'simple_action'
         });
         
-        this.activityTypes.set('language_changed', {
-            icon: 'fas fa-language',
-            color: 'info',
-            category: 'system',
-            template: 'language_action'
-        });
+        // language_changed activity type removed - German only
         
         this.activityTypes.set('theme_changed', {
             icon: 'fas fa-paint-brush',
@@ -423,15 +418,7 @@ class ActivityLogger {
      * @param {string} fromLang - Vorherige Sprache
      * @param {string} toLang - Neue Sprache
      */
-    logLanguageChanged(fromLang, toLang) {
-        return this.log('language_changed', {
-            description: this.getLocalizedText('activities.language_changed'),
-            metadata: {
-                fromLanguage: fromLang,
-                toLanguage: toLang
-            }
-        });
-    }
+    // logLanguageChanged() removed - German only
     
     /**
      * Aktivität für Theme-Wechsel

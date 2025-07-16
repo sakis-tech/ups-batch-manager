@@ -58,46 +58,12 @@ function initializeLanguageIntegration() {
         };
     }
     
-    // Keyboard-Shortcuts erweitern
-    if (window.keyboardShortcuts) {
-        // Registriere Sprachumschaltung
-        window.keyboardShortcuts.register('ctrl+shift+l', {
-            description: window.languageManager.t('shortcuts.actions.toggleLanguage') || 'Sprache umschalten',
-            category: window.languageManager.t('shortcuts.categories.display') || 'Darstellung',
-            action: () => {
-                window.languageManager.toggleLanguage();
-            }
-        });
-    }
+    // Language toggle shortcut removed - German only
     
-    // Language-Change Events
-    window.languageManager.onLanguageChange((newLang) => {
-        // Alle Systeme über Sprachänderung informieren
-        
-        // Toast-System
-        if (window.toastSystem) {
-            const message = newLang === 'de' ? 
-                'Sprache auf Deutsch geändert' : 
-                'Language changed to English';
-            window.toastSystem.showSuccess(message);
-        }
-        
-        // Page-Title aktualisieren
-        document.title = window.languageManager.t('app.title');
-        
-        // HTML lang-Attribut setzen
-        document.documentElement.lang = newLang;
-        
-        // Keyboard-Shortcuts aktualisieren
-        if (window.keyboardShortcuts) {
-            updateKeyboardShortcuts();
-        }
-        
-        // Existing systems benachrichtigen
-        window.dispatchEvent(new CustomEvent('languageChange', {
-            detail: { language: newLang }
-        }));
-    });
+    // Language-Change Events removed - German only
+    
+    // Set HTML lang attribute to German
+    document.documentElement.lang = 'de';
 }
 
 function updateKeyboardShortcuts() {

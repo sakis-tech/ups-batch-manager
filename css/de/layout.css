@@ -241,6 +241,7 @@
     display: grid;
     grid-template-columns: 1fr 300px;
     gap: var(--space-6);
+    padding: 20px;
 }
 
 .stats-grid {

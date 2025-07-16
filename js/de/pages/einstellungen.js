@@ -117,19 +117,8 @@ class EinstellungenPage {
         this.showSettingsSaved();
     }
 
-    handleLanguageChange(language) {
-        if (window.languageManager && typeof window.languageManager.setLanguage === 'function') {
-            window.languageManager.setLanguage(language);
-        }
-        
-        // Update language toggle button
-        const languageToggle = document.getElementById('languageToggle');
-        if (languageToggle) {
-            languageToggle.textContent = language === 'de' ? '🇩🇪 Deutsch' : '🇬🇧 English';
-        }
-        
-        this.showSettingsSaved();
-    }
+    // handleLanguageChange() removed - German only
+}
 
     updateStats() {
         if (window.sharedPageManager) {

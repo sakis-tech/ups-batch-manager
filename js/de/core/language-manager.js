@@ -65,7 +65,7 @@ class LanguageManager {
     async loadLanguages() {
         for (const lang of this.availableLanguages) {
             try {
-                const response = await fetch(`lang/${lang.code}.json`);
+                const response = await fetch(`../lang/${lang.code}.json`);
                 if (response.ok) {
                     this.translations[lang.code] = await response.json();
                 } else {
@@ -125,6 +125,9 @@ class LanguageManager {
         if (this.currentLanguage === languageCode) {
             return; // Bereits aktive Sprache
         }
+        
+        // Vorherige Sprache für Logging speichern
+        const previousLang = this.currentLanguage;
         
         // Sprache umschalten
         this.currentLanguage = languageCode;
@@ -207,7 +210,7 @@ class LanguageManager {
     interpolate(text, params) {
         if (typeof text !== 'string') return text;
         
-        return text.replace(/\\{\\{(.*?)\\}\\}/g, (match, key) => {
+        return text.replace(/\{\{(.*?)\}\}/g, (match, key) => {
             return params[key] || match;
         });
     }
@@ -268,4 +271,208 @@ class LanguageManager {
      * Navigation aktualisieren
      */
     updateNavigation() {
-        const navItems = {\n            'dashboard': 'nav.dashboard',\n            'sendungen': 'nav.sendungen',\n            'import': 'nav.import',\n            'export': 'nav.export',\n            'einstellungen': 'nav.einstellungen',\n            'hilfe': 'nav.hilfe'\n        };\n        \n        Object.entries(navItems).forEach(([section, key]) => {\n            const element = document.querySelector(`[data-section=\"${section}\"]`);\n            if (element) {\n                element.textContent = this.t(key);\n            }\n        });\n    }\n    \n    /**\n     * Footer aktualisieren\n     */\n    updateFooter() {\n        const footerElements = {\n            '.footer-text': 'footer.version',\n            '.footer-version': 'footer.version',\n            '#appVersion': 'app.version'\n        };\n        \n        Object.entries(footerElements).forEach(([selector, key]) => {\n            const element = document.querySelector(selector);\n            if (element && key !== 'app.version') {\n                element.textContent = this.t(key);\n            }\n        });\n    }\n    \n    /**\n     * Select-Elemente aktualisieren\n     */\n    updateSelectElements() {\n        // Theme-Select\n        const themeSelect = document.getElementById('themeSelect');\n        if (themeSelect) {\n            const options = themeSelect.querySelectorAll('option');\n            options.forEach(option => {\n                const value = option.value;\n                if (value === 'auto') option.textContent = this.t('settings.appearance.themes.auto');\n                if (value === 'light') option.textContent = this.t('settings.appearance.themes.light');\n                if (value === 'dark') option.textContent = this.t('settings.appearance.themes.dark');\n            });\n        }\n        \n        // Service-Select\n        const serviceSelects = document.querySelectorAll('select[name=\"serviceType\"]');\n        serviceSelects.forEach(select => {\n            this.updateServiceOptions(select);\n        });\n    }\n    \n    /**\n     * Service-Optionen aktualisieren\n     */\n    updateServiceOptions(selectElement) {\n        const serviceOptions = {\n            '03': this.currentLanguage === 'de' ? 'UPS Standard' : 'UPS Ground',\n            '02': this.currentLanguage === 'de' ? 'UPS Express' : 'UPS 2nd Day Air',\n            '01': this.currentLanguage === 'de' ? 'UPS Express Plus' : 'UPS Next Day Air',\n            '12': this.currentLanguage === 'de' ? 'UPS Express Saver' : 'UPS 3 Day Select',\n            '65': this.currentLanguage === 'de' ? 'UPS Worldwide Express Saver' : 'UPS Worldwide Express Saver'\n        };\n        \n        const options = selectElement.querySelectorAll('option');\n        options.forEach(option => {\n            const value = option.value;\n            if (serviceOptions[value]) {\n                option.textContent = serviceOptions[value];\n            }\n        });\n    }\n    \n    /**\n     * Language-Selectors aktualisieren\n     */\n    updateLanguageSelectors() {\n        const selectors = ['#languageSelect', '#settingsLanguageSelect'];\n        \n        selectors.forEach(selector => {\n            const element = document.querySelector(selector);\n            if (element) {\n                element.value = this.currentLanguage;\n            }\n        });\n        \n        // Language-Toggle Button\n        const langToggle = document.getElementById('languageToggle');\n        if (langToggle) {\n            const currentLang = this.availableLanguages.find(l => l.code === this.currentLanguage);\n            langToggle.innerHTML = `${currentLang.flag} ${currentLang.name}`;\n        }\n    }\n    \n    /**\n     * Callback für Sprachänderungen registrieren\n     * \n     * @param {Function} callback - Callback-Funktion\n     */\n    onLanguageChange(callback) {\n        this.callbacks.add(callback);\n    }\n    \n    /**\n     * Callback für Sprachänderungen entfernen\n     * \n     * @param {Function} callback - Callback-Funktion\n     */\n    offLanguageChange(callback) {\n        this.callbacks.delete(callback);\n    }\n    \n    /**\n     * Alle Callbacks benachrichtigen\n     * \n     * @param {string} newLanguage - Neue Sprache\n     */\n    notifyCallbacks(newLanguage) {\n        this.callbacks.forEach(callback => {\n            try {\n                callback(newLanguage, this.currentLanguage);\n            } catch (error) {\n                console.error('Fehler in Language-Callback:', error);\n            }\n        });\n    }\n    \n    /**\n     * Prüft ob Sprachcode gültig ist\n     * \n     * @param {string} languageCode - Zu prüfender Sprachcode\n     * @returns {boolean} true wenn gültig\n     */\n    isValidLanguage(languageCode) {\n        return this.availableLanguages.some(lang => lang.code === languageCode);\n    }\n    \n    /**\n     * Aktuellen Sprachcode abrufen\n     * \n     * @returns {string} Aktueller Sprachcode\n     */\n    getCurrentLanguage() {\n        return this.currentLanguage;\n    }\n    \n    /**\n     * Aktuellen Sprachnamen abrufen\n     * \n     * @returns {string} Aktueller Sprachname\n     */\n    getCurrentLanguageName() {\n        const lang = this.availableLanguages.find(l => l.code === this.currentLanguage);\n        return lang ? lang.name : 'Unknown';\n    }\n    \n    /**\n     * Verfügbare Sprachen abrufen\n     * \n     * @returns {Array} Array der verfügbaren Sprachen\n     */\n    getAvailableLanguages() {\n        return this.availableLanguages;\n    }\n    \n    /**\n     * Fallback-Übersetzungen für Deutsch\n     * \n     * @returns {Object} Deutsche Fallback-Übersetzungen\n     */\n    getGermanFallback() {\n        return {\n            app: {\n                title: 'UPS Batch-Manager',\n                subtitle: 'Deutsche Version'\n            },\n            nav: {\n                dashboard: 'Dashboard',\n                sendungen: 'Sendungen',\n                import: 'Import',\n                export: 'Export',\n                einstellungen: 'Einstellungen',\n                hilfe: 'Hilfe'\n            },\n            toast: {\n                messages: {\n                    saved: 'Gespeichert'\n                }\n            },\n            footer: {\n                version: 'Deutsche Version'\n            }\n        };\n    }\n}\n\n// Language Manager global verfügbar machen\nwindow.LanguageManager = LanguageManager;\nwindow.languageManager = new LanguageManager();"
+        const navItems = {
+            'dashboard': 'nav.dashboard',
+            'sendungen': 'nav.sendungen',
+            'import': 'nav.import',
+            'export': 'nav.export',
+            'einstellungen': 'nav.einstellungen',
+            'hilfe': 'nav.hilfe'
+        };
+        
+        Object.entries(navItems).forEach(([section, key]) => {
+            const element = document.querySelector(`[data-section="${section}"]`);
+            if (element) {
+                element.textContent = this.t(key);
+            }
+        });
+    }
+    
+    /**
+     * Footer aktualisieren
+     */
+    updateFooter() {
+        const footerElements = {
+            '.footer-text': 'footer.version',
+            '.footer-version': 'footer.version',
+            '#appVersion': 'app.version'
+        };
+        
+        Object.entries(footerElements).forEach(([selector, key]) => {
+            const element = document.querySelector(selector);
+            if (element && key !== 'app.version') {
+                element.textContent = this.t(key);
+            }
+        });
+    }
+    
+    /**
+     * Select-Elemente aktualisieren
+     */
+    updateSelectElements() {
+        // Theme-Select
+        const themeSelect = document.getElementById('themeSelect');
+        if (themeSelect) {
+            const options = themeSelect.querySelectorAll('option');
+            options.forEach(option => {
+                const value = option.value;
+                if (value === 'auto') option.textContent = this.t('settings.appearance.themes.auto');
+                if (value === 'light') option.textContent = this.t('settings.appearance.themes.light');
+                if (value === 'dark') option.textContent = this.t('settings.appearance.themes.dark');
+            });
+        }
+        
+        // Service-Select
+        const serviceSelects = document.querySelectorAll('select[name="serviceType"]');
+        serviceSelects.forEach(select => {
+            this.updateServiceOptions(select);
+        });
+    }
+    
+    /**
+     * Service-Optionen aktualisieren
+     */
+    updateServiceOptions(selectElement) {
+        const serviceOptions = {
+            '03': this.currentLanguage === 'de' ? 'UPS Standard' : 'UPS Ground',
+            '02': this.currentLanguage === 'de' ? 'UPS Express' : 'UPS 2nd Day Air',
+            '01': this.currentLanguage === 'de' ? 'UPS Express Plus' : 'UPS Next Day Air',
+            '12': this.currentLanguage === 'de' ? 'UPS Express Saver' : 'UPS 3 Day Select',
+            '65': this.currentLanguage === 'de' ? 'UPS Worldwide Express Saver' : 'UPS Worldwide Express Saver'
+        };
+        
+        const options = selectElement.querySelectorAll('option');
+        options.forEach(option => {
+            const value = option.value;
+            if (serviceOptions[value]) {
+                option.textContent = serviceOptions[value];
+            }
+        });
+    }
+    
+    /**
+     * Language-Selectors aktualisieren
+     */
+    updateLanguageSelectors() {
+        const selectors = ['#languageSelect', '#settingsLanguageSelect'];
+        
+        selectors.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                element.value = this.currentLanguage;
+            }
+        });
+        
+        // Language-Toggle Button
+        const langToggle = document.getElementById('languageToggle');
+        if (langToggle) {
+            const currentLang = this.availableLanguages.find(l => l.code === this.currentLanguage);
+            langToggle.innerHTML = `${currentLang.flag} ${currentLang.name}`;
+        }
+    }
+    
+    /**
+     * Callback für Sprachänderungen registrieren
+     * 
+     * @param {Function} callback - Callback-Funktion
+     */
+    onLanguageChange(callback) {
+        this.callbacks.add(callback);
+    }
+    
+    /**
+     * Callback für Sprachänderungen entfernen
+     * 
+     * @param {Function} callback - Callback-Funktion
+     */
+    offLanguageChange(callback) {
+        this.callbacks.delete(callback);
+    }
+    
+    /**
+     * Alle Callbacks benachrichtigen
+     * 
+     * @param {string} newLanguage - Neue Sprache
+     */
+    notifyCallbacks(newLanguage) {
+        this.callbacks.forEach(callback => {
+            try {
+                callback(newLanguage, this.currentLanguage);
+            } catch (error) {
+                console.error('Fehler in Language-Callback:', error);
+            }
+        });
+    }
+    
+    /**
+     * Prüft ob Sprachcode gültig ist
+     * 
+     * @param {string} languageCode - Zu prüfender Sprachcode
+     * @returns {boolean} true wenn gültig
+     */
+    isValidLanguage(languageCode) {
+        return this.availableLanguages.some(lang => lang.code === languageCode);
+    }
+    
+    /**
+     * Aktuellen Sprachcode abrufen
+     * 
+     * @returns {string} Aktueller Sprachcode
+     */
+    getCurrentLanguage() {
+        return this.currentLanguage;
+    }
+    
+    /**
+     * Aktuellen Sprachnamen abrufen
+     * 
+     * @returns {string} Aktueller Sprachname
+     */
+    getCurrentLanguageName() {
+        const lang = this.availableLanguages.find(l => l.code === this.currentLanguage);
+        return lang ? lang.name : 'Unknown';
+    }
+    
+    /**
+     * Verfügbare Sprachen abrufen
+     * 
+     * @returns {Array} Array der verfügbaren Sprachen
+     */
+    getAvailableLanguages() {
+        return this.availableLanguages;
+    }
+    
+    /**
+     * Fallback-Übersetzungen für Deutsch
+     * 
+     * @returns {Object} Deutsche Fallback-Übersetzungen
+     */
+    getGermanFallback() {
+        return {
+            app: {
+                title: 'UPS Batch-Manager',
+                subtitle: 'Deutsche Version'
+            },
+            nav: {
+                dashboard: 'Dashboard',
+                sendungen: 'Sendungen',
+                import: 'Import',
+                export: 'Export',
+                einstellungen: 'Einstellungen',
+                hilfe: 'Hilfe'
+            },
+            toast: {
+                messages: {
+                    saved: 'Gespeichert'
+                }
+            },
+            footer: {
+                version: 'Deutsche Version'
+            }
+        };
+    }
+}
+
+// Language Manager global verfügbar machen
+window.LanguageManager = LanguageManager;
+window.languageManager = new LanguageManager();

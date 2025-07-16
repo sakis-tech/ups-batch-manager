@@ -15,19 +15,19 @@ class RealTimeValidator {
     // Formular-Validierung einrichten
     setupFormValidation() {
         document.addEventListener('input', (e) => {
-            if (e.target.matches('.form-input, .form-select, .form-textarea')) {
+            if (e.target && e.target.matches && e.target.matches('.form-input, .form-select, .form-textarea')) {
                 this.scheduleValidation(e.target);
             }
         });
 
         document.addEventListener('blur', (e) => {
-            if (e.target.matches('.form-input, .form-select, .form-textarea')) {
+            if (e.target && e.target.matches && e.target.matches('.form-input, .form-select, .form-textarea')) {
                 this.validateFieldImmediate(e.target);
             }
         });
 
         document.addEventListener('change', (e) => {
-            if (e.target.matches('.form-input, .form-select, .form-textarea, input[type="checkbox"], input[type="radio"]')) {
+            if (e.target && e.target.matches && e.target.matches('.form-input, .form-select, .form-textarea, input[type="checkbox"], input[type="radio"]')) {
                 this.validateFieldImmediate(e.target);
                 this.updateDependentFields(e.target);
             }

@@ -11,7 +11,7 @@ Ein professioneller, webbasierter Manager für UPS Batch-Versanddateien mit mode
 
 ## 🚀 Quick Start
 
-1. **Öffnen**: `index.html` in einem modernen Browser
+1. **Öffnen**: `html/index.html` in einem modernen Browser
 2. **Erstellen**: Neue Sendung über Dashboard → "Neue Sendung"
 3. **Importieren**: CSV-Datei per Drag & Drop in Import-Bereich
 4. **Exportieren**: UPS-kompatible Batch-Datei über "Batch Exportieren"
@@ -59,7 +59,7 @@ Ein professioneller, webbasierter Manager für UPS Batch-Versanddateien mit mode
 ### 🏁 Installation & Start
 ```bash
 # Option 1: Direkt öffnen
-# index.html in Browser öffnen
+# html/index.html in Browser öffnen
 
 # Option 2: Lokaler Server (empfohlen für Entwicklung)
 npx serve .
@@ -146,7 +146,18 @@ python -m http.server 8000
 
 ```
 ups-batch-manager/
-├── index.html                          # Hauptanwendung (Deutsch)
+├── html/                               # HTML-Dateien
+│   ├── index.html                      # Hauptanwendung (Deutsch)
+│   ├── dashboard.html                  # Dashboard-Seite
+│   ├── sendungen.html                  # Sendungsverwaltung
+│   ├── import.html                     # CSV Import
+│   ├── export.html                     # Batch Export
+│   ├── einstellungen.html              # Einstellungen
+│   └── hilfe.html                      # Hilfe-Seite
+├── docs/                               # Dokumentation
+│   ├── CHANGELOG.md                    # Versionshistorie
+│   ├── DEPLOYMENT.md                   # Deployment-Anleitung
+│   └── FEATURES.md                     # Feature-Beschreibungen
 ├── manifest.json                       # PWA Manifest
 ├── ups-batch-file.json                # UPS Feldspezifikationen
 ├── css/de/                             # Deutsche Stylesheets
@@ -170,7 +181,9 @@ ups-batch-manager/
 │   └── validators/                     # Validierung
 │       ├── field-validators-de.js      # Deutsche Feldvalidatoren
 │       └── real-time-validator.js      # Echtzeit-Validierung
-├── archive/                            # Archivierte alte Dateien
+├── lang/                               # Sprachdateien
+│   ├── de.json                         # Deutsche Übersetzungen
+│   └── en.json                         # Englische Übersetzungen
 └── README.md                           # Diese Datei
 ```
 

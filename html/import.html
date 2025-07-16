@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Export - UPS Batch-Manager</title>
-    <meta name="description" content="Batch-Dateien exportieren im UPS Batch-Manager">
+    <title>Import - UPS Batch-Manager</title>
+    <meta name="description" content="CSV/SSV Dateien importieren im UPS Batch-Manager">
     <link rel="stylesheet" href="css/de/modern-base.css">
     <link rel="stylesheet" href="css/de/components.css">
     <link rel="stylesheet" href="css/de/layout.css">
@@ -44,10 +44,10 @@
                 <li><a href="sendungen.html" class="nav-link">
                     <i class="fas fa-boxes"></i> <span data-lang-key="nav.sendungen">Sendungen</span>
                 </a></li>
-                <li><a href="import.html" class="nav-link">
+                <li><a href="import.html" class="nav-link active">
                     <i class="fas fa-file-import"></i> <span data-lang-key="nav.import">Importieren</span>
                 </a></li>
-                <li><a href="export.html" class="nav-link active">
+                <li><a href="export.html" class="nav-link">
                     <i class="fas fa-file-export"></i> <span data-lang-key="nav.export">Exportieren</span>
                 </a></li>
                 <li><a href="einstellungen.html" class="nav-link">
@@ -80,7 +80,7 @@
                 <button id="toggleSidebar" class="btn btn-ghost">
                     <i class="fas fa-bars"></i>
                 </button>
-                <h1 id="pageTitle">Exportieren</h1>
+                <h1 id="pageTitle">Importieren</h1>
             </div>
             <div class="header-right">
                 <button id="darkModeToggle" class="btn btn-ghost" title="Dunkler Modus">
@@ -100,81 +100,87 @@
             </div>
         </header>
 
-        <!-- Export Content -->
+        <!-- Import Content -->
         <div class="section-header">
-            <h2>Batch-Datei exportieren</h2>
+            <h2>CSV/SSV Datei importieren</h2>
+            <div class="section-actions">
+                <button class="btn btn-info" onclick="downloadTemplate()">
+                    <i class="fas fa-download"></i>
+                    Vorlage herunterladen
+                </button>
+            </div>
         </div>
 
-        <div class="export-container">
-            <div class="export-options">
-                <div class="option-group">
-                    <h3>Export-Format</h3>
-                    <div class="radio-group">
-                        <label class="radio-label">
-                            <input type="radio" name="exportFormat" value="csv" checked>
-                            <span class="radio-custom"></span>
-                            CSV (Comma Separated Values)
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" name="exportFormat" value="ssv">
-                            <span class="radio-custom"></span>
-                            SSV (Semicolon Separated Values)
-                        </label>
+        <div class="import-container">
+            <div class="import-steps">
+                <div class="step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Datei auswählen</h3>
+                        <p>Wählen Sie eine CSV- oder SSV-Datei zum Importieren aus</p>
                     </div>
                 </div>
-
-                <div class="option-group">
-                    <h3>Export-Optionen</h3>
-                    <div class="checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="includeHeaders" checked>
-                            <span class="checkbox-custom"></span>
-                            Spaltenüberschriften einschließen
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="exportOnlyValid">
-                            <span class="checkbox-custom"></span>
-                            Nur gültige Sendungen exportieren
-                        </label>
+                <div class="step" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Vorschau</h3>
+                        <p>Überprüfen Sie die importierten Daten</p>
                     </div>
                 </div>
-
-                <div class="option-group">
-                    <h3>Sendungen auswählen</h3>
-                    <div class="selection-stats">
-                        <div class="stat-item">
-                            <span>Gesamt:</span>
-                            <span id="exportTotalCount">0</span>
-                        </div>
-                        <div class="stat-item">
-                            <span>Gültig:</span>
-                            <span id="exportValidCount">0</span>
-                        </div>
-                        <div class="stat-item">
-                            <span>Auswahl:</span>
-                            <span id="exportSelectedCount">0</span>
-                        </div>
+                <div class="step" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Importieren</h3>
+                        <p>Bestätigen Sie den Import</p>
                     </div>
                 </div>
             </div>
 
-            <div class="export-actions">
-                <button class="btn btn-primary" id="exportBatchBtn">
-                    <i class="fas fa-file-export"></i>
-                    Batch-Datei exportieren
-                </button>
-                <button class="btn btn-secondary" id="quickExportCSV">
-                    <i class="fas fa-file-csv"></i>
-                    Schnell-Export CSV
-                </button>
-                <button class="btn btn-success" id="quickExportSSV">
-                    <i class="fas fa-file-text"></i>
-                    Schnell-Export SSV
-                </button>
-                <button class="btn btn-warning" onclick="exportErrors()">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    Fehler-Report exportieren
-                </button>
+            <div class="import-content">
+                <div id="importStep1" class="import-step active">
+                    <div class="file-upload-area" id="fileUploadArea">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h3>Datei hier ablegen oder klicken zum Auswählen</h3>
+                        <p>Unterstützte Formate: CSV, SSV (max. 10MB)</p>
+                        <input type="file" id="fileInput" accept=".csv,.ssv,.txt" hidden>
+                    </div>
+                </div>
+
+                <div id="importStep2" class="import-step">
+                    <div class="preview-container">
+                        <h3>Datenvorschau</h3>
+                        <div id="previewTable" class="preview-table"></div>
+                        <div class="preview-actions">
+                            <button class="btn btn-secondary" onclick="backToStep(1)">
+                                <i class="fas fa-arrow-left"></i>
+                                Zurück
+                            </button>
+                            <button class="btn btn-primary" onclick="nextStep(3)">
+                                Weiter
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="importStep3" class="import-step">
+                    <div class="import-summary">
+                        <h3>Import-Zusammenfassung</h3>
+                        <div id="importSummary" class="summary-details"></div>
+                        <div class="import-actions">
+                            <button class="btn btn-secondary" onclick="backToStep(2)">
+                                <i class="fas fa-arrow-left"></i>
+                                Zurück
+                            </button>
+                            <button class="btn btn-success" onclick="confirmImport()">
+                                <i class="fas fa-check"></i>
+                                Import bestätigen
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -209,9 +215,11 @@
     <script src="js/de/core/undo-manager.js"></script>
     <script src="js/de/ui/modal-system.js"></script>
     <script src="js/de/ui/toast-system.js"></script>
-    <script src="js/de/ui/export-handler.js"></script>
+    <script src="js/de/ui/import-handler.js"></script>
+    <script src="js/de/ui/template-handler.js"></script>
     <script src="js/de/validators/field-validators-de.js"></script>
     <script src="js/de/validators/real-time-validator.js"></script>
-    <script src="js/de/pages/export.js"></script>
+    <script src="js/de/pages/shared.js"></script>
+    <script src="js/de/pages/import.js"></script>
 </body>
 </html>

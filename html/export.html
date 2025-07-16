@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - UPS Batch-Manager</title>
-    <meta name="description" content="Dashboard des UPS Batch-Managers für Versand-Stapelverarbeitung">
+    <title>Export - UPS Batch-Manager</title>
+    <meta name="description" content="Batch-Dateien exportieren im UPS Batch-Manager">
     <link rel="stylesheet" href="css/de/modern-base.css">
     <link rel="stylesheet" href="css/de/components.css">
     <link rel="stylesheet" href="css/de/layout.css">
@@ -38,7 +38,7 @@
         </div>
         <nav class="sidebar-nav">
             <ul>
-                <li><a href="dashboard.html" class="nav-link active">
+                <li><a href="dashboard.html" class="nav-link">
                     <i class="fas fa-tachometer-alt"></i> <span data-lang-key="nav.dashboard">Dashboard</span>
                 </a></li>
                 <li><a href="sendungen.html" class="nav-link">
@@ -47,7 +47,7 @@
                 <li><a href="import.html" class="nav-link">
                     <i class="fas fa-file-import"></i> <span data-lang-key="nav.import">Importieren</span>
                 </a></li>
-                <li><a href="export.html" class="nav-link">
+                <li><a href="export.html" class="nav-link active">
                     <i class="fas fa-file-export"></i> <span data-lang-key="nav.export">Exportieren</span>
                 </a></li>
                 <li><a href="einstellungen.html" class="nav-link">
@@ -80,7 +80,7 @@
                 <button id="toggleSidebar" class="btn btn-ghost">
                     <i class="fas fa-bars"></i>
                 </button>
-                <h1 id="pageTitle">Dashboard</h1>
+                <h1 id="pageTitle">Exportieren</h1>
             </div>
             <div class="header-right">
                 <button id="darkModeToggle" class="btn btn-ghost" title="Dunkler Modus">
@@ -100,105 +100,81 @@
             </div>
         </header>
 
-        <!-- Dashboard Content -->
-        <div class="dashboard-grid">
-            <!-- Statistics Cards -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-boxes"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="dashTotalShipments">0</h3>
-                        <p>Gesamt Sendungen</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="dashValidShipments">0</h3>
-                        <p>Gültige Sendungen</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="dashInvalidShipments">0</h3>
-                        <p>Fehlerhafte Sendungen</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-weight-hanging"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="dashTotalWeight">0 kg</h3>
-                        <p>Gesamtgewicht</p>
-                    </div>
-                </div>
-            </div>
+        <!-- Export Content -->
+        <div class="section-header">
+            <h2>Batch-Datei exportieren</h2>
+        </div>
 
-            <!-- Quick Actions -->
-            <div class="quick-actions">
-                <h3>Schnellaktionen</h3>
-                <div class="action-buttons">
-                    <button class="btn btn-primary" onclick="showCreateShipmentModal()">
-                        <i class="fas fa-plus"></i>
-                        Neue Sendung
-                    </button>
-                    <button class="btn btn-secondary" onclick="window.location.href='import.html'">
-                        <i class="fas fa-file-import"></i>
-                        CSV Importieren
-                    </button>
-                    <button class="btn btn-success" onclick="window.location.href='export.html'">
-                        <i class="fas fa-file-export"></i>
-                        Batch Exportieren
-                    </button>
-                    <button class="btn btn-info" onclick="downloadTemplate()">
-                        <i class="fas fa-download"></i>
-                        Vorlage Herunterladen
-                    </button>
-                </div>
-            </div>
-
-            <!-- Recent Activity -->
-            <div class="recent-activity">
-                <div class="activity-header">
-                    <h3 data-lang-key="activities.title">Letzte Aktivitäten</h3>
-                    <div class="activity-actions">
-                        <button class="btn btn-ghost btn-sm" onclick="showActivityDetails()" title="Alle Aktivitäten anzeigen">
-                            <i class="fas fa-list"></i>
-                        </button>
-                        <button class="btn btn-ghost btn-sm" onclick="clearActivityLog()" title="Aktivitäten löschen">
-                            <i class="fas fa-trash"></i>
-                        </button>
+        <div class="export-container">
+            <div class="export-options">
+                <div class="option-group">
+                    <h3>Export-Format</h3>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="exportFormat" value="csv" checked>
+                            <span class="radio-custom"></span>
+                            CSV (Comma Separated Values)
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="exportFormat" value="ssv">
+                            <span class="radio-custom"></span>
+                            SSV (Semicolon Separated Values)
+                        </label>
                     </div>
                 </div>
-                <div id="recentActivityList" class="activity-list">
-                    <div class="activity-item placeholder">
-                        <i class="fas fa-info-circle"></i>
-                        <div class="activity-content">
-                            <span class="activity-description" data-lang-key="activities.empty">Keine Aktivitäten vorhanden</span>
-                            <small class="activity-time">-</small>
+
+                <div class="option-group">
+                    <h3>Export-Optionen</h3>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="includeHeaders" checked>
+                            <span class="checkbox-custom"></span>
+                            Spaltenüberschriften einschließen
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="exportOnlyValid">
+                            <span class="checkbox-custom"></span>
+                            Nur gültige Sendungen exportieren
+                        </label>
+                    </div>
+                </div>
+
+                <div class="option-group">
+                    <h3>Sendungen auswählen</h3>
+                    <div class="selection-stats">
+                        <div class="stat-item">
+                            <span>Gesamt:</span>
+                            <span id="exportTotalCount">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>Gültig:</span>
+                            <span id="exportValidCount">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>Auswahl:</span>
+                            <span id="exportSelectedCount">0</span>
                         </div>
                     </div>
                 </div>
-                <div class="activity-footer">
-                    <div class="activity-stats">
-                        <span class="stat-item">
-                            <span data-lang-key="activities.stats.today">Heute</span>: 
-                            <span id="activitiesToday">0</span>
-                        </span>
-                        <span class="stat-item">
-                            <span data-lang-key="activities.stats.total">Gesamt</span>: 
-                            <span id="activitiesTotal">0</span>
-                        </span>
-                    </div>
-                </div>
+            </div>
+
+            <div class="export-actions">
+                <button class="btn btn-primary" id="exportBatchBtn">
+                    <i class="fas fa-file-export"></i>
+                    Batch-Datei exportieren
+                </button>
+                <button class="btn btn-secondary" id="quickExportCSV">
+                    <i class="fas fa-file-csv"></i>
+                    Schnell-Export CSV
+                </button>
+                <button class="btn btn-success" id="quickExportSSV">
+                    <i class="fas fa-file-text"></i>
+                    Schnell-Export SSV
+                </button>
+                <button class="btn btn-warning" onclick="exportErrors()">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Fehler-Report exportieren
+                </button>
             </div>
         </div>
     </div>
@@ -233,9 +209,10 @@
     <script src="js/de/core/undo-manager.js"></script>
     <script src="js/de/ui/modal-system.js"></script>
     <script src="js/de/ui/toast-system.js"></script>
-    <script src="js/de/ui/accordion.js"></script>
+    <script src="js/de/ui/export-handler.js"></script>
     <script src="js/de/validators/field-validators-de.js"></script>
     <script src="js/de/validators/real-time-validator.js"></script>
-    <script src="js/de/pages/dashboard.js"></script>
+    <script src="js/de/pages/shared.js"></script>
+    <script src="js/de/pages/export.js"></script>
 </body>
 </html>

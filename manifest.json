@@ -1,8 +1,8 @@
 {
   "name": "UPS Batch Manager",
   "short_name": "UPS Batch",
-  "description": "Create and manage UPS batch shipping files with up to 250 shipments",
-  "version": "1.0.0",
+  "description": "Professioneller UPS Batch-Manager mit Accordion-Formularen und Avatar-Menü-System",
+  "version": "2.3.0",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

@@ -75,10 +75,10 @@ class FormHandlerDE {
             }
         }, true);
 
-        // Tab-Navigation
+        // Accordion-Navigation  
         document.addEventListener('keydown', (e) => {
-            if (e.target.closest('.form-tabs')) {
-                this.handleTabNavigation(e);
+            if (e.target.closest('.form-accordion')) {
+                this.handleAccordionNavigation(e);
             }
         });
 
@@ -139,7 +139,7 @@ class FormHandlerDE {
 
         this.forms.set(formId, formConfig);
         this.setupFormValidation(formConfig);
-        this.setupTabSwitching(formElement);
+        this.setupAccordionForm(formElement);
         this.setupFieldDependencies(formConfig);
     }
 
@@ -273,29 +273,31 @@ class FormHandlerDE {
         });
     }
 
-    // Tab-Umschaltung einrichten
-    setupTabSwitching(form) {
-        const tabButtons = form.querySelectorAll('.tab-item');
-        const tabPanes = form.querySelectorAll('.tab-pane');
-
-        tabButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetTab = button.dataset.tab;
-                
-                // Aktive Tab-Buttons aktualisieren
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-
-                // Aktive Tab-Panes aktualisieren
-                tabPanes.forEach(pane => {
-                    pane.classList.remove('active');
-                    if (pane.dataset.tab === targetTab) {
-                        pane.classList.add('active');
-                    }
-                });
-            });
+    // Accordion-Formular einrichten
+    setupAccordionForm(form) {
+        const accordionHeaders = form.querySelectorAll('.accordion-header');
+        
+        accordionHeaders.forEach(header => {
+            const accordionId = header.getAttribute('data-accordion');
+            if (accordionId && window.accordionSystem) {
+                // Registriere das Accordion mit dem globalen System
+                const accordionItem = header.closest('.accordion-item');
+                window.accordionSystem.registerAccordion(accordionId, accordionItem);
+            }
         });
+
+        // Bei Formular-Validierungsfehlern öffne das entsprechende Accordion
+        form.addEventListener('invalid', (e) => {
+            const errorField = e.target;
+            const accordionContent = errorField.closest('.accordion-content');
+            if (accordionContent) {
+                const accordionHeader = accordionContent.previousElementSibling;
+                const accordionId = accordionHeader?.getAttribute('data-accordion');
+                if (accordionId && window.accordionSystem) {
+                    window.accordionSystem.openAccordion(accordionId);
+                }
+            }
+        }, true);
     }
 
     // Feldabhängigkeiten einrichten
@@ -373,24 +375,32 @@ class FormHandlerDE {
         this.hideFieldHelp(field);
     }
 
-    // Tab-Navigation handhaben
-    handleTabNavigation(e) {
-        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-            const currentTab = e.target.closest('.tab-item');
-            if (currentTab) {
+    // Accordion-Navigation handhaben
+    handleAccordionNavigation(e) {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+            const currentHeader = e.target.closest('.accordion-header');
+            if (currentHeader) {
                 e.preventDefault();
-                const tabs = Array.from(currentTab.parentNode.querySelectorAll('.tab-item'));
-                const currentIndex = tabs.indexOf(currentTab);
+                const headers = Array.from(currentHeader.closest('.form-accordion').querySelectorAll('.accordion-header'));
+                const currentIndex = headers.indexOf(currentHeader);
                 
                 let nextIndex;
-                if (e.key === 'ArrowRight') {
-                    nextIndex = (currentIndex + 1) % tabs.length;
+                if (e.key === 'ArrowDown') {
+                    nextIndex = (currentIndex + 1) % headers.length;
                 } else {
-                    nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+                    nextIndex = (currentIndex - 1 + headers.length) % headers.length;
                 }
                 
-                tabs[nextIndex].click();
-                tabs[nextIndex].focus();
+                headers[nextIndex].focus();
+            }
+        } else if (e.key === 'Enter' || e.key === ' ') {
+            const currentHeader = e.target.closest('.accordion-header');
+            if (currentHeader) {
+                e.preventDefault();
+                const accordionId = currentHeader.getAttribute('data-accordion');
+                if (accordionId && window.accordionSystem) {
+                    window.accordionSystem.toggleAccordion(accordionId);
+                }
             }
         }
     }
@@ -723,11 +733,33 @@ class FormHandlerDE {
     showValidationErrors(form) {
         const firstError = form.querySelector('.has-error');
         if (firstError) {
-            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            
-            const input = firstError.querySelector('input, select, textarea');
-            if (input) {
-                input.focus();
+            // Finde das Accordion, das den Fehler enthält
+            const accordionContent = firstError.closest('.accordion-content');
+            if (accordionContent) {
+                const accordionHeader = accordionContent.previousElementSibling;
+                const accordionId = accordionHeader?.getAttribute('data-accordion');
+                if (accordionId && window.accordionSystem) {
+                    // Öffne das Accordion mit dem Fehler
+                    window.accordionSystem.openAccordion(accordionId);
+                    
+                    // Warte kurz auf die Animation und scrolle dann
+                    setTimeout(() => {
+                        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        
+                        const input = firstError.querySelector('input, select, textarea');
+                        if (input) {
+                            input.focus();
+                        }
+                    }, 350);
+                }
+            } else {
+                // Fallback für Felder außerhalb von Accordions
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                const input = firstError.querySelector('input, select, textarea');
+                if (input) {
+                    input.focus();
+                }
             }
         }
 

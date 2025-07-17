@@ -2684,3 +2684,185 @@ body.login-active {
 body.login-active {
     overflow: hidden;
 }
+
+/* ========================================
+   FORM ACCORDION COMPONENTS
+   ======================================== */
+
+/* Form Accordion Container */
+.form-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.form-accordion .accordion-group {
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--bg-primary);
+}
+
+/* Accordion Items */
+.form-accordion .accordion-item {
+    border-bottom: 1px solid var(--border-light);
+}
+
+.form-accordion .accordion-item:last-child {
+    border-bottom: none;
+}
+
+/* Accordion Headers */
+.form-accordion .accordion-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4) var(--space-6);
+    background: var(--bg-secondary);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    position: relative;
+    min-height: 60px;
+}
+
+.form-accordion .accordion-header:hover {
+    background: var(--bg-tertiary);
+}
+
+.form-accordion .accordion-header.active {
+    background: var(--primary-light);
+    border-bottom: 1px solid var(--primary);
+}
+
+.form-accordion .accordion-header:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: -2px;
+    z-index: 1;
+}
+
+/* Accordion Title */
+.accordion-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-weight: var(--font-weight-medium);
+}
+
+.accordion-title i {
+    font-size: var(--font-size-lg);
+    color: var(--primary);
+    width: 20px;
+    text-align: center;
+}
+
+.accordion-title h3 {
+    margin: 0;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+}
+
+/* Accordion Chevron */
+.form-accordion .accordion-header > i {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    transition: transform var(--transition-fast);
+    margin-left: auto;
+}
+
+.form-accordion .accordion-header.active > i,
+.form-accordion .accordion-header > i.rotated {
+    transform: rotate(180deg);
+    color: var(--primary);
+}
+
+/* Accordion Content */
+.form-accordion .accordion-content {
+    padding: 0;
+    background: var(--bg-primary);
+    border-top: 1px solid var(--border-light);
+    overflow: hidden;
+    transition: height var(--transition-normal) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-accordion .accordion-content.active {
+    display: block;
+}
+
+/* Form Section within Accordion */
+.form-accordion .form-section {
+    padding: var(--space-6);
+    border: none;
+    background: transparent;
+}
+
+.form-accordion .form-section-header {
+    display: none; /* Hide redundant headers since accordion header shows the same info */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .form-accordion .accordion-header {
+        padding: var(--space-3) var(--space-4);
+        min-height: 50px;
+    }
+    
+    .accordion-title {
+        gap: var(--space-2);
+    }
+    
+    .accordion-title h3 {
+        font-size: var(--font-size-sm);
+    }
+    
+    .accordion-title i {
+        font-size: var(--font-size-md);
+    }
+    
+    .form-accordion .form-section {
+        padding: var(--space-4);
+    }
+}
+
+/* Dark Mode Support */
+[data-theme="dark"] .form-accordion .accordion-group {
+    border-color: var(--border-dark);
+    background: var(--bg-secondary);
+}
+
+[data-theme="dark"] .form-accordion .accordion-item {
+    border-color: var(--border-dark);
+}
+
+[data-theme="dark"] .form-accordion .accordion-header {
+    background: var(--bg-tertiary);
+}
+
+[data-theme="dark"] .form-accordion .accordion-header:hover {
+    background: var(--bg-primary);
+}
+
+[data-theme="dark"] .form-accordion .accordion-header.active {
+    background: rgba(37, 99, 235, 0.1);
+    border-bottom-color: var(--primary);
+}
+
+[data-theme="dark"] .form-accordion .accordion-content {
+    background: var(--bg-secondary);
+    border-top-color: var(--border-dark);
+}
+
+/* Animation Performance Optimization */
+.form-accordion .accordion-content {
+    will-change: height;
+    transform: translateZ(0);
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    .form-accordion .accordion-header > i,
+    .form-accordion .accordion-content {
+        transition: none !important;
+    }
+}

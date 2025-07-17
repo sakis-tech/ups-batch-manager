@@ -378,33 +378,91 @@ class ModalSystem {
         
         return `
             <form id="shipmentForm" class="shipment-form">
-                <div class="form-tabs">
-                    <div class="tabs">
-                        <div class="tabs-nav">
-                            <button type="button" class="tab-item active" data-tab="recipient">
-                                <i class="fas fa-user"></i> Empfänger
-                            </button>
-                            <button type="button" class="tab-item" data-tab="package">
-                                <i class="fas fa-box"></i> Paket
-                            </button>
-                            <button type="button" class="tab-item" data-tab="service">
-                                <i class="fas fa-shipping-fast"></i> Service
-                            </button>
-                            <button type="button" class="tab-item" data-tab="options">
-                                <i class="fas fa-cog"></i> Optionen
-                            </button>
-                        </div>
-                        <div class="tab-content">
-                            <div class="tab-pane active" data-tab="recipient">
+                <div class="form-accordion">
+                    <div class="accordion-group">
+                        <div class="accordion-item">
+                            <div class="accordion-header active" 
+                                 data-accordion="recipient"
+                                 tabindex="0"
+                                 role="button"
+                                 aria-expanded="true"
+                                 aria-controls="recipient-content">
+                                <div class="accordion-title">
+                                    <i class="fas fa-user"></i>
+                                    <h3>Empfänger-Informationen</h3>
+                                </div>
+                                <i class="fas fa-chevron-down rotated"></i>
+                            </div>
+                            <div class="accordion-content active" 
+                                 id="recipient-content"
+                                 role="region"
+                                 aria-labelledby="recipient">
                                 ${this.getRecipientFormFields(shipment)}
                             </div>
-                            <div class="tab-pane" data-tab="package">
+                        </div>
+
+                        <div class="accordion-item">
+                            <div class="accordion-header" 
+                                 data-accordion="package"
+                                 tabindex="0"
+                                 role="button"
+                                 aria-expanded="false"
+                                 aria-controls="package-content">
+                                <div class="accordion-title">
+                                    <i class="fas fa-box"></i>
+                                    <h3>Paket-Informationen</h3>
+                                </div>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content" 
+                                 id="package-content"
+                                 role="region"
+                                 aria-labelledby="package"
+                                 style="display: none;">
                                 ${this.getPackageFormFields(shipment)}
                             </div>
-                            <div class="tab-pane" data-tab="service">
+                        </div>
+
+                        <div class="accordion-item">
+                            <div class="accordion-header" 
+                                 data-accordion="service"
+                                 tabindex="0"
+                                 role="button"
+                                 aria-expanded="false"
+                                 aria-controls="service-content">
+                                <div class="accordion-title">
+                                    <i class="fas fa-shipping-fast"></i>
+                                    <h3>Service-Optionen</h3>
+                                </div>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content" 
+                                 id="service-content"
+                                 role="region"
+                                 aria-labelledby="service"
+                                 style="display: none;">
                                 ${this.getServiceFormFields(shipment)}
                             </div>
-                            <div class="tab-pane" data-tab="options">
+                        </div>
+
+                        <div class="accordion-item">
+                            <div class="accordion-header" 
+                                 data-accordion="options"
+                                 tabindex="0"
+                                 role="button"
+                                 aria-expanded="false"
+                                 aria-controls="options-content">
+                                <div class="accordion-title">
+                                    <i class="fas fa-cog"></i>
+                                    <h3>Zusätzliche Optionen</h3>
+                                </div>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="accordion-content" 
+                                 id="options-content"
+                                 role="region"
+                                 aria-labelledby="options"
+                                 style="display: none;">
                                 ${this.getOptionsFormFields(shipment)}
                             </div>
                         </div>

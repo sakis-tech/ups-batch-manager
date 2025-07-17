@@ -2,7 +2,7 @@
 
 > **TL;DR**: Professioneller, webbasierter UPS Batch-Manager für bis zu 250 Sendungen. 100% client-side, keine Installation nötig, vollständige deutsche Lokalisierung mit UPS-konformen Export-Formaten.
 
-[![Version](https://img.shields.io/badge/Version-2.2.0-blue)](#changelog)
+[![Version](https://img.shields.io/badge/Version-2.3.0-blue)](#changelog)
 [![Browser](https://img.shields.io/badge/Browser-Chrome%20%7C%20Firefox%20%7C%20Safari-green)](#browser-unterstützung)
 [![Offline](https://img.shields.io/badge/Offline-Capable-orange)](#offline-funktionalität)
 [![Language](https://img.shields.io/badge/Sprache-Deutsch-red)](#lokalisierung)
@@ -18,14 +18,21 @@ Ein professioneller, webbasierter Manager für UPS Batch-Versanddateien mit mode
 
 **Fertig!** Keine Installation, keine Server, keine Registrierung erforderlich.
 
-## 🆕 Aktuelle Version (v2.2.0)
+## 🆕 Aktuelle Version (v2.3.0)
 
-### **Neue Architektur**
-- **Multi-Page Application**: Getrennte HTML-Seiten für bessere Performance
-- **Modulare Struktur**: Organisierte JavaScript-Module nach Funktionalität
-- **Deutsche Fokussierung**: Vollständig deutsche Anwendung ohne Sprachenwechsel
+### **Neueste Features**
+- **Accordion-Formulare**: Moderne aufklappbare Abschnitte statt Tabs in Sendungsformularen
+- **Avatar-Menü-System**: Benutzereinstellungen über elegantes Dropdown-Menü im Header
+- **Intelligente Form-Grids**: Responsive 1-, 2- und 3-spaltige Layouts für optimale Felddarstellung
+- **Erweiterte Hilfe**: Überarbeitete Hilfe-Seite mit besserer Navigation und Suchfunktion
 
-### **Letzte Verbesserungen**
+### **UI/UX Verbesserungen**
+- ✅ **Modernisierte Formulare**: Sendungserfassung mit aufklappbaren Bereichen
+- ✅ **Konsistente Spacing**: Einheitliches Abstandssystem für alle Komponenten
+- ✅ **Intelligente Settings**: Einstellungen aus Sidebar in Header-Avatar verschoben
+- ✅ **Dark Mode Integration**: Vollständige Avatar-Menü-Unterstützung für alle Themes
+
+### **Architektur & Stabilität**
 - ✅ **CORS-Problem gelöst**: Sprachdateien eingebettet für offline Nutzung
 - ✅ **Dateistruktur optimiert**: HTML in `html/`, Dokumentation in `docs/`
 - ✅ **Modal-System repariert**: Context-Binding für Formulare korrigiert
@@ -65,6 +72,9 @@ Ein professioneller, webbasierter Manager für UPS Batch-Versanddateien mit mode
 - 📱 **Responsive Design**: Optimiert für Desktop, Tablet, Mobile
 - 🌓 **Dark/Light Mode**: Automatische oder manuelle Umschaltung
 - 🧩 **Moderne Komponenten**: Modals, Tooltips, Akkordeons, Toast-Nachrichten
+- 📋 **Accordion-Formulare**: Aufklappbare Bereiche für übersichtliche Dateneingabe
+- 👤 **Avatar-Menü**: Moderne Header-Navigation mit Benutzereinstellungen
+- 📏 **Intelligente Layouts**: Responsive Grid-Systeme für optimale Feldanordnung
 - ♿ **Barrierefreiheit**: WCAG 2.1 AA konform, Tastatur-Navigation
 
 ## 📖 Detaillierte Anleitung
@@ -83,9 +93,11 @@ python -m http.server 8000
 ### 🎯 Grundlegende Nutzung
 
 #### 1. **Neue Sendung erstellen**
-- Dashboard → "Neue Sendung" → Formulardaten eingeben
+- Dashboard → "Neue Sendung" → Accordion-Formular öffnet sich
+- **Aufklappbare Bereiche**: Empfänger, Paket, Service, Optionen einzeln bearbeiten
 - **Echtzeit-Validierung** prüft Eingaben sofort
 - **Länderspezifische Felder** werden automatisch angepasst
+- **Intelligente Feldanordnung**: Responsive 1-3 Spalten je nach Feldtyp
 
 #### 2. **CSV-Import durchführen**
 - Datei per **Drag & Drop** in Import-Bereich
@@ -184,7 +196,8 @@ ups-batch-manager/
 │   │   ├── activity-logger.js          # Aktivitätsverfolgung
 │   │   ├── user-manager.js             # Benutzerverwaltung
 │   │   ├── undo-manager.js             # Rückgängig-Funktionen
-│   │   └── unsaved-changes-manager.js  # Ungespeicherte Änderungen
+│   │   ├── unsaved-changes-manager.js  # Ungespeicherte Änderungen
+│   │   └── version-manager.js          # Versionsverwaltung
 │   ├── pages/                          # Seitenspezifische Logik
 │   │   ├── dashboard.js                # Dashboard-Funktionalität
 │   │   ├── sendungen.js                # Sendungsseite
@@ -194,14 +207,15 @@ ups-batch-manager/
 │   │   ├── hilfe.js                    # Hilfe-Seite
 │   │   └── shared.js                   # Geteilte Funktionen
 │   ├── ui/                             # Benutzeroberfläche
-│   │   ├── modal-system.js             # Modal-Dialoge
+│   │   ├── modal-system.js             # Modal-Dialoge mit Accordion-Formularen
 │   │   ├── toast-system.js             # Toast-Benachrichtigungen
-│   │   ├── accordion.js                # Akkordeon-Komponenten
+│   │   ├── accordion.js                # Akkordeon-Komponenten-System
+│   │   ├── user-menu.js                # Avatar-Dropdown-Menü-System
 │   │   ├── pagination.js               # Tabellen-Pagination
 │   │   ├── import-handler.js           # CSV Import mit 3-Schritt-Prozess
 │   │   ├── export-handler.js           # Erweiterte Export-Optionen
 │   │   ├── template-handler.js         # Template-Download-System
-│   │   ├── form-handler-de.js          # Formular-Management
+│   │   ├── form-handler-de.js          # Formular-Management mit Grid-System
 │   │   ├── table-handler-de.js         # Tabellen-Management
 │   │   ├── help-system.js              # Kontextsensitive Hilfe
 │   │   ├── keyboard-shortcuts.js       # Tastaturkürzel
@@ -349,7 +363,16 @@ Alle Daten werden lokal im Browser gespeichert. Keine Datenübertragung an exter
 
 ## 📈 Changelog
 
-### **v2.2.0** (Aktuell) - Architektur & Stabilität
+### **v2.3.0** (Aktuell) - UI/UX Modernisierung
+- ✅ **Accordion-Formulare**: Moderne aufklappbare Abschnitte in Sendungserfassung
+- ✅ **Avatar-Menü-System**: Elegantes Dropdown-Menü für Benutzereinstellungen im Header
+- ✅ **Intelligente Form-Grids**: Responsive 1-, 2- und 3-spaltige Layouts
+- ✅ **Erweiterte Hilfe**: Überarbeitete Navigation und Suchfunktion
+- ✅ **Konsistentes Spacing**: Einheitliches Abstandssystem für alle Komponenten
+- ✅ **Dark Mode Integration**: Vollständige Theme-Unterstützung für alle neuen Features
+- 🔧 **Settings-Migration**: Einstellungen aus Sidebar zu Avatar-Menü verschoben
+
+### **v2.2.0** - Architektur & Stabilität
 - ✅ **Multi-Page Application**: Umstrukturierung zu getrennten HTML-Seiten
 - ✅ **Dateiorganisation**: HTML in `html/`, Dokumentation in `docs/`
 - ✅ **Deutsche Fokussierung**: Entfernung der Sprachenwechsel-Funktion
@@ -357,7 +380,6 @@ Alle Daten werden lokal im Browser gespeichert. Keine Datenübertragung an exter
 - ✅ **Modal-System Fix**: Context-Binding für Formular-Funktionen repariert
 - ✅ **Pfad-Optimierung**: Alle relativen Pfade nach Umstrukturierung aktualisiert
 - ✅ **Root-Redirect**: index.html leitet automatisch zum Dashboard weiter
-- 🔧 **Bugfixes**: Modal-Funktionen, Pfad-Referenzen, JavaScript-Kontexte
 
 ### **v2.1.0** - Stabilität & Features
 - ✅ **Echtzeit-Validierung**: Sofortige Feldprüfung während der Eingabe

@@ -5,6 +5,36 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
 und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2024-07-17
+
+### ✅ Hinzugefügt
+- **Accordion-Formularsystem**: Moderne aufklappbare Abschnitte statt Tabs in Sendungsformularen
+- **Avatar-Menü-System**: Elegantes Dropdown-Menü für Benutzereinstellungen im Header
+- **Intelligente Form-Grids**: Responsive 1-, 2- und 3-spaltige Layouts für optimale Felddarstellung
+- **Erweiterte Accordion-Navigation**: Vollständige Tastatur-Navigation und Barrierefreiheit
+- **User-Menu-Manager**: Umfassendes System für Avatar-Dropdown-Funktionalität
+- **Konsistentes Spacing-System**: Einheitliche Abstände und Layoutregeln für alle Komponenten
+
+### 🔧 Verbessert
+- **Formular-UX**: Übersichtlichere Sendungserfassung durch aufklappbare Bereiche
+- **Settings-Zugänglichkeit**: Einstellungen direkt über Avatar-Menü erreichbar
+- **Mobile Responsiveness**: Optimierte Darstellung auf allen Gerätegrößen
+- **Hilfe-System**: Überarbeitete Navigation und bessere Struktur
+- **Form-Handler**: Erweiterte Accordion-Integration und Validierung
+- **Dark Mode Integration**: Vollständige Theme-Unterstützung für alle neuen Komponenten
+
+### 🐛 Behoben
+- **Sidebar-Redundanz**: Entfernung überflüssiger Settings-Links aus Navigation
+- **Layout-Inkonsistenzen**: Einheitliche Spacing-Regeln eliminieren Design-Abweichungen
+- **Tab-Navigation**: Ersetzung durch moderne Accordion-Navigation
+- **Avatar-Integration**: Alle HTML-Seiten nutzen konsistent das neue User-Menu-System
+
+### 🎨 Design
+- **Moderne Accordion-Formulare**: Elegante aufklappbare Bereiche mit Animationen
+- **Professional Avatar-Menu**: Sleek Dropdown-Design im Corporate Style
+- **Optimierte Feldanordnung**: Intelligente Grid-Layouts für bessere Übersicht
+- **Konsistente Abstände**: Einheitliches Spacing-System für professionelles Erscheinungsbild
+
 ## [2.2.0] - 2024-07-17
 
 ### ✅ Hinzugefügt

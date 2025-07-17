@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hilfe - UPS Batch-Manager</title>
+    <meta name="description" content="Hilfe und Dokumentation für den UPS Batch-Manager">
+    <link rel="stylesheet" href="../css/de/modern-base.css">
+    <link rel="stylesheet" href="../css/de/components.css">
+    <link rel="stylesheet" href="../css/de/layout.css">
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#663300">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Lädt...</div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Modal Container -->
+    <div id="modalContainer" class="modal-container"></div>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2><i class="fas fa-shipping-fast"></i> UPS Batch-Manager</h2>
+            <button id="sidebarToggle" class="sidebar-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="dashboard.html" class="nav-link">
+                    <i class="fas fa-tachometer-alt"></i> <span >Dashboard</span>
+                </a></li>
+                <li><a href="sendungen.html" class="nav-link">
+                    <i class="fas fa-boxes"></i> <span >Sendungen</span>
+                </a></li>
+                <li><a href="import.html" class="nav-link">
+                    <i class="fas fa-file-import"></i> <span >Importieren</span>
+                </a></li>
+                <li><a href="export.html" class="nav-link">
+                    <i class="fas fa-file-export"></i> <span >Exportieren</span>
+                </a></li>
+                <li><a href="einstellungen.html" class="nav-link">
+                    <i class="fas fa-cog"></i> <span >Einstellungen</span>
+                </a></li>
+                <li><a href="hilfe.html" class="nav-link active">
+                    <i class="fas fa-question-circle"></i> <span >Hilfe</span>
+                </a></li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="stats-summary">
+                <div class="stat-item">
+                    <span class="stat-label">Sendungen:</span>
+                    <span id="totalShipments" class="stat-value">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Gültig:</span>
+                    <span id="validShipments" class="stat-value">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="main-content">
+        <!-- Header -->
+        <header class="main-header">
+            <div class="header-left">
+                <button id="toggleSidebar" class="btn btn-ghost">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="pageTitle">Hilfe</h1>
+            </div>
+            <div class="header-right">
+                <button id="darkModeToggle" class="btn btn-ghost" title="Dunkler Modus">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button id="fullscreenToggle" class="btn btn-ghost" title="Vollbild">
+                    <i class="fas fa-expand"></i>
+                </button>
+                <div class="user-menu">
+                    <button class="btn btn-ghost user-avatar">
+                        <i class="fas fa-user"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Help Content -->
+        <div class="section-header">
+            <h2>Hilfe & Dokumentation</h2>
+        </div>
+
+        <div class="help-container">
+            <div class="help-search">
+                <input type="text" id="helpSearch" placeholder="Hilfe durchsuchen..." class="search-input">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+
+            <div class="help-content">
+                <div class="help-section">
+                    <h3>Häufig gestellte Fragen</h3>
+                    <div class="faq-list" id="faqList">
+                        <!-- FAQ items will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="help-section">
+                    <h3>Schnelleinstieg</h3>
+                    <div class="quick-guide">
+                        <div class="guide-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Neue Sendung erstellen</h4>
+                                <p>Klicken Sie auf "Neue Sendung" und füllen Sie die erforderlichen Felder aus.</p>
+                            </div>
+                        </div>
+                        <div class="guide-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Daten validieren</h4>
+                                <p>Das System überprüft automatisch alle Eingaben und zeigt Fehler an.</p>
+                            </div>
+                        </div>
+                        <div class="guide-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Batch exportieren</h4>
+                                <p>Exportieren Sie Ihre Sendungen als CSV- oder SSV-Datei für UPS.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <span class="footer-text" >© 2024 UPS Batch-Manager</span>
+                <span class="footer-separator">•</span>
+                <span class="footer-text" >Deutsche Version</span>
+            </div>
+            <div class="footer-right">
+                <span class="footer-version">Version <span id="appVersion">2.1.0</span></span>
+                <span class="footer-separator">•</span>
+                <span class="footer-text" >Offline-fähig</span>
+                <span class="footer-separator">•</span>
+                <span class="footer-text" >Datenschutz: 100% lokal</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../js/de/core/ups-fields.js"></script>
+    <script src="../js/de/core/shipment-de.js"></script>
+    <script src="../js/de/core/storage-de.js"></script>
+    <script src="../js/de/core/unsaved-changes-manager.js"></script>
+    <script src="../js/de/core/activity-logger.js"></script>
+    <script src="../js/de/core/user-manager.js"></script>
+    <script src="../js/de/core/undo-manager.js"></script>
+    <script src="../js/de/ui/modal-system.js"></script>
+    <script src="../js/de/ui/toast-system.js"></script>
+    <script src="../js/de/ui/help-system.js"></script>
+    <script src="../js/de/validators/field-validators-de.js"></script>
+    <script src="../js/de/validators/real-time-validator.js"></script>
+    <script src="../js/de/pages/shared.js"></script>
+    <script src="../js/de/pages/hilfe.js"></script>
+</body>
+</html>

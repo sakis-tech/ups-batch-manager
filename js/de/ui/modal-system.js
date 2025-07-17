@@ -173,7 +173,7 @@ class ModalSystem {
                     ${modal.closable ? '<button class="modal-close" aria-label="Schließen"><i class="fas fa-times"></i></button>' : ''}
                 </div>
                 <div class="modal-body">
-                    ${typeof modal.content === 'function' ? modal.content(data) : modal.content}
+                    ${typeof modal.content === 'function' ? modal.content.call(this, data) : modal.content}
                 </div>
                 ${modal.buttons.length > 0 ? this.renderModalFooter(modal) : ''}
             </div>

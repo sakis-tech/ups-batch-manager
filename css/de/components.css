@@ -1,5 +1,202 @@
 /* Modern UI Components */
 
+/* Error Display System */
+.form-input.field-error,
+.form-select.field-error,
+.form-textarea.field-error {
+    border: 2px solid var(--error) !important;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.15);
+    background-color: rgba(220, 53, 69, 0.05);
+}
+
+.error-message {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-top: var(--space-1);
+    padding: var(--space-2);
+    background-color: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    border-radius: var(--radius-sm);
+    color: var(--error-dark);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    animation: slideInError 0.3s ease-out;
+}
+
+.error-message .error-icon {
+    color: var(--error);
+    font-size: var(--font-size-sm);
+    flex-shrink: 0;
+}
+
+/* Tooltip System */
+.field-tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.field-tooltip .tooltip-content {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background-color: var(--dark);
+    color: var(--white);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-xs);
+    white-space: nowrap;
+    z-index: 1000;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-width: 300px;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.field-tooltip .tooltip-content::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--dark);
+}
+
+.field-tooltip:hover .tooltip-content,
+.field-tooltip.tooltip-visible .tooltip-content {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Error Tooltip Variant */
+.field-tooltip.error-tooltip .tooltip-content {
+    background-color: var(--error);
+    border: 1px solid var(--error-dark);
+}
+
+.field-tooltip.error-tooltip .tooltip-content::after {
+    border-top-color: var(--error);
+}
+
+/* Success State */
+.form-input.field-success,
+.form-select.field-success,
+.form-textarea.field-success {
+    border-color: var(--success) !important;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.15);
+    background-color: rgba(40, 167, 69, 0.05);
+}
+
+.success-message {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-top: var(--space-1);
+    padding: var(--space-2);
+    background-color: rgba(40, 167, 69, 0.1);
+    border: 1px solid rgba(40, 167, 69, 0.3);
+    border-radius: var(--radius-sm);
+    color: var(--success-dark);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    animation: slideInSuccess 0.3s ease-out;
+}
+
+.success-message .success-icon {
+    color: var(--success);
+    font-size: var(--font-size-sm);
+    flex-shrink: 0;
+}
+
+/* Field Help Text */
+.field-help {
+    margin-top: var(--space-1);
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+/* Form Group Enhanced */
+.form-group.has-error .form-label {
+    color: var(--error-dark);
+    font-weight: var(--font-weight-semibold);
+}
+
+.form-group.has-success .form-label {
+    color: var(--success-dark);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* Animations */
+@keyframes slideInError {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInSuccess {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Tooltips */
+@media (max-width: 768px) {
+    .field-tooltip .tooltip-content {
+        max-width: 250px;
+        font-size: 11px;
+        padding: var(--space-1) var(--space-2);
+    }
+    
+    .error-message,
+    .success-message {
+        font-size: 11px;
+        padding: var(--space-1);
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .error-message,
+    .success-message,
+    .tooltip-content {
+        animation: none;
+        transition: none;
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .form-input.field-error,
+    .form-select.field-error,
+    .form-textarea.field-error {
+        border-width: 3px;
+        box-shadow: none;
+    }
+    
+    .error-message {
+        border-width: 2px;
+        background-color: rgba(220, 53, 69, 0.2);
+    }
+}
+
 /* Buttons */
 .btn {
     display: inline-flex;

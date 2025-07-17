@@ -18,6 +18,60 @@ class FieldValidatorsDE {
             customsRequired: 'Zollwert ist für internationale Sendungen erforderlich',
             descriptionRequired: 'Warenbeschreibung ist für internationale Sendungen erforderlich'
         };
+
+        this.tooltipMessages = {
+            contactName: 'Name der Kontaktperson beim Empfänger. Maximal 35 Zeichen.',
+            companyName: 'Firmenname oder Name des Empfängers. Maximal 35 Zeichen.',
+            country: 'Zielland für die Sendung. Bestimmt verfügbare Services und Validierungsregeln.',
+            address1: 'Hauptadresse des Empfängers. Straße und Hausnummer. Maximal 35 Zeichen.',
+            address2: 'Zusätzliche Adressinformationen (optional). Maximal 35 Zeichen.',
+            address3: 'Weitere Adressinformationen (optional). Maximal 35 Zeichen.',
+            city: 'Stadt oder Ort des Empfängers. Maximal 30 Zeichen.',
+            state: 'Bundesland/Provinz. Erforderlich für USA und Kanada.',
+            postalCode: 'Postleitzahl entsprechend dem jeweiligen Länderformat.',
+            telephone: 'Telefonnummer des Empfängers für Rückfragen bei der Zustellung.',
+            extension: 'Durchwahl (optional). Maximal 4 Zeichen.',
+            residential: 'Markieren Sie dies, wenn es sich um eine Privatadresse handelt.',
+            email: 'E-Mail-Adresse für Sendungsbenachrichtigungen (optional).',
+            packagingType: 'Art der Verpackung. Beeinflusst Größen- und Gewichtslimits.',
+            customsValue: 'Warenwert für internationale Sendungen in Euro. Erforderlich außerhalb Deutschlands.',
+            weight: 'Gewicht des Pakets. Zwischen 0,1 und 70 kg (oder bis 150 lbs).',
+            length: 'Länge des Pakets in cm. Zwischen 1 und 270 cm.',
+            width: 'Breite des Pakets in cm. Zwischen 1 und 270 cm.',
+            height: 'Höhe des Pakets in cm. Zwischen 1 und 270 cm.',
+            unitOfMeasure: 'Maßeinheit für Gewicht und Abmessungen.',
+            goodsDescription: 'Beschreibung des Inhalts für internationale Sendungen.',
+            serviceType: 'UPS Service-Typ. Verfügbare Optionen hängen vom Zielland ab.',
+            deliveryConfirm: 'Zusätzliche Zustellbestätigung gegen Aufpreis.',
+            reference1: 'Erste Referenznummer für interne Zuordnung (optional).',
+            reference2: 'Zweite Referenznummer für interne Zuordnung (optional).',
+            reference3: 'Dritte Referenznummer für interne Zuordnung (optional).'
+        };
+
+        this.detailedErrors = {
+            weight: {
+                invalid: 'Bitte nur Zahlen zwischen 0,1 und 70 kg eingeben',
+                tooLow: 'Mindestgewicht beträgt 0,1 kg für UPS-Sendungen',
+                tooHigh: 'Höchstgewicht beträgt 70 kg für Standard-Pakete'
+            },
+            postalCode: {
+                DE: 'Deutsche Postleitzahl: 5 Ziffern (z.B. 12345)',
+                US: 'US ZIP Code: 5 Ziffern oder 5+4 Format (z.B. 12345 oder 12345-6789)',
+                CA: 'Kanadischer Postal Code: A1A 1A1 Format',
+                GB: 'UK Postcode: z.B. SW1A 1AA oder M1 1AA',
+                FR: 'Französische Postleitzahl: 5 Ziffern (z.B. 75001)',
+                general: 'Postleitzahl entsprechend dem gewählten Länderformat'
+            },
+            telephone: {
+                DE: 'Deutsche Telefonnummer: +49 oder 0 am Anfang (z.B. +49 30 12345678)',
+                US: 'US Telefonnummer: 10 Ziffern (z.B. (555) 123-4567)',
+                CA: 'Kanadische Telefonnummer: 10 Ziffern (z.B. (416) 123-4567)',
+                GB: 'UK Telefonnummer: +44 oder 0 am Anfang',
+                general: 'Internationale Telefonnummer mit Ländervorwahl'
+            },
+            email: 'Gültige E-Mail-Adresse im Format name@domain.com',
+            dimensions: 'Abmessungen zwischen 1 und 270 cm. Umfang (L + 2×B + 2×H) max. 400 cm'
+        };
     }
 
     // Allgemeine Validierung
@@ -90,7 +144,9 @@ class FieldValidatorsDE {
 
         return {
             isValid: errors.length === 0,
-            errors
+            errors,
+            tooltip: this.getFieldTooltip(fieldKey, shipment),
+            detailedError: this.getDetailedError(fieldKey, value, shipment, errors)
         };
     }
 
@@ -512,6 +568,57 @@ class FieldValidatorsDE {
         };
         
         return mapping[fieldKey] || fieldKey;
+    }
+
+    // Feld-Tooltip abrufen
+    getFieldTooltip(fieldKey, shipment = {}) {
+        return this.tooltipMessages[fieldKey] || '';
+    }
+
+    // Detaillierte Fehlermeldung abrufen
+    getDetailedError(fieldKey, value, shipment = {}, errors = []) {
+        if (errors.length === 0) return '';
+
+        const country = shipment.country || 'DE';
+        
+        switch (fieldKey) {
+            case 'weight':
+                if (this.detailedErrors.weight) {
+                    if (errors.some(e => e.includes('Mindestgewicht'))) {
+                        return this.detailedErrors.weight.tooLow;
+                    }
+                    if (errors.some(e => e.includes('Höchstgewicht'))) {
+                        return this.detailedErrors.weight.tooHigh;
+                    }
+                    return this.detailedErrors.weight.invalid;
+                }
+                break;
+                
+            case 'postalCode':
+                if (this.detailedErrors.postalCode[country]) {
+                    return this.detailedErrors.postalCode[country];
+                }
+                return this.detailedErrors.postalCode.general;
+                
+            case 'telephone':
+                if (this.detailedErrors.telephone[country]) {
+                    return this.detailedErrors.telephone[country];
+                }
+                return this.detailedErrors.telephone.general;
+                
+            case 'email':
+                return this.detailedErrors.email;
+                
+            case 'length':
+            case 'width':
+            case 'height':
+                return this.detailedErrors.dimensions;
+                
+            default:
+                return errors[0] || '';
+        }
+        
+        return errors[0] || '';
     }
 }
 

@@ -117,13 +117,23 @@ class RealTimeValidator {
         this.clearFieldErrors(fieldGroup);
 
         // Element-Klassen aktualisieren
-        element.classList.remove('error', 'success', 'warning');
+        element.classList.remove('field-error', 'field-success', 'error', 'success', 'warning');
+        fieldGroup.classList.remove('has-error', 'has-success');
         
         if (!validation.isValid && validation.errors.length > 0) {
-            element.classList.add('error');
-            this.showFieldErrors(fieldGroup, validation.errors);
+            element.classList.add('field-error');
+            fieldGroup.classList.add('has-error');
+            this.showFieldErrors(fieldGroup, validation.errors, validation.detailedError);
+            this.addFieldTooltip(element, validation.detailedError, 'error');
         } else if (element.value && validation.isValid) {
-            element.classList.add('success');
+            element.classList.add('field-success');
+            fieldGroup.classList.add('has-success');
+            this.showSuccessMessage(fieldGroup, element);
+        }
+
+        // Tooltip für Feldhilfe hinzufügen (wenn kein Fehler)
+        if (validation.isValid && validation.tooltip) {
+            this.addFieldTooltip(element, validation.tooltip, 'info');
         }
 
         // Realtime feedback für spezielle Felder
@@ -169,16 +179,18 @@ class RealTimeValidator {
     }
 
     // Feldfehler anzeigen
-    showFieldErrors(fieldGroup, errors) {
+    showFieldErrors(fieldGroup, errors, detailedError = '') {
         const errorContainer = document.createElement('div');
         errorContainer.className = 'field-errors';
         
-        errors.forEach(error => {
+        // Hauptfehlermeldung anzeigen
+        const mainError = detailedError || errors[0] || '';
+        if (mainError) {
             const errorElement = document.createElement('div');
-            errorElement.className = 'form-error';
-            errorElement.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${error}`;
+            errorElement.className = 'error-message';
+            errorElement.innerHTML = `<i class="fas fa-exclamation-circle error-icon"></i> ${mainError}`;
             errorContainer.appendChild(errorElement);
-        });
+        }
 
         fieldGroup.appendChild(errorContainer);
     }
@@ -191,10 +203,79 @@ class RealTimeValidator {
         fieldGroup.appendChild(feedbackElement);
     }
 
+    // Erfolgsmeldung anzeigen
+    showSuccessMessage(fieldGroup, element) {
+        const fieldName = element.name;
+        let successText = '';
+        
+        switch (fieldName) {
+            case 'weight':
+                const unit = this.getFormData(element.closest('form')).unitOfMeasure || 'KG';
+                successText = `Gültiges Gewicht: ${element.value} ${unit}`;
+                break;
+            case 'email':
+                successText = 'E-Mail-Format korrekt';
+                break;
+            case 'postalCode':
+                const country = this.getFormData(element.closest('form')).country || 'DE';
+                successText = `Gültige Postleitzahl für ${this.getCountryName(country)}`;
+                break;
+            case 'telephone':
+                successText = 'Telefonnummer-Format korrekt';
+                break;
+            default:
+                return; // Keine Erfolgsmeldung für andere Felder
+        }
+
+        if (successText) {
+            const successContainer = document.createElement('div');
+            successContainer.className = 'success-message';
+            successContainer.innerHTML = `<i class="fas fa-check-circle success-icon"></i> ${successText}`;
+            fieldGroup.appendChild(successContainer);
+        }
+    }
+
+    // Tooltip zu Feld hinzufügen
+    addFieldTooltip(element, message, type = 'info') {
+        if (!message) return;
+
+        // Bestehende Tooltips entfernen
+        this.removeFieldTooltip(element);
+
+        // Tooltip-Container erstellen
+        const tooltip = document.createElement('div');
+        tooltip.className = `field-tooltip ${type === 'error' ? 'error-tooltip' : ''}`;
+        
+        // Tooltip-Inhalt
+        const tooltipContent = document.createElement('div');
+        tooltipContent.className = 'tooltip-content';
+        tooltipContent.textContent = message;
+        tooltip.appendChild(tooltipContent);
+
+        // Element in Tooltip einwickeln
+        const parent = element.parentNode;
+        parent.insertBefore(tooltip, element);
+        tooltip.appendChild(element);
+    }
+
+    // Tooltip von Feld entfernen
+    removeFieldTooltip(element) {
+        const existingTooltip = element.closest('.field-tooltip');
+        if (existingTooltip) {
+            const parent = existingTooltip.parentNode;
+            parent.insertBefore(element, existingTooltip);
+            existingTooltip.remove();
+        }
+    }
+
     // Feldfehler löschen
     clearFieldErrors(fieldGroup) {
-        const existingErrors = fieldGroup.querySelectorAll('.field-errors, .field-feedback');
+        const existingErrors = fieldGroup.querySelectorAll('.field-errors, .field-feedback, .error-message, .success-message');
         existingErrors.forEach(error => error.remove());
+        
+        // Tooltips von allen Feldern in der Gruppe entfernen
+        const fields = fieldGroup.querySelectorAll('.form-input, .form-select, .form-textarea');
+        fields.forEach(field => this.removeFieldTooltip(field));
     }
 
     // Abhängige Felder aktualisieren
@@ -339,7 +420,7 @@ class RealTimeValidator {
         const submitButton = form.querySelector('button[type="submit"], button[data-action="save"], button[data-action="confirm"]');
         if (!submitButton) return;
 
-        const hasErrors = form.querySelectorAll('.form-input.error, .form-select.error').length > 0;
+        const hasErrors = form.querySelectorAll('.form-input.field-error, .form-select.field-error').length > 0;
         const hasEmptyRequired = Array.from(form.querySelectorAll('[required]')).some(field => {
             return !this.getFieldValue(field) && field.offsetParent !== null; // Sichtbar und leer
         });
@@ -409,117 +490,10 @@ class RealTimeValidator {
         return countries[countryCode] || countryCode;
     }
 
-    // Validierungs-Styles hinzufügen
+    // Validierungs-Styles hinzufügen (jetzt in components.css)
     addValidationStyles() {
-        const styles = `
-            .form-input.error,
-            .form-select.error,
-            .form-textarea.error {
-                border-color: var(--error) !important;
-                background-color: var(--error-light);
-            }
-
-            .form-input.success,
-            .form-select.success,
-            .form-textarea.success {
-                border-color: var(--success) !important;
-                background-color: var(--success-light);
-            }
-
-            .form-input.warning,
-            .form-select.warning,
-            .form-textarea.warning {
-                border-color: var(--warning) !important;
-                background-color: var(--warning-light);
-            }
-
-            .field-errors {
-                margin-top: var(--space-2);
-            }
-
-            .form-error {
-                display: flex;
-                align-items: center;
-                gap: var(--space-1);
-                color: var(--error-dark);
-                font-size: var(--font-size-xs);
-                margin-bottom: var(--space-1);
-            }
-
-            .form-error:last-child {
-                margin-bottom: 0;
-            }
-
-            .field-feedback {
-                display: flex;
-                align-items: center;
-                gap: var(--space-1);
-                margin-top: var(--space-2);
-                font-size: var(--font-size-xs);
-                font-weight: var(--font-weight-medium);
-            }
-
-            .field-feedback-success {
-                color: var(--success-dark);
-            }
-
-            .field-feedback-info {
-                color: var(--info-dark);
-            }
-
-            .field-feedback-warning {
-                color: var(--warning-dark);
-            }
-
-            .btn-disabled {
-                opacity: 0.6;
-                cursor: not-allowed;
-                pointer-events: none;
-            }
-
-            .form-group.has-error .form-label {
-                color: var(--error-dark);
-            }
-
-            .form-group.has-success .form-label {
-                color: var(--success-dark);
-            }
-
-            /* Animation für Validierungsänderungen */
-            .form-input,
-            .form-select,
-            .form-textarea {
-                transition: border-color 0.2s ease, background-color 0.2s ease;
-            }
-
-            .field-errors,
-            .field-feedback {
-                animation: slideDown 0.3s ease-out;
-            }
-
-            @keyframes slideDown {
-                from {
-                    opacity: 0;
-                    transform: translateY(-10px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-
-            /* Responsive Anpassungen */
-            @media (max-width: 768px) {
-                .form-error,
-                .field-feedback {
-                    font-size: var(--font-size-xs);
-                }
-            }
-        `;
-
-        const styleSheet = document.createElement('style');
-        styleSheet.textContent = styles;
-        document.head.appendChild(styleSheet);
+        // Styles sind jetzt in components.css definiert
+        // Diese Methode bleibt für Kompatibilität erhalten
     }
 
     // Cleanup bei Destroy

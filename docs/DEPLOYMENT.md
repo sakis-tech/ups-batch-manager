@@ -58,14 +58,14 @@
 ### **3. Webserver-Deployment**
 ```bash
 # Alle Dateien hochladen:
-# - index.html
+# - index.html (Root-Redirect)
+# - html/ (alle HTML-Seiten)
 # - css/de/
 # - js/de/
+# - docs/ (Dokumentation)
+# - lang/ (optional, da eingebettet)
 # - manifest.json
 # - ups-batch-file.json
-# - README.md
-# - CHANGELOG.md
-# - FEATURES.md
 ```
 
 ### **4. MIME-Types konfigurieren**
@@ -171,6 +171,6 @@
 
 ---
 
-**Version**: 2.1.0  
-**Letzte Aktualisierung**: 2024-07-16  
+**Version**: 2.2.0  
+**Letzte Aktualisierung**: 2024-07-17  
 **Status**: ✅ Deployment-Ready

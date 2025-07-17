@@ -2,14 +2,16 @@
 
 ## 📊 Feature-Status Übersicht
 
-### ✅ **Abgeschlossen** (v2.1.0)
+### ✅ **Abgeschlossen** (v2.2.0)
 
 #### 🎯 **Kern-Funktionalität**
 - [x] **Sendungsverwaltung**: Vollständiges CRUD (Create, Read, Update, Delete)
 - [x] **UPS-Feldvalidierung**: Alle offiziellen UPS-Felder mit Validierung
-- [x] **Deutsche Lokalisierung**: Vollständige Übersetzung und Anpassung
-- [x] **Offline-Funktionalität**: 100% client-side ohne Server-Abhängigkeiten
+- [x] **Deutsche Lokalisierung**: Vollständige deutsche Anwendung (Sprachenwechsel entfernt)
+- [x] **Offline-Funktionalität**: 100% client-side ohne Server-Abhängigkeiten, CORS-frei
 - [x] **Persistente Speicherung**: localStorage mit intelligenter Verwaltung
+- [x] **Multi-Page Application**: Getrennte HTML-Seiten für bessere Performance
+- [x] **Eingebettete Übersetzungen**: Sprachdateien direkt in JavaScript integriert
 
 #### 🎨 **Benutzeroberfläche**
 - [x] **Modern UI Design**: UPS-Corporate Design mit modernen Komponenten
@@ -51,7 +53,7 @@
 
 ---
 
-### 🔄 **In Entwicklung** (v2.2.0)
+### 🔄 **In Entwicklung** (v2.3.0)
 
 #### 🔍 **Erweiterte Suchfunktionen**
 - [ ] **Volltext-Suche**: Suche in allen Sendungsfeldern
@@ -79,7 +81,7 @@
 
 ---
 
-### 📅 **Geplant** (v2.3.0+)
+### 📅 **Geplant** (v2.4.0+)
 
 #### 🌐 **Progressive Web App**
 - [ ] **Service Worker**: Vollständige Offline-Funktionalität
@@ -137,9 +139,9 @@
 - **Mobile Optimierung**: 40% 📅
 
 ### **Nächste Meilensteine**
-- **v2.2.0**: Erweiterte Suche + Bulk-Aktionen (Q2 2024)
-- **v2.3.0**: Service Worker + PWA (Q3 2024)
-- **v3.0.0**: UPS API-Integration (Q4 2024)
+- **v2.3.0**: Erweiterte Suche + Bulk-Aktionen (Q4 2024)
+- **v2.4.0**: Service Worker + PWA (Q1 2025)
+- **v3.0.0**: UPS API-Integration (Q2 2025)
 
 ---
 
@@ -195,11 +197,14 @@
 
 ## 🔧 **Technische Roadmap**
 
-### **Aktuelle Architektur** (v2.1.0)
+### **Aktuelle Architektur** (v2.2.0)
 - Vanilla JavaScript (ES6+)
-- Modulares Design
+- Multi-Page Application
+- Modulares Design mit getrennten Seiten
 - LocalStorage-basiert
 - 100% Client-Side
+- CORS-freie Offline-Nutzung
+- Eingebettete Übersetzungen
 
 ### **Geplante Verbesserungen**
 - **TypeScript**: Bessere Typsicherheit
@@ -225,5 +230,5 @@
 
 ---
 
-*Letzte Aktualisierung: 2024-01-15*
-*Version: 2.1.0*
+*Letzte Aktualisierung: 2024-07-17*
+*Version: 2.2.0*

@@ -2,7 +2,7 @@
 
 > **TL;DR**: Professioneller, webbasierter UPS Batch-Manager für bis zu 250 Sendungen. 100% client-side, keine Installation nötig, vollständige deutsche Lokalisierung mit UPS-konformen Export-Formaten.
 
-[![Version](https://img.shields.io/badge/Version-2.1.0-blue)](#changelog)
+[![Version](https://img.shields.io/badge/Version-2.2.0-blue)](#changelog)
 [![Browser](https://img.shields.io/badge/Browser-Chrome%20%7C%20Firefox%20%7C%20Safari-green)](#browser-unterstützung)
 [![Offline](https://img.shields.io/badge/Offline-Capable-orange)](#offline-funktionalität)
 [![Language](https://img.shields.io/badge/Sprache-Deutsch-red)](#lokalisierung)
@@ -11,12 +11,25 @@ Ein professioneller, webbasierter Manager für UPS Batch-Versanddateien mit mode
 
 ## 🚀 Quick Start
 
-1. **Öffnen**: `html/index.html` in einem modernen Browser
+1. **Öffnen**: `index.html` im Browser (leitet automatisch zum Dashboard weiter)
 2. **Erstellen**: Neue Sendung über Dashboard → "Neue Sendung"
 3. **Importieren**: CSV-Datei per Drag & Drop in Import-Bereich
 4. **Exportieren**: UPS-kompatible Batch-Datei über "Batch Exportieren"
 
 **Fertig!** Keine Installation, keine Server, keine Registrierung erforderlich.
+
+## 🆕 Aktuelle Version (v2.2.0)
+
+### **Neue Architektur**
+- **Multi-Page Application**: Getrennte HTML-Seiten für bessere Performance
+- **Modulare Struktur**: Organisierte JavaScript-Module nach Funktionalität
+- **Deutsche Fokussierung**: Vollständig deutsche Anwendung ohne Sprachenwechsel
+
+### **Letzte Verbesserungen**
+- ✅ **CORS-Problem gelöst**: Sprachdateien eingebettet für offline Nutzung
+- ✅ **Dateistruktur optimiert**: HTML in `html/`, Dokumentation in `docs/`
+- ✅ **Modal-System repariert**: Context-Binding für Formulare korrigiert
+- ✅ **Pfade aktualisiert**: Alle relativen Pfade nach Umstrukturierung angepasst
 
 ## ✨ Funktionen
 
@@ -59,7 +72,7 @@ Ein professioneller, webbasierter Manager für UPS Batch-Versanddateien mit mode
 ### 🏁 Installation & Start
 ```bash
 # Option 1: Direkt öffnen
-# html/index.html in Browser öffnen
+# index.html in Browser öffnen (leitet automatisch zum Dashboard weiter)
 
 # Option 2: Lokaler Server (empfohlen für Entwicklung)
 npx serve .
@@ -146,44 +159,61 @@ python -m http.server 8000
 
 ```
 ups-batch-manager/
-├── html/                               # HTML-Dateien
-│   ├── index.html                      # Hauptanwendung (Deutsch)
-│   ├── dashboard.html                  # Dashboard-Seite
+├── index.html                          # Root-Redirect zur Anwendung
+├── html/                               # HTML-Seiten (Multi-Page Application)
+│   ├── dashboard.html                  # Dashboard mit Statistiken
 │   ├── sendungen.html                  # Sendungsverwaltung
 │   ├── import.html                     # CSV Import
 │   ├── export.html                     # Batch Export
 │   ├── einstellungen.html              # Einstellungen
-│   └── hilfe.html                      # Hilfe-Seite
+│   └── hilfe.html                      # Hilfe-System
 ├── docs/                               # Dokumentation
 │   ├── CHANGELOG.md                    # Versionshistorie
 │   ├── DEPLOYMENT.md                   # Deployment-Anleitung
 │   └── FEATURES.md                     # Feature-Beschreibungen
-├── manifest.json                       # PWA Manifest
-├── ups-batch-file.json                # UPS Feldspezifikationen
-├── css/de/                             # Deutsche Stylesheets
-│   ├── modern-base.css                 # Basis-Styles & Variablen
+├── css/de/                             # Stylesheets (Deutsch)
+│   ├── modern-base.css                 # Basis-Styles & CSS-Variablen
 │   ├── components.css                  # UI-Komponenten
-│   └── layout.css                      # Layout-System
-├── js/de/                              # Deutsche JavaScript-Module
+│   └── layout.css                      # Layout-System & Responsive Design
+├── js/de/                              # JavaScript-Module (Deutsch)
 │   ├── core/                           # Kernfunktionalität
 │   │   ├── ups-fields.js               # UPS Felddefinitionen
-│   │   ├── shipment-de.js              # Sendungsverwaltung
-│   │   ├── storage-de.js               # Speicherverwaltung
-│   │   └── app-de.js                   # Hauptanwendung
+│   │   ├── shipment-de.js              # Sendungsverwaltung (CRUD)
+│   │   ├── storage-de.js               # Speicherverwaltung & Backup
+│   │   ├── language-manager.js         # Übersetzungsmanagement (Deutsch)
+│   │   ├── activity-logger.js          # Aktivitätsverfolgung
+│   │   ├── user-manager.js             # Benutzerverwaltung
+│   │   ├── undo-manager.js             # Rückgängig-Funktionen
+│   │   └── unsaved-changes-manager.js  # Ungespeicherte Änderungen
+│   ├── pages/                          # Seitenspezifische Logik
+│   │   ├── dashboard.js                # Dashboard-Funktionalität
+│   │   ├── sendungen.js                # Sendungsseite
+│   │   ├── import.js                   # Import-Seite
+│   │   ├── export.js                   # Export-Seite
+│   │   ├── einstellungen.js            # Einstellungsseite
+│   │   ├── hilfe.js                    # Hilfe-Seite
+│   │   └── shared.js                   # Geteilte Funktionen
 │   ├── ui/                             # Benutzeroberfläche
 │   │   ├── modal-system.js             # Modal-Dialoge
-│   │   ├── toast-system.js             # Benachrichtigungen
+│   │   ├── toast-system.js             # Toast-Benachrichtigungen
 │   │   ├── accordion.js                # Akkordeon-Komponenten
-│   │   ├── pagination.js               # Seitennummerierung
-│   │   ├── import-handler.js           # CSV Import mit Vorschau
-│   │   ├── export-handler.js           # Batch Export mit Optionen
-│   │   └── template-handler.js         # Template Downloads
-│   └── validators/                     # Validierung
+│   │   ├── pagination.js               # Tabellen-Pagination
+│   │   ├── import-handler.js           # CSV Import mit 3-Schritt-Prozess
+│   │   ├── export-handler.js           # Erweiterte Export-Optionen
+│   │   ├── template-handler.js         # Template-Download-System
+│   │   ├── form-handler-de.js          # Formular-Management
+│   │   ├── table-handler-de.js         # Tabellen-Management
+│   │   ├── help-system.js              # Kontextsensitive Hilfe
+│   │   ├── keyboard-shortcuts.js       # Tastaturkürzel
+│   │   └── activity-ui.js              # Aktivitätsanzeige
+│   └── validators/                     # Validierung & Datenqualität
 │       ├── field-validators-de.js      # Deutsche Feldvalidatoren
 │       └── real-time-validator.js      # Echtzeit-Validierung
-├── lang/                               # Sprachdateien
+├── lang/                               # Sprachdateien (eingebettet in JS)
 │   ├── de.json                         # Deutsche Übersetzungen
-│   └── en.json                         # Englische Übersetzungen
+│   └── en.json                         # [Veraltet] Englische Übersetzungen
+├── manifest.json                       # PWA Manifest
+├── ups-batch-file.json                # UPS Feldspezifikationen
 └── README.md                           # Diese Datei
 ```
 
@@ -319,14 +349,23 @@ Alle Daten werden lokal im Browser gespeichert. Keine Datenübertragung an exter
 
 ## 📈 Changelog
 
-### **v2.1.0** (Aktuell) - Stabilität & Features
+### **v2.2.0** (Aktuell) - Architektur & Stabilität
+- ✅ **Multi-Page Application**: Umstrukturierung zu getrennten HTML-Seiten
+- ✅ **Dateiorganisation**: HTML in `html/`, Dokumentation in `docs/`
+- ✅ **Deutsche Fokussierung**: Entfernung der Sprachenwechsel-Funktion
+- ✅ **CORS-Lösung**: Sprachdateien direkt in JavaScript eingebettet
+- ✅ **Modal-System Fix**: Context-Binding für Formular-Funktionen repariert
+- ✅ **Pfad-Optimierung**: Alle relativen Pfade nach Umstrukturierung aktualisiert
+- ✅ **Root-Redirect**: index.html leitet automatisch zum Dashboard weiter
+- 🔧 **Bugfixes**: Modal-Funktionen, Pfad-Referenzen, JavaScript-Kontexte
+
+### **v2.1.0** - Stabilität & Features
 - ✅ **Echtzeit-Validierung**: Sofortige Feldprüfung während der Eingabe
 - ✅ **Erweiterte Import-Funktionen**: 3-Schritt-Import mit intelligenter Fehlerbehandlung
 - ✅ **Professioneller Export**: Modal mit Feldauswahl und Formatoptionen
 - ✅ **Template-Downloads**: 4 vorgefertigte Vorlagen mit Beispieldaten
 - ✅ **Robuste Speicher-Verwaltung**: Automatische Bereinigung und Wiederherstellung
 - ✅ **Verbesserte Fehlerbehandlung**: Kategorisierte Fehler vs. Warnungen
-- 🔧 **Bugfixes**: Speicherfehler-Vermeidung, bessere Validierung
 
 ### **v2.0.0** - Deutsche Vollversion
 - ✅ **Vollständige deutsche Lokalisierung** mit UPS-Corporate Design

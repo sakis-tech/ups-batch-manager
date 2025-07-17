@@ -5,6 +5,35 @@ Alle wichtigen Änderungen an diesem Projekt werden in dieser Datei dokumentiert
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
 und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2024-07-17
+
+### ✅ Hinzugefügt
+- **Multi-Page Application**: Umstrukturierung zu getrennten HTML-Seiten für bessere Performance
+- **Root-Redirect**: index.html im Root-Verzeichnis für direkten Zugriff
+- **Dateiorganisation**: HTML-Dateien in `html/`, Dokumentation in `docs/`
+- **Deutsche Fokussierung**: Vollständige Entfernung der Sprachenwechsel-Funktion
+- **Eingebettete Übersetzungen**: Sprachdateien direkt in JavaScript für CORS-freie Nutzung
+
+### 🔧 Verbessert
+- **Modal-System**: Context-Binding für Formular-Funktionen repariert
+- **Pfad-Management**: Alle relativen Pfade nach Dateistruktur-Umorganisation aktualisiert
+- **Offline-Funktionalität**: Vollständige Offline-Nutzung ohne CORS-Probleme
+- **Code-Organisation**: Bessere Trennung von Seiten-spezifischem und geteiltem Code
+- **Deployment**: Vereinfachte Deployment-Struktur mit klarer Trennung
+
+### 🐛 Behoben
+- **CORS-Fehler**: Sprachdateien-Laden bei direktem Öffnen der HTML-Dateien
+- **Modal-Funktionen**: "this.getRecipientFormFields is not a function" Fehler
+- **Pfad-Referenzen**: Alle Asset-Pfade nach Dateistruktur-Änderung korrigiert
+- **JavaScript-Kontexte**: Korrekte Bindung von this-Kontexten in Modal-Funktionen
+- **Navigation**: Konsistente Navigation zwischen den Seiten
+
+### 🗑️ Entfernt
+- **Sprachenwechsel-UI**: Alle Language-Toggle-Buttons und Dropdown-Menüs
+- **Mehrsprachigkeit**: Englische Übersetzungen und Sprachwechsel-Logik
+- **Language-Event-Handler**: Alle sprachbezogenen Event-Listener und Callbacks
+- **Veraltete Pfade**: Alte Referenzen zur ursprünglichen Dateistruktur
+
 ## [2.1.0] - 2024-01-15
 
 ### ✅ Hinzugefügt
@@ -97,13 +126,13 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ### Nächste Versionen
 
-#### v2.2.0 (Geplant)
+#### v2.3.0 (Geplant)
 - 🔍 **Erweiterte Suchfunktionen**: Volltext-Suche in Sendungen
 - 📊 **Bulk-Aktionen**: Mehrere Sendungen gleichzeitig bearbeiten
-- 🔄 **Undo/Redo**: Rückgängig-Funktion für Sendungsänderungen
+- 🔄 **Undo/Redo**: Erweiterte Rückgängig-Funktionen für alle Aktionen
 - 📈 **Erweiterte Statistiken**: Detaillierte Berichte und Diagramme
 
-#### v2.3.0 (Geplant)
+#### v2.4.0 (Geplant)
 - 🌐 **Service Worker**: Vollständige PWA-Funktionalität
 - 🔧 **Erweiterte Einstellungen**: Mehr Anpassungsmöglichkeiten
 - 📱 **Mobile Optimierung**: Verbesserte Touch-Bedienung

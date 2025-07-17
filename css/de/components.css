@@ -197,6 +197,287 @@
     }
 }
 
+/* Version Migration Dialogs */
+.version-migration-dialog,
+.version-downgrade-dialog {
+    max-width: 600px;
+    padding: var(--space-6);
+    font-family: var(--font-primary);
+}
+
+.migration-warning,
+.downgrade-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    margin-bottom: var(--space-4);
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 193, 7, 0.05));
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    border-radius: var(--radius-lg);
+    color: var(--warning-dark);
+}
+
+.migration-warning i,
+.downgrade-warning i {
+    font-size: var(--font-size-xl);
+    color: var(--warning);
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.migration-warning p,
+.downgrade-warning p {
+    margin: 0;
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+}
+
+.migration-info,
+.downgrade-info {
+    margin-bottom: var(--space-5);
+}
+
+.migration-info h4 {
+    margin: 0 0 var(--space-2) 0;
+    color: var(--text-primary);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+}
+
+.migration-info ul {
+    margin: 0;
+    padding-left: var(--space-4);
+    list-style-type: disc;
+}
+
+.migration-info li {
+    margin-bottom: var(--space-1);
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.migration-options h4 {
+    margin: 0 0 var(--space-3) 0;
+    color: var(--text-primary);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+}
+
+.migration-buttons,
+.downgrade-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+}
+
+.migration-buttons .btn,
+.downgrade-buttons .btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    text-align: left;
+    min-height: 50px;
+    font-weight: var(--font-weight-medium);
+    transition: all 0.2s ease;
+}
+
+.migration-buttons .btn:hover,
+.downgrade-buttons .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.migration-buttons .btn i,
+.downgrade-buttons .btn i {
+    font-size: var(--font-size-lg);
+    flex-shrink: 0;
+}
+
+.migration-details {
+    margin-top: var(--space-4);
+    border-top: 1px solid var(--border-color);
+    padding-top: var(--space-4);
+}
+
+.migration-details summary {
+    cursor: pointer;
+    font-weight: var(--font-weight-medium);
+    color: var(--text-secondary);
+    padding: var(--space-2);
+    border-radius: var(--radius-sm);
+    transition: background-color 0.2s ease;
+}
+
+.migration-details summary:hover {
+    background-color: var(--bg-secondary);
+}
+
+.tech-details {
+    margin-top: var(--space-3);
+    padding: var(--space-3);
+    background-color: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+}
+
+.tech-details p {
+    margin: 0 0 var(--space-2) 0;
+    color: var(--text-secondary);
+}
+
+.tech-details p:last-child {
+    margin-bottom: 0;
+}
+
+.tech-details strong {
+    color: var(--text-primary);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* Version Info Displays */
+.version-info-card {
+    background: linear-gradient(135deg, var(--primary-light), var(--primary-lighter));
+    border: 1px solid var(--primary-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    margin-bottom: var(--space-4);
+}
+
+.version-info-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+}
+
+.version-info-header i {
+    color: var(--primary);
+    font-size: var(--font-size-lg);
+}
+
+.version-info-header h3 {
+    margin: 0;
+    color: var(--primary-dark);
+    font-size: var(--font-size-md);
+}
+
+.version-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--space-3);
+}
+
+.version-detail-item {
+    text-align: center;
+}
+
+.version-detail-item .label {
+    display: block;
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    margin-bottom: var(--space-1);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.version-detail-item .value {
+    display: block;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-dark);
+}
+
+/* Migration Progress */
+.migration-progress {
+    margin: var(--space-4) 0;
+}
+
+.migration-progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: var(--bg-tertiary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-bottom: var(--space-2);
+}
+
+.migration-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--success), var(--success-light));
+    border-radius: var(--radius-full);
+    transition: width 0.3s ease;
+}
+
+.migration-status {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+/* Error Details in Activity Log */
+.error-detail {
+    color: var(--error-dark) !important;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    background-color: rgba(220, 53, 69, 0.1);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--error);
+}
+
+/* Responsive Design for Migration Dialogs */
+@media (max-width: 768px) {
+    .version-migration-dialog,
+    .version-downgrade-dialog {
+        padding: var(--space-4);
+        max-width: 95vw;
+    }
+    
+    .migration-buttons,
+    .downgrade-buttons {
+        gap: var(--space-2);
+    }
+    
+    .migration-buttons .btn,
+    .downgrade-buttons .btn {
+        padding: var(--space-2) var(--space-3);
+        min-height: 44px;
+        font-size: var(--font-size-sm);
+    }
+    
+    .migration-warning,
+    .downgrade-warning {
+        padding: var(--space-3);
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .version-details {
+        grid-template-columns: 1fr;
+        gap: var(--space-2);
+    }
+}
+
+/* Dark Mode Anpassungen */
+[data-theme="dark"] .migration-warning,
+[data-theme="dark"] .downgrade-warning {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 193, 7, 0.08));
+    border-color: rgba(255, 193, 7, 0.4);
+}
+
+[data-theme="dark"] .version-info-card {
+    background: linear-gradient(135deg, rgba(102, 51, 0, 0.2), rgba(102, 51, 0, 0.1));
+    border-color: rgba(102, 51, 0, 0.3);
+}
+
+[data-theme="dark"] .tech-details {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
 /* Buttons */
 .btn {
     display: inline-flex;

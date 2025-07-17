@@ -45,7 +45,10 @@ class UPSBatchManagerApp {
         this.initialize();
     }
 
-    initialize() {
+    async initialize() {
+        // Version Manager prüfung vor allen anderen Initialisierungen
+        await this.checkVersionAndMigrate();
+        
         this.cacheFrequentElements();
         this.setupDebouncedFunctions();
         this.setupEventListeners();
@@ -55,6 +58,30 @@ class UPSBatchManagerApp {
         this.updateRecentActivities();
         this.setupTooltips();
         this.loadSettings();
+    }
+
+    // Version prüfen und Migration durchführen
+    async checkVersionAndMigrate() {
+        try {
+            if (window.versionManager) {
+                const migrationSuccess = await window.versionManager.checkVersionOnStartup();
+                
+                if (!migrationSuccess) {
+                    console.error('Migration fehlgeschlagen - Anwendung könnte instabil sein');
+                    
+                    // Warnung an Benutzer anzeigen
+                    if (window.toastManager) {
+                        window.toastManager.show(
+                            'Warnung: Datenmigration fehlgeschlagen. Bitte kontaktieren Sie den Support.',
+                            'error',
+                            10000
+                        );
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Fehler bei der Versionsprüfung:', error);
+        }
     }
 
     // DOM-Elemente cachen für bessere Performance

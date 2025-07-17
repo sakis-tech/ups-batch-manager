@@ -147,6 +147,63 @@ class ActivityLogger {
             category: 'system',
             template: 'simple_action'
         });
+
+        // Version Management & Migration
+        this.activityTypes.set('version_initialized', {
+            icon: 'fas fa-code-branch',
+            color: 'info',
+            category: 'version',
+            template: 'version_action'
+        });
+
+        this.activityTypes.set('app_version_updated', {
+            icon: 'fas fa-arrow-up',
+            color: 'info',
+            category: 'version',
+            template: 'version_action'
+        });
+
+        this.activityTypes.set('migration_started', {
+            icon: 'fas fa-sync-alt',
+            color: 'info',
+            category: 'version',
+            template: 'migration_action'
+        });
+
+        this.activityTypes.set('migration_step_completed', {
+            icon: 'fas fa-check',
+            color: 'success',
+            category: 'version',
+            template: 'migration_step_action'
+        });
+
+        this.activityTypes.set('migration_completed', {
+            icon: 'fas fa-check-circle',
+            color: 'success',
+            category: 'version',
+            template: 'migration_action'
+        });
+
+        this.activityTypes.set('migration_failed', {
+            icon: 'fas fa-exclamation-circle',
+            color: 'danger',
+            category: 'version',
+            template: 'migration_action'
+        });
+
+        this.activityTypes.set('fresh_start_completed', {
+            icon: 'fas fa-refresh',
+            color: 'warning',
+            category: 'version',
+            template: 'version_action'
+        });
+
+        this.activityTypes.set('data_migrated', {
+            icon: 'fas fa-database',
+            color: 'success',
+            category: 'version',
+            template: 'migration_action'
+        });
         
         // User
         this.activityTypes.set('user_created', {
@@ -799,6 +856,39 @@ class ActivityLogger {
                     <div class="activity-details">
                         <span class="detail-item"><strong>${this.getLocalizedText('activities.from')}:</strong> ${meta.oldName}</span>
                         <span class="detail-item"><strong>${this.getLocalizedText('activities.to')}:</strong> ${meta.newName}</span>
+                    </div>
+                `;
+                break;
+
+            case 'version_action':
+                html = `
+                    <div class="activity-details">
+                        ${meta.dataVersion ? `<span class="detail-item"><strong>Datenversion:</strong> ${meta.dataVersion}</span>` : ''}
+                        ${meta.appVersion ? `<span class="detail-item"><strong>App-Version:</strong> ${meta.appVersion}</span>` : ''}
+                        ${meta.newVersion ? `<span class="detail-item"><strong>Neue Version:</strong> ${meta.newVersion}</span>` : ''}
+                        ${meta.timestamp ? `<span class="detail-item"><strong>Zeitpunkt:</strong> ${new Date(meta.timestamp).toLocaleString()}</span>` : ''}
+                    </div>
+                `;
+                break;
+
+            case 'migration_action':
+                html = `
+                    <div class="activity-details">
+                        ${meta.fromVersion ? `<span class="detail-item"><strong>Von Version:</strong> ${meta.fromVersion}</span>` : ''}
+                        ${meta.toVersion ? `<span class="detail-item"><strong>Zu Version:</strong> ${meta.toVersion}</span>` : ''}
+                        ${meta.success !== undefined ? `<span class="detail-item"><strong>Status:</strong> ${meta.success ? 'Erfolgreich' : 'Fehlgeschlagen'}</span>` : ''}
+                        ${meta.timestamp ? `<span class="detail-item"><strong>Zeitpunkt:</strong> ${new Date(meta.timestamp).toLocaleString()}</span>` : ''}
+                        ${meta.error ? `<span class="detail-item error-detail"><strong>Fehler:</strong> ${meta.error}</span>` : ''}
+                    </div>
+                `;
+                break;
+
+            case 'migration_step_action':
+                html = `
+                    <div class="activity-details">
+                        ${meta.fromVersion ? `<span class="detail-item"><strong>Von:</strong> ${meta.fromVersion}</span>` : ''}
+                        ${meta.toVersion ? `<span class="detail-item"><strong>Zu:</strong> ${meta.toVersion}</span>` : ''}
+                        ${meta.description ? `<span class="detail-item"><strong>Beschreibung:</strong> ${meta.description}</span>` : ''}
                     </div>
                 `;
                 break;

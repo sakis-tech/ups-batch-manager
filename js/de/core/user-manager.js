@@ -44,8 +44,37 @@ class UserManager {
      */
     initialize() {
         this.loadUserData();
+        this.setupSessionStorage();
         this.checkLoginRequired();
         this.setupEventListeners();
+    }
+
+    /**
+     * Session-Storage für Browser-übergreifende Persistenz einrichten
+     */
+    setupSessionStorage() {
+        // Session-ID für Browser-Tab generieren
+        this.sessionId = this.generateSessionId();
+        
+        // Session in sessionStorage speichern (überlebt Browser-Refresh)
+        if (this.currentUser) {
+            const sessionData = {
+                userId: this.currentUser.id,
+                userName: this.currentUser.name,
+                sessionId: this.sessionId,
+                timestamp: Date.now()
+            };
+            sessionStorage.setItem('ups_batch_session', JSON.stringify(sessionData));
+        }
+    }
+
+    /**
+     * Session-ID generieren
+     * 
+     * @returns {string} Eindeutige Session-ID
+     */
+    generateSessionId() {
+        return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     }
     
     /**
@@ -91,8 +120,125 @@ class UserManager {
     checkLoginRequired() {
         this.loginRequired = !this.currentUser || !this.currentUser.name;
         
-        if (this.loginRequired) {
+        // Nur Login-Screen zeigen wenn noch nie eingeloggt war
+        // oder Session abgelaufen ist
+        if (this.loginRequired && this.shouldShowLogin()) {
             this.showLoginScreen();
+        }
+    }
+
+    /**
+     * Prüft ob Login-Screen angezeigt werden soll
+     * Verhindert mehrfache Anzeige bei Navigation
+     * 
+     * @returns {boolean} true wenn Login-Screen gezeigt werden soll
+     */
+    shouldShowLogin() {
+        // Prüfe ob Login-Screen bereits aktiv ist
+        if (document.getElementById('loginOverlay')) {
+            return false;
+        }
+        
+        // Prüfe aktive Session in sessionStorage
+        const sessionData = this.getActiveSession();
+        if (sessionData && this.validateSessionData(sessionData)) {
+            // Aktive Session gefunden - kein Login erforderlich
+            this.loginRequired = false;
+            return false;
+        }
+        
+        // Prüfe ob bereits ein globaler UserManager existiert
+        if (window.userManagerInstance && window.userManagerInstance.isLoggedIn()) {
+            // Synchronisiere mit existierender Instanz
+            this.currentUser = window.userManagerInstance.currentUser;
+            this.userProfile = window.userManagerInstance.userProfile;
+            this.loginRequired = false;
+            return false;
+        }
+        
+        // Prüfe Session-Gültigkeit
+        return this.isSessionValid();
+    }
+
+    /**
+     * Aktive Session aus sessionStorage abrufen
+     * 
+     * @returns {Object|null} Session-Daten oder null
+     */
+    getActiveSession() {
+        try {
+            const sessionData = sessionStorage.getItem('ups_batch_session');
+            return sessionData ? JSON.parse(sessionData) : null;
+        } catch (error) {
+            console.error('Fehler beim Laden der Session-Daten:', error);
+            return null;
+        }
+    }
+
+    /**
+     * Session-Daten validieren
+     * 
+     * @param {Object} sessionData - Session-Daten
+     * @returns {boolean} true wenn Session gültig
+     */
+    validateSessionData(sessionData) {
+        if (!sessionData || !sessionData.userId || !sessionData.userName) {
+            return false;
+        }
+        
+        // Session-Timeout prüfen (1 Stunde für sessionStorage)
+        const sessionAge = Date.now() - sessionData.timestamp;
+        const maxSessionAge = 60 * 60 * 1000; // 1 Stunde
+        
+        if (sessionAge > maxSessionAge) {
+            sessionStorage.removeItem('ups_batch_session');
+            return false;
+        }
+        
+        // Prüfe ob User-Daten in localStorage übereinstimmen
+        if (this.currentUser && this.currentUser.id === sessionData.userId) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
+     * Prüft ob die aktuelle Session noch gültig ist
+     * 
+     * @returns {boolean} true wenn neue Session erforderlich
+     */
+    isSessionValid() {
+        if (!this.currentUser || !this.currentUser.lastLogin) {
+            return true; // Neuer Login erforderlich
+        }
+        
+        // Session-Timeout prüfen (24 Stunden)
+        const lastLogin = new Date(this.currentUser.lastLogin);
+        const now = new Date();
+        const sessionDuration = now - lastLogin;
+        const maxSessionDuration = 24 * 60 * 60 * 1000; // 24 Stunden
+        
+        if (sessionDuration > maxSessionDuration) {
+            // Session abgelaufen - logout ohne Login-Screen
+            this.logout(false);
+            return true;
+        }
+        
+        // Session erneuern
+        this.refreshSession();
+        return false; // Kein neuer Login erforderlich
+    }
+
+    /**
+     * Session erneuern
+     */
+    refreshSession() {
+        if (this.currentUser) {
+            // Nur lastLogin aktualisieren, nicht loginCount
+            // (loginCount wird nur bei echtem Login erhöht)
+            this.currentUser.lastLogin = new Date().toISOString();
+            this.saveUserData();
         }
     }
     
@@ -114,6 +260,57 @@ class UserManager {
                 this.updateUserName(e.target.value);
             }
         });
+
+        // Storage-Events für Cross-Tab-Synchronisation
+        window.addEventListener('storage', (e) => {
+            this.handleStorageChange(e);
+        });
+
+        // Seitenwechsel-Events
+        window.addEventListener('beforeunload', () => {
+            this.handlePageUnload();
+        });
+
+        // Seitenfokus-Events
+        window.addEventListener('focus', () => {
+            this.handlePageFocus();
+        });
+    }
+
+    /**
+     * Storage-Änderungen behandeln (Cross-Tab-Synchronisation)
+     * 
+     * @param {StorageEvent} event - Storage Event
+     */
+    handleStorageChange(event) {
+        if (event.key === this.userStorageKey) {
+            // User-Daten in anderem Tab geändert
+            this.loadUserData();
+            this.checkLoginRequired();
+        } else if (event.key === 'ups_batch_logout_signal') {
+            // Logout-Signal von anderem Tab
+            this.logout(false);
+        }
+    }
+
+    /**
+     * Seite wird verlassen
+     */
+    handlePageUnload() {
+        // Session-Timestamp aktualisieren
+        if (this.currentUser) {
+            this.refreshSession();
+        }
+    }
+
+    /**
+     * Seite erhält Fokus
+     */
+    handlePageFocus() {
+        // Session-Gültigkeit prüfen
+        if (this.currentUser) {
+            this.isSessionValid();
+        }
     }
     
     /**
@@ -259,6 +456,12 @@ class UserManager {
      * Login erfolgreich behandeln
      */
     onLoginSuccess() {
+        // Session Storage aktualisieren
+        this.setupSessionStorage();
+        
+        // Globale Instanz setzen
+        window.userManagerInstance = this;
+        
         // Login-Screen entfernen
         this.hideLoginScreen();
         
@@ -424,8 +627,10 @@ class UserManager {
     
     /**
      * Nutzer abmelden (für Debugging/Testing)
+     * 
+     * @param {boolean} showLogin - Ob Login-Screen gezeigt werden soll (default: true)
      */
-    logout() {
+    logout(showLogin = true) {
         // Activity Logger - Logout
         if (window.activityLogger) {
             window.activityLogger.logUserLogout(this.currentUser);
@@ -438,9 +643,17 @@ class UserManager {
         // Daten löschen
         localStorage.removeItem(this.userStorageKey);
         localStorage.removeItem(this.profileStorageKey);
+        sessionStorage.removeItem('ups_batch_session');
         
-        // Login-Screen anzeigen
-        this.showLoginScreen();
+        // Globale Instanz zurücksetzen
+        if (window.userManagerInstance === this) {
+            window.userManagerInstance = null;
+        }
+        
+        // Login-Screen nur anzeigen wenn gewünscht
+        if (showLogin) {
+            this.showLoginScreen();
+        }
     }
     
     /**
@@ -566,7 +779,31 @@ class UserManager {
 // UserManager global verfügbar machen
 window.UserManager = UserManager;
 
+// Singleton-Pattern für globale UserManager-Instanz
+function initializeUserManager() {
+    // Prüfe ob bereits eine globale Instanz existiert
+    if (window.userManagerInstance && window.userManagerInstance.isLoggedIn()) {
+        // Verwende existierende Instanz
+        window.userManager = window.userManagerInstance;
+        return;
+    }
+    
+    // Erstelle neue Instanz falls noch keine existiert
+    if (!window.userManagerInstance) {
+        window.userManagerInstance = new UserManager();
+    }
+    
+    // Setze lokale Referenz
+    window.userManager = window.userManagerInstance;
+}
+
 // Initialisierung nach DOM Load
-document.addEventListener('DOMContentLoaded', () => {
-    window.userManager = new UserManager();
-});
+document.addEventListener('DOMContentLoaded', initializeUserManager);
+
+// Initialisierung auch bei schneller Navigation ohne DOM-Reload
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeUserManager);
+} else {
+    // DOM bereits geladen
+    initializeUserManager();
+}

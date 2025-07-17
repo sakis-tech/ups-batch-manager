@@ -212,10 +212,10 @@
     gap: var(--space-3);
     padding: var(--space-4);
     margin-bottom: var(--space-4);
-    background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 193, 7, 0.05));
-    border: 1px solid rgba(255, 193, 7, 0.3);
+    background: linear-gradient(135deg, var(--warning-lighter), rgba(217, 119, 6, 0.05));
+    border: 1px solid var(--warning-border);
     border-radius: var(--radius-lg);
-    color: var(--warning-dark);
+    color: var(--warning-darker);
 }
 
 .migration-warning i,
@@ -340,7 +340,7 @@
 
 /* Version Info Displays */
 .version-info-card {
-    background: linear-gradient(135deg, var(--primary-light), var(--primary-lighter));
+    background: linear-gradient(135deg, var(--primary-lighter), rgba(37, 99, 235, 0.05));
     border: 1px solid var(--primary-border);
     border-radius: var(--radius-lg);
     padding: var(--space-4);
@@ -465,20 +465,21 @@
 /* Dark Mode Anpassungen */
 [data-theme="dark"] .migration-warning,
 [data-theme="dark"] .downgrade-warning {
-    background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 193, 7, 0.08));
-    border-color: rgba(255, 193, 7, 0.4);
+    background: linear-gradient(135deg, var(--warning-lighter), rgba(217, 119, 6, 0.08));
+    border-color: var(--warning-border);
+    color: var(--warning-light);
 }
 
 [data-theme="dark"] .version-info-card {
-    background: linear-gradient(135deg, rgba(102, 51, 0, 0.2), rgba(102, 51, 0, 0.1));
-    border-color: rgba(102, 51, 0, 0.3);
+    background: linear-gradient(135deg, var(--primary-lighter), rgba(37, 99, 235, 0.08));
+    border-color: var(--primary-border);
 }
 
 [data-theme="dark"] .tech-details {
     background-color: rgba(255, 255, 255, 0.05);
 }
 
-/* Buttons */
+/* Modern Button System */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -486,18 +487,19 @@
     gap: var(--space-2);
     padding: var(--space-3) var(--space-4);
     border: 1px solid transparent;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
     line-height: var(--line-height-tight);
     text-decoration: none;
     cursor: pointer;
-    transition: var(--transition-fast);
+    transition: all var(--transition-fast);
     white-space: nowrap;
     user-select: none;
-    min-height: 36px;
+    min-height: 40px;
     position: relative;
     overflow: hidden;
+    box-shadow: var(--shadow-sm);
 }
 
 .btn:disabled {
@@ -508,96 +510,188 @@
 
 .btn:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(102, 51, 0, 0.2);
+    box-shadow: 0 0 0 3px var(--primary-lighter);
 }
 
+.btn:active {
+    transform: translateY(1px);
+}
+
+/* Primary Button - Modern Blue */
 .btn-primary {
-    background-color: var(--primary);
-    color: var(--white);
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: var(--text-on-primary);
     border-color: var(--primary);
+    box-shadow: var(--shadow-md);
 }
 
 .btn-primary:hover {
-    background-color: var(--primary-dark);
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-darker));
     border-color: var(--primary-dark);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-1px);
 }
 
+.btn-primary:focus {
+    box-shadow: 0 0 0 3px var(--primary-lighter), var(--shadow-md);
+}
+
+/* Secondary Button - Modern Cyan */
 .btn-secondary {
-    background-color: var(--secondary);
-    color: var(--white);
+    background: linear-gradient(135deg, var(--secondary), var(--secondary-dark));
+    color: var(--text-on-secondary);
     border-color: var(--secondary);
+    box-shadow: var(--shadow-md);
 }
 
 .btn-secondary:hover {
-    background-color: var(--secondary-dark);
+    background: linear-gradient(135deg, var(--secondary-dark), var(--secondary-darker));
     border-color: var(--secondary-dark);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-1px);
 }
 
+.btn-secondary:focus {
+    box-shadow: 0 0 0 3px var(--secondary-lighter), var(--shadow-md);
+}
+
+/* Success Button - Modern Emerald */
 .btn-success {
-    background-color: var(--success);
+    background: linear-gradient(135deg, var(--success), var(--success-dark));
     color: var(--white);
     border-color: var(--success);
+    box-shadow: var(--shadow-md);
 }
 
 .btn-success:hover {
-    background-color: var(--success-dark);
+    background: linear-gradient(135deg, var(--success-dark), var(--success-darker));
     border-color: var(--success-dark);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-1px);
 }
 
+.btn-success:focus {
+    box-shadow: 0 0 0 3px var(--success-lighter), var(--shadow-md);
+}
+
+/* Warning Button - Modern Amber */
 .btn-warning {
-    background-color: var(--warning);
+    background: linear-gradient(135deg, var(--warning), var(--warning-dark));
     color: var(--white);
     border-color: var(--warning);
+    box-shadow: var(--shadow-md);
 }
 
 .btn-warning:hover {
-    background-color: var(--warning-dark);
+    background: linear-gradient(135deg, var(--warning-dark), var(--warning-darker));
     border-color: var(--warning-dark);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-1px);
 }
 
+.btn-warning:focus {
+    box-shadow: 0 0 0 3px var(--warning-lighter), var(--shadow-md);
+}
+
+/* Danger Button - Modern Red */
 .btn-danger {
-    background-color: var(--error);
+    background: linear-gradient(135deg, var(--error), var(--error-dark));
     color: var(--white);
     border-color: var(--error);
+    box-shadow: var(--shadow-md);
 }
 
 .btn-danger:hover {
-    background-color: var(--error-dark);
+    background: linear-gradient(135deg, var(--error-dark), var(--error-darker));
     border-color: var(--error-dark);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-1px);
 }
 
+.btn-danger:focus {
+    box-shadow: 0 0 0 3px var(--error-lighter), var(--shadow-md);
+}
+
+/* Info Button - Modern Sky */
 .btn-info {
-    background-color: var(--info);
+    background: linear-gradient(135deg, var(--info), var(--info-dark));
     color: var(--white);
     border-color: var(--info);
+    box-shadow: var(--shadow-md);
 }
 
 .btn-info:hover {
-    background-color: var(--info-dark);
+    background: linear-gradient(135deg, var(--info-dark), var(--info-darker));
     border-color: var(--info-dark);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-1px);
 }
 
+.btn-info:focus {
+    box-shadow: 0 0 0 3px var(--info-lighter), var(--shadow-md);
+}
+
+/* Ghost Button - Outline Style */
 .btn-ghost {
-    background-color: transparent;
+    background: transparent;
     color: var(--text-secondary);
-    border-color: var(--border-light);
+    border-color: var(--border-color);
+    box-shadow: none;
 }
 
 .btn-ghost:hover {
-    background-color: var(--bg-tertiary);
+    background: var(--bg-hover);
     color: var(--text-primary);
+    border-color: var(--border-medium);
+    box-shadow: var(--shadow-sm);
 }
 
+.btn-ghost:focus {
+    box-shadow: 0 0 0 3px var(--primary-lighter);
+}
+
+/* Outline Button Variants */
+.btn-outline-primary {
+    background: transparent;
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-outline-primary:hover {
+    background: var(--primary);
+    color: var(--text-on-primary);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-outline-secondary {
+    background: transparent;
+    color: var(--secondary);
+    border-color: var(--secondary);
+}
+
+.btn-outline-secondary:hover {
+    background: var(--secondary);
+    color: var(--text-on-secondary);
+    box-shadow: var(--shadow-md);
+}
+
+/* Button Sizes */
 .btn-sm {
     padding: var(--space-2) var(--space-3);
     font-size: var(--font-size-xs);
-    min-height: 28px;
+    min-height: 32px;
 }
 
 .btn-lg {
     padding: var(--space-4) var(--space-6);
     font-size: var(--font-size-base);
-    min-height: 44px;
+    min-height: 48px;
+}
+
+.btn-xl {
+    padding: var(--space-5) var(--space-8);
+    font-size: var(--font-size-lg);
+    min-height: 56px;
 }
 
 .btn-loading {
@@ -726,7 +820,7 @@
 .form-textarea:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(102, 51, 0, 0.1);
+    box-shadow: 0 0 0 3px var(--primary-lighter);
 }
 
 .form-input:invalid,
@@ -738,7 +832,7 @@
 .form-input:invalid:focus,
 .form-select:invalid:focus,
 .form-textarea:invalid:focus {
-    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    box-shadow: 0 0 0 3px var(--error-lighter);
 }
 
 .form-input.error,

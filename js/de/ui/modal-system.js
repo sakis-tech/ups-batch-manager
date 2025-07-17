@@ -417,82 +417,105 @@ class ModalSystem {
     getRecipientFormFields(shipment) {
         return `
             <div class="form-section">
-                <h4>Empfänger-Informationen</h4>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">Firma oder Name *</label>
+                <div class="form-section-header">
+                    <i class="fas fa-user"></i>
+                    <h3>Empfänger-Informationen</h3>
+                </div>
+                
+                <!-- 2-Grid: Empfänger Name/Firma und Kontaktperson -->
+                <div class="form-grid form-grid-2">
+                    <div class="form-field">
+                        <label class="form-field-required">Empfänger Name/Firma</label>
                         <input type="text" name="companyName" class="form-input" required 
                                value="${shipment.companyName || ''}" maxlength="35">
-                        <div class="form-help">Name des Empfängers oder der Firma</div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Kontaktname</label>
+                    <div class="form-field">
+                        <label>Kontaktperson</label>
                         <input type="text" name="contactName" class="form-input" 
                                value="${shipment.contactName || ''}" maxlength="35">
-                        <div class="form-help">Name der Kontaktperson (optional)</div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Adresse 1 *</label>
+                </div>
+                
+                <!-- 1-Grid: Straße und Hausnummer -->
+                <div class="form-grid form-grid-1">
+                    <div class="form-field">
+                        <label class="form-field-required">Straße und Hausnummer</label>
                         <input type="text" name="address1" class="form-input" required 
                                value="${shipment.address1 || ''}" maxlength="35">
-                        <div class="form-help">Straße und Hausnummer</div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Adresse 2</label>
+                </div>
+                
+                <!-- 2-Grid: Zusätzliche Adressinformationen -->
+                <div class="form-grid form-grid-2">
+                    <div class="form-field">
+                        <label>Adresse 2</label>
                         <input type="text" name="address2" class="form-input" 
                                value="${shipment.address2 || ''}" maxlength="35">
-                        <div class="form-help">Zusätzliche Adressinformationen</div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Adresse 3</label>
+                    <div class="form-field">
+                        <label>Adresse 3</label>
                         <input type="text" name="address3" class="form-input" 
                                value="${shipment.address3 || ''}" maxlength="35">
-                        <div class="form-help">Weitere Adressinformationen</div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Stadt *</label>
-                        <input type="text" name="city" class="form-input" required 
-                               value="${shipment.city || ''}" maxlength="30">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Land *</label>
+                </div>
+                
+                <!-- 3-Grid: Land, PLZ, Ort -->
+                <div class="form-grid form-grid-3">
+                    <div class="form-field">
+                        <label class="form-field-required">Land</label>
                         <select name="country" class="form-select" required onchange="updateCountryDependentFields(this.value)">
                             ${this.getCountryOptions(shipment.country)}
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Postleitzahl *</label>
+                    <div class="form-field">
+                        <label class="form-field-required">PLZ</label>
                         <input type="text" name="postalCode" class="form-input" required 
                                value="${shipment.postalCode || ''}" maxlength="10">
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Bundesland/Provinz</label>
+                    <div class="form-field">
+                        <label class="form-field-required">Ort</label>
+                        <input type="text" name="city" class="form-input" required 
+                               value="${shipment.city || ''}" maxlength="30">
+                    </div>
+                </div>
+                
+                <!-- 1-Grid: Bundesland/Provinz -->
+                <div class="form-grid form-grid-1">
+                    <div class="form-field">
+                        <label>Bundesland/Provinz</label>
                         <input type="text" name="state" class="form-input" 
                                value="${shipment.state || ''}" maxlength="5">
-                        <div class="form-help">Erforderlich für USA und Kanada</div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Telefon</label>
+                </div>
+                
+                <!-- 3-Grid: Telefon, Durchwahl, E-Mail -->
+                <div class="form-grid form-grid-3">
+                    <div class="form-field">
+                        <label>Telefon</label>
                         <input type="tel" name="telephone" class="form-input" 
                                value="${shipment.telephone || ''}" maxlength="15">
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Durchwahl</label>
+                    <div class="form-field">
+                        <label>Durchwahl</label>
                         <input type="text" name="extension" class="form-input" 
                                value="${shipment.extension || ''}" maxlength="4">
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">E-Mail</label>
+                    <div class="form-field">
+                        <label>E-Mail</label>
                         <input type="email" name="email" class="form-input" 
                                value="${shipment.email || ''}" maxlength="50">
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="residential" ${shipment.residential ? 'checked' : ''}>
-                        <span class="checkbox-custom"></span>
-                        Privatadresse (Wohnadresse statt Geschäftsadresse)
-                    </label>
+                
+                <!-- 1-Grid: Checkbox -->
+                <div class="form-grid form-grid-1">
+                    <div class="form-field">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="residential" ${shipment.residential ? 'checked' : ''}>
+                            <span class="checkbox-custom"></span>
+                            Privatadresse (Wohnadresse statt Geschäftsadresse)
+                        </label>
+                    </div>
                 </div>
             </div>
         `;
@@ -501,10 +524,15 @@ class ModalSystem {
     getPackageFormFields(shipment) {
         return `
             <div class="form-section">
-                <h4>Paket-Informationen</h4>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">Gewicht *</label>
+                <div class="form-section-header">
+                    <i class="fas fa-box"></i>
+                    <h3>Paket-Informationen</h3>
+                </div>
+                
+                <!-- 2-Grid: Gewicht und Verpackungsart -->
+                <div class="form-grid form-grid-2">
+                    <div class="form-field">
+                        <label class="form-field-required">Gewicht</label>
                         <div class="input-group">
                             <input type="number" name="weight" class="form-input" required 
                                    value="${shipment.weight || '1.0'}" min="0.1" max="70" step="0.1">
@@ -514,72 +542,85 @@ class ModalSystem {
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Verpackungsart *</label>
+                    <div class="form-field">
+                        <label class="form-field-required">Verpackungsart</label>
                         <select name="packagingType" class="form-select" required>
                             ${this.getPackagingOptions(shipment.packagingType)}
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Länge</label>
-                        <div class="input-group">
-                            <input type="number" name="length" class="form-input" 
-                                   value="${shipment.length || ''}" min="1" max="270">
-                            <span class="input-suffix">cm</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Breite</label>
+                </div>
+                
+                <!-- 3-Grid: Breite, Höhe, Tiefe -->
+                <div class="form-grid form-grid-3">
+                    <div class="form-field">
+                        <label>Breite</label>
                         <div class="input-group">
                             <input type="number" name="width" class="form-input" 
                                    value="${shipment.width || ''}" min="1" max="270">
                             <span class="input-suffix">cm</span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Höhe</label>
+                    <div class="form-field">
+                        <label>Höhe</label>
                         <div class="input-group">
                             <input type="number" name="height" class="form-input" 
                                    value="${shipment.height || ''}" min="1" max="270">
                             <span class="input-suffix">cm</span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Warenbeschreibung</label>
+                    <div class="form-field">
+                        <label>Tiefe</label>
+                        <div class="input-group">
+                            <input type="number" name="length" class="form-input" 
+                                   value="${shipment.length || ''}" min="1" max="270">
+                            <span class="input-suffix">cm</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 1-Grid: Warenbeschreibung -->
+                <div class="form-grid form-grid-1">
+                    <div class="form-field">
+                        <label>Warenbeschreibung</label>
                         <input type="text" name="goodsDescription" class="form-input" 
                                value="${shipment.goodsDescription || ''}" maxlength="50">
-                        <div class="form-help">Erforderlich für internationale Sendungen</div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Zollwert</label>
+                </div>
+                
+                <!-- 3-Grid: Zollwert, Paket-Deklarationswert, GNIFC -->
+                <div class="form-grid form-grid-3">
+                    <div class="form-field">
+                        <label>Zollwert</label>
                         <div class="input-group">
                             <input type="number" name="customsValue" class="form-input" 
                                    value="${shipment.customsValue || ''}" min="0" max="99999" step="0.01">
                             <span class="input-suffix">€</span>
                         </div>
-                        <div class="form-help">Erforderlich für internationale Sendungen</div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Paket-Deklarationswert</label>
+                    <div class="form-field">
+                        <label>Paket-Deklarationswert</label>
                         <div class="input-group">
                             <input type="number" name="packageDeclaredValue" class="form-input" 
                                    value="${shipment.packageDeclaredValue || ''}" min="0" max="99999" step="0.01">
                             <span class="input-suffix">€</span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">GNIFC</label>
+                    <div class="form-field">
+                        <label>GNIFC</label>
                         <input type="text" name="gnifc" class="form-input" 
                                value="${shipment.gnifc || ''}" maxlength="15">
-                        <div class="form-help">Goods Not In Free Circulation</div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="documentsNoCommercialValue" ${shipment.documentsNoCommercialValue ? 'checked' : ''}>
-                        <span class="checkbox-custom"></span>
-                        Dokumente ohne kommerziellen Wert
-                    </label>
+                
+                <!-- 1-Grid: Checkbox -->
+                <div class="form-grid form-grid-1">
+                    <div class="form-field">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="documentsNoCommercialValue" ${shipment.documentsNoCommercialValue ? 'checked' : ''}>
+                            <span class="checkbox-custom"></span>
+                            Dokumente ohne kommerziellen Wert
+                        </label>
+                    </div>
                 </div>
             </div>
         `;
@@ -588,30 +629,43 @@ class ModalSystem {
     getServiceFormFields(shipment) {
         return `
             <div class="form-section">
-                <h4>Service-Optionen</h4>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">Service-Art *</label>
+                <div class="form-section-header">
+                    <i class="fas fa-shipping-fast"></i>
+                    <h3>Service-Optionen</h3>
+                </div>
+                
+                <!-- 2-Grid: Service-Art und Zustellbestätigung -->
+                <div class="form-grid form-grid-2">
+                    <div class="form-field">
+                        <label class="form-field-required">Service-Art</label>
                         <select name="serviceType" class="form-select" required>
                             ${this.getServiceOptions(shipment.serviceType)}
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Zustellbestätigung</label>
+                    <div class="form-field">
+                        <label>Zustellbestätigung</label>
                         <select name="deliveryConfirm" class="form-select">
                             ${this.getDeliveryConfirmOptions(shipment.deliveryConfirm)}
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Referenzen</label>
-                    <div class="form-grid">
+                
+                <!-- 3-Grid: Referenzen -->
+                <div class="form-grid form-grid-3">
+                    <div class="form-field">
+                        <label>Referenz 1</label>
                         <input type="text" name="reference1" class="form-input" 
-                               placeholder="Referenz 1" value="${shipment.reference1 || ''}" maxlength="35">
+                               value="${shipment.reference1 || ''}" maxlength="35">
+                    </div>
+                    <div class="form-field">
+                        <label>Referenz 2</label>
                         <input type="text" name="reference2" class="form-input" 
-                               placeholder="Referenz 2" value="${shipment.reference2 || ''}" maxlength="35">
+                               value="${shipment.reference2 || ''}" maxlength="35">
+                    </div>
+                    <div class="form-field">
+                        <label>Referenz 3</label>
                         <input type="text" name="reference3" class="form-input" 
-                               placeholder="Referenz 3" value="${shipment.reference3 || ''}" maxlength="35">
+                               value="${shipment.reference3 || ''}" maxlength="35">
                     </div>
                 </div>
             </div>
@@ -621,78 +675,106 @@ class ModalSystem {
     getOptionsFormFields(shipment) {
         return `
             <div class="form-section">
-                <h4>Zusätzliche Optionen</h4>
+                <div class="form-section-header">
+                    <i class="fas fa-cog"></i>
+                    <h3>Zusätzliche Optionen</h3>
+                </div>
+                
                 <div class="form-subsection">
                     <h5>Zustelloptionen</h5>
-                    <div class="checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="saturdayDelivery" ${shipment.saturdayDelivery ? 'checked' : ''}>
-                            <span class="checkbox-custom"></span>
-                            Samstag-Zustellung
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="shipperRelease" ${shipment.shipperRelease ? 'checked' : ''}>
-                            <span class="checkbox-custom"></span>
-                            Versender-Freigabe (Zustellung ohne Unterschrift)
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="returnOfDocuments" ${shipment.returnOfDocuments ? 'checked' : ''}>
-                            <span class="checkbox-custom"></span>
-                            Rückgabe von Dokumenten
-                        </label>
+                    <!-- 3-Grid: Zustelloptionen -->
+                    <div class="form-grid form-grid-3">
+                        <div class="form-field">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="saturdayDelivery" ${shipment.saturdayDelivery ? 'checked' : ''}>
+                                <span class="checkbox-custom"></span>
+                                Samstag-Zustellung
+                            </label>
+                        </div>
+                        <div class="form-field">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="shipperRelease" ${shipment.shipperRelease ? 'checked' : ''}>
+                                <span class="checkbox-custom"></span>
+                                Versender-Freigabe
+                            </label>
+                        </div>
+                        <div class="form-field">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="returnOfDocuments" ${shipment.returnOfDocuments ? 'checked' : ''}>
+                                <span class="checkbox-custom"></span>
+                                Rückgabe von Dokumenten
+                            </label>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="form-subsection">
                     <h5>Paket-Spezifikationen</h5>
-                    <div class="checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="largePackage" ${shipment.largePackage ? 'checked' : ''}>
-                            <span class="checkbox-custom"></span>
-                            Großpaket (>30 kg oder übergroß)
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="additionalHandling" ${shipment.additionalHandling ? 'checked' : ''}>
-                            <span class="checkbox-custom"></span>
-                            Zusätzliche Behandlung erforderlich
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="carbonNeutral" ${shipment.carbonNeutral ? 'checked' : ''}>
-                            <span class="checkbox-custom"></span>
-                            Klimaneutraler Versand
-                        </label>
+                    <!-- 3-Grid: Paket-Spezifikationen -->
+                    <div class="form-grid form-grid-3">
+                        <div class="form-field">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="largePackage" ${shipment.largePackage ? 'checked' : ''}>
+                                <span class="checkbox-custom"></span>
+                                Großpaket (>30 kg)
+                            </label>
+                        </div>
+                        <div class="form-field">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="additionalHandling" ${shipment.additionalHandling ? 'checked' : ''}>
+                                <span class="checkbox-custom"></span>
+                                Zusätzliche Behandlung
+                            </label>
+                        </div>
+                        <div class="form-field">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="carbonNeutral" ${shipment.carbonNeutral ? 'checked' : ''}>
+                                <span class="checkbox-custom"></span>
+                                Klimaneutraler Versand
+                            </label>
+                        </div>
                     </div>
                 </div>
 
                 <div class="form-subsection">
                     <h5>Premium Services</h5>
-                    <div class="checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="upsPremiumCare" ${shipment.upsPremiumCare ? 'checked' : ''}>
-                            <span class="checkbox-custom"></span>
-                            UPS Premium Care
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="electronicPackageRelease" ${shipment.electronicPackageRelease ? 'checked' : ''}>
-                            <span class="checkbox-custom"></span>
-                            Elektronische Paket-Freigabe-Authentifizierung
-                        </label>
+                    <!-- 2-Grid: Premium Services -->
+                    <div class="form-grid form-grid-2">
+                        <div class="form-field">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="upsPremiumCare" ${shipment.upsPremiumCare ? 'checked' : ''}>
+                                <span class="checkbox-custom"></span>
+                                UPS Premium Care
+                            </label>
+                        </div>
+                        <div class="form-field">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="electronicPackageRelease" ${shipment.electronicPackageRelease ? 'checked' : ''}>
+                                <span class="checkbox-custom"></span>
+                                Elektronische Paket-Freigabe
+                            </label>
+                        </div>
                     </div>
                 </div>
 
                 <div class="form-subsection">
                     <h5>Gefährliche Güter</h5>
-                    <div class="checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="lithiumIonAlone" ${shipment.lithiumIonAlone ? 'checked' : ''}>
-                            <span class="checkbox-custom"></span>
-                            Lithium-Ionen-Batterien (allein)
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="lithiumIonInEquipment" ${shipment.lithiumIonInEquipment ? 'checked' : ''}>
-                            <span class="checkbox-custom"></span>
-                            Lithium-Ionen-Batterien (in Geräten)
-                        </label>
+                    <!-- 2-Grid: Gefährliche Güter -->
+                    <div class="form-grid form-grid-2">
+                        <div class="form-field">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="lithiumIonAlone" ${shipment.lithiumIonAlone ? 'checked' : ''}>
+                                <span class="checkbox-custom"></span>
+                                Lithium-Ionen-Batterien (allein)
+                            </label>
+                        </div>
+                        <div class="form-field">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="lithiumIonInEquipment" ${shipment.lithiumIonInEquipment ? 'checked' : ''}>
+                                <span class="checkbox-custom"></span>
+                                Lithium-Ionen-Batterien (in Geräten)
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - UPS Batch-Manager</title>
-    <meta name="description" content="Dashboard des UPS Batch-Managers für Versand-Stapelverarbeitung">
+    <title>Sendungen - UPS Batch-Manager</title>
+    <meta name="description" content="Sendungen verwalten im UPS Batch-Manager">
     <link rel="stylesheet" href="../css/de/modern-base.css">
     <link rel="stylesheet" href="../css/de/components.css">
     <link rel="stylesheet" href="../css/de/layout.css">
     <link rel="manifest" href="../manifest.json">
-    <meta name="theme-color" content="#2563eb">
+    <meta name="theme-color" content="#663300">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -38,10 +38,10 @@
         </div>
         <nav class="sidebar-nav">
             <ul>
-                <li><a href="dashboard.html" class="nav-link active">
+                <li><a href="dashboard.html" class="nav-link">
                     <i class="fas fa-tachometer-alt"></i> <span data-lang-key="nav.dashboard">Dashboard</span>
                 </a></li>
-                <li><a href="sendungen.html" class="nav-link">
+                <li><a href="sendungen.html" class="nav-link active">
                     <i class="fas fa-boxes"></i> <span data-lang-key="nav.sendungen">Sendungen</span>
                 </a></li>
                 <li><a href="import.html" class="nav-link">
@@ -80,7 +80,7 @@
                 <button id="toggleSidebar" class="btn btn-ghost">
                     <i class="fas fa-bars"></i>
                 </button>
-                <h1 id="pageTitle">Dashboard</h1>
+                <h1 id="pageTitle">Sendungen</h1>
             </div>
             <div class="header-right">
                 <button id="darkModeToggle" class="btn btn-ghost" title="Dunkler Modus">
@@ -97,108 +97,108 @@
             </div>
         </header>
 
-        <!-- Dashboard Content -->
-        <div class="content-wrapper">
-            <div class="dashboard-grid">
-            <!-- Statistics Cards -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-boxes"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="dashTotalShipments">0</h3>
-                        <p>Gesamt Sendungen</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="dashValidShipments">0</h3>
-                        <p>Gültige Sendungen</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="dashInvalidShipments">0</h3>
-                        <p>Fehlerhafte Sendungen</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-weight-hanging"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="dashTotalWeight">0 kg</h3>
-                        <p>Gesamtgewicht</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Actions -->
-            <div class="quick-actions">
-                <h3>Schnellaktionen</h3>
-                <div class="action-buttons">
-                    <button class="btn btn-primary" onclick="showCreateShipmentModal()">
-                        <i class="fas fa-plus"></i>
-                        Neue Sendung
-                    </button>
-                    <button class="btn btn-secondary" onclick="window.location.href='import.html'">
-                        <i class="fas fa-file-import"></i>
-                        CSV Importieren
-                    </button>
-                    <button class="btn btn-success" onclick="window.location.href='export.html'">
-                        <i class="fas fa-file-export"></i>
-                        Batch Exportieren
-                    </button>
-                    <button class="btn btn-info" onclick="downloadTemplate()">
-                        <i class="fas fa-download"></i>
-                        Vorlage Herunterladen
-                    </button>
-                </div>
-            </div>
-
-            <!-- Recent Activity -->
-            <div class="recent-activity">
-                <div class="activity-header">
-                    <h3 data-lang-key="activities.title">Letzte Aktivitäten</h3>
-                    <div class="activity-actions">
-                        <button class="btn btn-ghost btn-sm" onclick="showActivityDetails()" title="Alle Aktivitäten anzeigen">
-                            <i class="fas fa-list"></i>
-                        </button>
-                        <button class="btn btn-ghost btn-sm" onclick="clearActivityLog()" title="Aktivitäten löschen">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-                <div id="recentActivityList" class="activity-list">
-                    <div class="activity-item placeholder">
-                        <i class="fas fa-info-circle"></i>
-                        <div class="activity-content">
-                            <span class="activity-description" data-lang-key="activities.empty">Keine Aktivitäten vorhanden</span>
-                            <small class="activity-time">-</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="activity-footer">
-                    <div class="activity-stats">
-                        <span class="stat-item">
-                            <span data-lang-key="activities.stats.today">Heute</span>: 
-                            <span id="activitiesToday">0</span>
-                        </span>
-                        <span class="stat-item">
-                            <span data-lang-key="activities.stats.total">Gesamt</span>: 
-                            <span id="activitiesTotal">0</span>
-                        </span>
-                    </div>
-                </div>
+        <!-- Shipments Content -->
+        <div class="section-header">
+            <h2>Sendungen verwalten</h2>
+            <div class="section-actions">
+                <button class="btn btn-primary" onclick="showCreateShipmentModal()">
+                    <i class="fas fa-plus"></i>
+                    Neue Sendung
+                </button>
+                <button class="btn btn-secondary" id="bulkDeleteBtn" disabled>
+                    <i class="fas fa-trash"></i>
+                    Auswahl löschen
+                </button>
             </div>
         </div>
+
+        <!-- Filters and Search -->
+        <div class="filters-container">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Sendungen durchsuchen..." class="search-input">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <div class="filter-group">
+                <select id="serviceFilter" class="filter-select">
+                    <option value="">Alle Services</option>
+                    <option value="01">Next Day Air</option>
+                    <option value="02">2nd Day Air</option>
+                    <option value="03">Ground</option>
+                    <option value="07">Express</option>
+                    <option value="08">Expedited</option>
+                    <option value="11">Standard</option>
+                </select>
+                <select id="countryFilter" class="filter-select">
+                    <option value="">Alle Länder</option>
+                    <option value="US">USA</option>
+                    <option value="DE">Deutschland</option>
+                    <option value="CA">Kanada</option>
+                    <option value="GB">Großbritannien</option>
+                    <option value="FR">Frankreich</option>
+                </select>
+                <button class="btn btn-ghost" onclick="clearFilters()">
+                    <i class="fas fa-times"></i>
+                    Filter zurücksetzen
+                </button>
+            </div>
+        </div>
+
+        <!-- Shipments Table -->
+        <div class="table-container">
+            <table id="shipmentsTable" class="modern-table">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" id="selectAll" class="checkbox">
+                        </th>
+                        <th class="sortable" data-sort="recipientName">
+                            Empfänger <i class="fas fa-sort"></i>
+                        </th>
+                        <th class="sortable" data-sort="country">
+                            Land <i class="fas fa-sort"></i>
+                        </th>
+                        <th class="sortable" data-sort="city">
+                            Stadt <i class="fas fa-sort"></i>
+                        </th>
+                        <th class="sortable" data-sort="weight">
+                            Gewicht <i class="fas fa-sort"></i>
+                        </th>
+                        <th class="sortable" data-sort="serviceType">
+                            Service <i class="fas fa-sort"></i>
+                        </th>
+                        <th>Status</th>
+                        <th>Aktionen</th>
+                    </tr>
+                </thead>
+                <tbody id="shipmentsTableBody">
+                    <!-- Rows will be populated by JavaScript -->
+                </tbody>
+            </table>
+            <div id="emptyState" class="empty-state">
+                <i class="fas fa-boxes"></i>
+                <h3>Keine Sendungen vorhanden</h3>
+                <p>Fügen Sie Ihre erste Sendung hinzu oder importieren Sie eine CSV-Datei.</p>
+                <button class="btn btn-primary" onclick="showCreateShipmentModal()">
+                    <i class="fas fa-plus"></i>
+                    Erste Sendung hinzufügen
+                </button>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-container">
+            <div class="pagination-info">
+                Zeige <span id="paginationStart">0</span> bis <span id="paginationEnd">0</span> von <span id="paginationTotal">0</span> Sendungen
+            </div>
+            <div class="pagination-controls">
+                <button class="btn btn-ghost" id="prevPage" disabled>
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div id="pageNumbers" class="page-numbers"></div>
+                <button class="btn btn-ghost" id="nextPage" disabled>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -211,7 +211,7 @@
                 <span class="footer-text" data-lang-key="footer.version">Deutsche Version</span>
             </div>
             <div class="footer-right">
-                <span class="footer-version">Version <span id="appVersion">2.2.0</span></span>
+                <span class="footer-version">Version <span id="appVersion">2.1.0</span></span>
                 <span class="footer-separator">•</span>
                 <span class="footer-text" data-lang-key="footer.offline">Offline-fähig</span>
                 <span class="footer-separator">•</span>
@@ -228,16 +228,16 @@
     <script src="../js/de/core/language-integration.js"></script>
     <script src="../js/de/core/unsaved-changes-manager.js"></script>
     <script src="../js/de/core/activity-logger.js"></script>
-    <script src="../js/de/core/version-manager.js"></script>
     <script src="../js/de/core/user-manager.js"></script>
     <script src="../js/de/core/undo-manager.js"></script>
     <script src="../js/de/ui/modal-system.js"></script>
     <script src="../js/de/ui/toast-system.js"></script>
-    <script src="../js/de/ui/accordion.js"></script>
-    <script src="../js/de/ui/template-handler.js"></script>
+    <script src="../js/de/ui/pagination.js"></script>
+    <script src="../js/de/ui/table-handler-de.js"></script>
+    <script src="../js/de/ui/form-handler-de.js"></script>
     <script src="../js/de/validators/field-validators-de.js"></script>
     <script src="../js/de/validators/real-time-validator.js"></script>
     <script src="../js/de/pages/shared.js"></script>
-    <script src="../js/de/pages/dashboard.js"></script>
+    <script src="../js/de/pages/sendungen.js"></script>
 </body>
 </html>

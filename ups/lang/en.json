@@ -1,0 +1,481 @@
+{
+  "app": {
+    "title": "UPS Batch Manager",
+    "subtitle": "English Version",
+    "version": "Version"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "sendungen": "Shipments",
+    "import": "Import",
+    "export": "Export",
+    "einstellungen": "Settings",
+    "hilfe": "Help"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome to UPS Batch Manager!",
+    "stats": {
+      "total": "Total",
+      "valid": "Valid",
+      "invalid": "Invalid",
+      "weight": "Total Weight"
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "newShipment": "New Shipment",
+      "importCsv": "Import CSV",
+      "exportBatch": "Export Batch",
+      "downloadTemplate": "Download Template"
+    },
+    "recentActivity": {
+      "title": "Recent Activity",
+      "empty": "Welcome to UPS Batch Manager!"
+    }
+  },
+  "shipments": {
+    "title": "Manage Shipments",
+    "search": "Search shipments...",
+    "filters": {
+      "all": "All",
+      "service": "Service",
+      "country": "Country",
+      "status": "Status"
+    },
+    "table": {
+      "select": "Select",
+      "recipient": "Recipient",
+      "address": "Address",
+      "service": "Service",
+      "weight": "Weight",
+      "status": "Status",
+      "actions": "Actions",
+      "edit": "Edit",
+      "delete": "Delete",
+      "duplicate": "Duplicate"
+    },
+    "status": {
+      "valid": "Valid",
+      "invalid": "Invalid",
+      "warning": "Warning"
+    },
+    "actions": {
+      "selectAll": "Select All",
+      "deselectAll": "Deselect All",
+      "deleteSelected": "Delete Selected",
+      "exportSelected": "Export Selected"
+    }
+  },
+  "import": {
+    "title": "CSV Import",
+    "subtitle": "Import shipment data from CSV files",
+    "dropzone": {
+      "title": "Drop file here",
+      "subtitle": "or click here to select",
+      "formats": "Supported formats: CSV, SSV, TXT",
+      "maxSize": "Maximum file size: 10 MB"
+    },
+    "steps": {
+      "upload": "1. Upload File",
+      "preview": "2. Preview & Mapping",
+      "import": "3. Start Import"
+    },
+    "preview": {
+      "title": "Import Preview",
+      "mapping": "Field Mapping",
+      "validation": "Validation",
+      "results": "Results"
+    },
+    "validation": {
+      "valid": "Valid Rows",
+      "invalid": "Invalid Rows",
+      "warnings": "Warnings",
+      "errors": "Errors"
+    },
+    "buttons": {
+      "selectFile": "Select File",
+      "startImport": "Start Import",
+      "cancel": "Cancel",
+      "finish": "Finish"
+    }
+  },
+  "export": {
+    "title": "Batch Export",
+    "subtitle": "Export shipments in UPS-compatible format",
+    "options": {
+      "title": "Export Options",
+      "format": "Format",
+      "fields": "Fields",
+      "sorting": "Sorting",
+      "filter": "Filter"
+    },
+    "formats": {
+      "csv": "CSV (Comma-separated)",
+      "ssv": "SSV (Semicolon-separated)",
+      "txt": "TXT (Tab-separated)"
+    },
+    "fieldSets": {
+      "basic": "Basic Fields",
+      "extended": "Extended Fields",
+      "international": "International Fields",
+      "all": "All Fields"
+    },
+    "sorting": {
+      "none": "No Sorting",
+      "country": "By Country",
+      "service": "By Service",
+      "recipient": "By Recipient"
+    },
+    "filters": {
+      "all": "All Shipments",
+      "valid": "Valid Only",
+      "selected": "Selected Only"
+    },
+    "buttons": {
+      "export": "Export",
+      "preview": "Preview",
+      "cancel": "Cancel"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "sections": {
+      "appearance": "Appearance",
+      "defaults": "Defaults",
+      "data": "Data Management",
+      "about": "About"
+    },
+    "appearance": {
+      "theme": "Theme",
+      "language": "Language",
+      "themes": {
+        "auto": "System",
+        "light": "Light",
+        "dark": "Dark"
+      },
+      "languages": {
+        "de": "Deutsch",
+        "en": "English"
+      }
+    },
+    "defaults": {
+      "country": "Default Country",
+      "service": "Default Service",
+      "unit": "Default Unit"
+    },
+    "data": {
+      "storage": "Storage Usage",
+      "backup": "Create Backup",
+      "restore": "Restore",
+      "clear": "Clear All Data"
+    },
+    "user": {
+      "title": "User Settings",
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "nameHelp": "This name will be used for all your activities.",
+      "created": "Created on",
+      "lastLogin": "Last login",
+      "loginCount": "Login count",
+      "logout": "Logout"
+    },
+    "nameUpdated": "Name has been updated",
+    "buttons": {
+      "save": "Save",
+      "reset": "Reset",
+      "backup": "Create Backup",
+      "restore": "Restore",
+      "clear": "Clear"
+    }
+  },
+  "forms": {
+    "shipment": {
+      "title": "Edit Shipment",
+      "newTitle": "Create New Shipment",
+      "sections": {
+        "recipient": "Recipient Information",
+        "package": "Package Information",
+        "service": "Service Options",
+        "special": "Special Options"
+      },
+      "fields": {
+        "companyName": "Company or Name",
+        "contactName": "Contact Person",
+        "address1": "Address 1",
+        "address2": "Address 2",
+        "address3": "Address 3",
+        "city": "City",
+        "state": "State",
+        "postalCode": "Postal Code",
+        "country": "Country",
+        "phone": "Phone",
+        "email": "Email",
+        "weight": "Weight",
+        "length": "Length",
+        "width": "Width",
+        "height": "Height",
+        "serviceType": "Service Type",
+        "description": "Description",
+        "value": "Value",
+        "reference1": "Reference 1",
+        "reference2": "Reference 2",
+        "reference3": "Reference 3"
+      },
+      "placeholders": {
+        "companyName": "Company Name or Full Name",
+        "contactName": "Contact Person",
+        "address1": "Street and Number",
+        "address2": "Additional Address Line",
+        "city": "City",
+        "postalCode": "Postal Code",
+        "phone": "Phone Number",
+        "email": "Email Address",
+        "description": "Item Description",
+        "reference1": "Reference Number 1"
+      },
+      "buttons": {
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "duplicate": "Duplicate"
+      }
+    },
+    "validation": {
+      "required": "This field is required",
+      "email": "Valid email address required",
+      "phone": "Valid phone number required",
+      "postalCode": "Valid postal code required",
+      "number": "Valid number required",
+      "positive": "Value must be positive",
+      "maxLength": "Maximum length exceeded"
+    },
+    "unsavedChanges": {
+      "beforeUnload": "You have unsaved changes. Do you really want to continue?",
+      "navigationWarning": "You have unsaved changes. Do you really want to continue?",
+      "modalTitle": "Unsaved Changes",
+      "saveAndContinue": "Save changes",
+      "discardChanges": "Discard",
+      "discarded": "Changes discarded",
+      "monitoring": "Changes are being monitored",
+      "unsavedIndicator": "Unsaved changes"
+    }
+  },
+  "activities": {
+    "title": "Activity Log",
+    "subtitle": "Detailed logging of all actions",
+    "empty": "No activities available",
+    "viewAll": "View all",
+    "clearAll": "Clear all",
+    "export": "Export",
+    "filter": "Filter",
+    "search": "Search activities...",
+    "categories": {
+      "all": "All",
+      "shipments": "Shipments",
+      "import_export": "Import/Export",
+      "system": "System",
+      "validation": "Validation"
+    },
+    "actions": {
+      "shipment_created": "New shipment created",
+      "shipment_updated": "Shipment updated",
+      "shipment_deleted": "Shipment deleted",
+      "shipment_duplicated": "Shipment duplicated",
+      "csv_imported": "CSV file imported",
+      "csv_exported": "CSV file exported",
+      "template_downloaded": "Template downloaded",
+      "app_started": "Application started",
+      "language_changed": "Language changed",
+      "theme_changed": "Theme changed",
+      "data_cleared": "Data cleared",
+      "validation_failed": "Validation failed",
+      "validation_passed": "Validation successful",
+      "undo_performed": "Action undone",
+      "user_created": "User created",
+      "user_login": "User logged in",
+      "user_logout": "User logged out",
+      "user_name_changed": "Name changed"
+    },
+    "details": {
+      "recipient": "Recipient",
+      "shipmentId": "Shipment ID",
+      "country": "Country",
+      "city": "City",
+      "weight": "Weight",
+      "fileName": "File name",
+      "totalRows": "Total rows",
+      "validRows": "Valid rows",
+      "invalidRows": "Invalid rows",
+      "fileSize": "File size",
+      "from": "From",
+      "to": "To",
+      "errors": "Errors",
+      "warnings": "Warnings",
+      "user": "User",
+      "loginCount": "Login Count"
+    },
+    "time": {
+      "justNow": "Just now",
+      "minutesAgo": "{minutes} minutes ago",
+      "hoursAgo": "{hours} hours ago",
+      "daysAgo": "{days} days ago"
+    },
+    "stats": {
+      "total": "Total",
+      "today": "Today",
+      "thisWeek": "This week",
+      "categories": "Categories"
+    },
+    "confirmClear": "Do you really want to delete all activities? This action cannot be undone.",
+    "cleared": "Activities have been cleared",
+    "exported": "Activities have been exported",
+    "performedBy": "Action performed by"
+  },
+  "login": {
+    "welcome": "Welcome to UPS Batch Manager",
+    "subtitle": "Please enter your name to continue.",
+    "namePlaceholder": "Your name",
+    "button": "Login",
+    "nameRequired": "Name is required",
+    "welcomeMessage": "Welcome",
+    "loginSuccess": "Successfully logged in",
+    "nameHelp": "This name will be used for all your activities.",
+    "privacy": "All data is stored locally only"
+  },
+  "undo": {
+    "button": "Undo",
+    "success": "Action undone",
+    "error": "Error undoing action",
+    "shipment": {
+      "created": "Delete shipment (undo creation)",
+      "updated": "Revert shipment (undo changes)",
+      "deleted": "Restore shipment",
+      "duplicated": "Remove duplicate"
+    },
+    "import": {
+      "csv": "Undo import"
+    },
+    "system": {
+      "dataCleared": "Restore data"
+    },
+    "messages": {
+      "shipmentRestored": "Shipment restored",
+      "shipmentDeleted": "Shipment removed (creation undone)",
+      "shipmentReverted": "Shipment reverted",
+      "duplicateRemoved": "Duplicate removed",
+      "importReverted": "Import undone",
+      "dataRestored": "Data restored"
+    }
+  },
+  "templates": {
+    "title": "Templates",
+    "types": {
+      "basic": "Basic Template",
+      "extended": "Extended Template",
+      "international": "International Template",
+      "examples": "Example Data"
+    },
+    "descriptions": {
+      "basic": "Basic fields for simple shipments",
+      "extended": "Extended fields for complex shipments",
+      "international": "All fields for international shipments",
+      "examples": "Template with example data for testing"
+    },
+    "buttons": {
+      "download": "Download",
+      "preview": "Preview"
+    }
+  },
+  "help": {
+    "title": "Help",
+    "sections": {
+      "overview": "Overview",
+      "sendungen": "Manage Shipments",
+      "import": "CSV Import",
+      "export": "Batch Export",
+      "validation": "Understanding Validation",
+      "templates": "Using Templates",
+      "offline": "Offline Usage",
+      "troubleshooting": "Troubleshooting",
+      "shortcuts": "Keyboard Shortcuts"
+    }
+  },
+  "shortcuts": {
+    "title": "Keyboard Shortcuts",
+    "categories": {
+      "general": "General",
+      "navigation": "Navigation",
+      "shipments": "Shipments",
+      "import": "Import/Export",
+      "display": "Display"
+    },
+    "actions": {
+      "newShipment": "Create New Shipment",
+      "save": "Save",
+      "import": "Open Import",
+      "export": "Start Export",
+      "search": "Focus Search",
+      "help": "Open Help",
+      "toggleTheme": "Toggle Theme",
+      "dashboard": "Dashboard",
+      "settings": "Settings",
+      "closeModal": "Close Dialog",
+      "fullscreen": "Fullscreen"
+    }
+  },
+  "toast": {
+    "titles": {
+      "success": "Success",
+      "error": "Error",
+      "warning": "Warning",
+      "info": "Information",
+      "loading": "Loading..."
+    },
+    "messages": {
+      "saved": "Changes saved",
+      "deleted": "Successfully deleted",
+      "imported": "Import completed",
+      "exported": "Export completed",
+      "error": "An error occurred",
+      "loading": "Loading..."
+    }
+  },
+  "footer": {
+    "copyright": "© 2024 UPS Batch Manager",
+    "version": "English Version",
+    "offline": "Offline capable",
+    "privacy": "Privacy: 100% local"
+  },
+  "common": {
+    "buttons": {
+      "ok": "OK",
+      "cancel": "Cancel",
+      "close": "Close",
+      "save": "Save",
+      "delete": "Delete",
+      "edit": "Edit",
+      "add": "Add",
+      "remove": "Remove",
+      "select": "Select",
+      "back": "Back",
+      "next": "Next",
+      "finish": "Finish",
+      "retry": "Retry",
+      "continue": "Continue"
+    },
+    "status": {
+      "loading": "Loading...",
+      "saving": "Saving...",
+      "success": "Success",
+      "error": "Error",
+      "warning": "Warning",
+      "info": "Information"
+    },
+    "units": {
+      "kg": "kg",
+      "lb": "lb",
+      "cm": "cm",
+      "in": "in"
+    }
+  }
+}

@@ -5,7 +5,6 @@ class TemplateHandlerDE {
             basic: 'Basis-Vorlage',
             advanced: 'Erweiterte Vorlage',
             international: 'Internationale Vorlage',
-            complete: 'Vollständige UPS-Vorlage',
             example: 'Beispiel mit Daten'
         };
         this.initialize();
@@ -82,16 +81,6 @@ class TemplateHandlerDE {
                             </label>
                             
                             <label class="radio-label template-option">
-                                <input type="radio" name="templateType" value="complete">
-                                <span class="radio-custom"></span>
-                                <div class="option-content">
-                                    <strong>Vollständige UPS-Vorlage</strong>
-                                    <p>Alle 108 UPS-Felder in Original-Reihenfolge</p>
-                                    <small>Exakt wie das UPS-Original für maximale Kompatibilität</small>
-                                </div>
-                            </label>
-                            
-                            <label class="radio-label template-option">
                                 <input type="radio" name="templateType" value="example">
                                 <span class="radio-custom"></span>
                                 <div class="option-content">
@@ -149,56 +138,28 @@ class TemplateHandlerDE {
 
     // Template-Felder basierend auf Typ abrufen
     getTemplateFields(templateType) {
-        // Original UPS Batch File Reihenfolge (alle 108 Felder)
-        const allUPSFields = [
-            'Contact Name', 'Company or Name', 'Country', 'Address 1', 'Address 2', 'Address 3',
-            'City', 'State/Prov/Other', 'Postal Code', 'Telephone', 'Ext', 'Residential Ind',
-            'Consignee Email', 'Packaging Type', 'Customs Value', 'Weight', 'Length', 'Width',
-            'Height', 'Unit of Measure', 'Description of Goods', 'Documents of No Commercial Value',
-            'GNIFC', 'Pkg Decl Value', 'Service', 'Delivery Confirm', 'Shipper Release',
-            'Ret of Documents', 'Saturday Deliver', 'Carbon Neutral', 'Large Package',
-            'Addl handling', 'Reference 1', 'Reference 2', 'Reference 3', 'QV Notif 1-Addr',
-            'QV Notif 1-Ship', 'QV Notif 1-Excp', 'QV Notif 1-Delv', 'QV Notif 2-Addr',
-            'QV Notif 2-Ship', 'QV Notif 2-Excp', 'QV Notif 2-Delv', 'QV Notif 3-Addr',
-            'QV Notif 3-Ship', 'QV Notif 3-Excp', 'QV Notif 3-Delv', 'QV Notif 4-Addr',
-            'QV Notif 4-Ship', 'QV Notif 4-Excp', 'QV Notif 4-Delv', 'QV Notif 5-Addr',
-            'QV Notif 5-Ship', 'QV Notif 5-Excp', 'QV Notif 5-Delv', 'QV Notif Msg',
-            'QV Failure Addr', 'UPS Premium Care', 'ADL Location ID', 'ADL Media Type',
-            'ADL Language', 'ADL Notification Addr', 'ADL Failure Addr', 'ADL COD Value',
-            'ADL Deliver to Addressee', 'ADL Shipper Media Type', 'ADL Shipper Language',
-            'ADL Shipper Notification Addr', 'ADL Direct Delivery Only',
-            'Electronic Package Release Authentication', 'Lithium Ion Alone',
-            'Lithium Ion In Equipment', 'Lithium Ion With_Equipment', 'Lithium Metal Alone',
-            'Lithium Metal In Equipment', 'Lithium Metal With Equipment',
-            'Weekend Commercial Delivery', 'Dry Ice Weight', 'Merchandise Description',
-            'UPS SurePost®Limited Quantity/Lithium Battery'
-        ];
-
         const basicFields = [
-            'Contact Name', 'Company or Name', 'Country', 'Address 1', 'City', 'State/Prov/Other',
-            'Postal Code', 'Telephone', 'Consignee Email', 'Packaging Type', 'Weight',
-            'Unit of Measure', 'Service'
+            'Company or Name', 'Address 1', 'City', 'State/Prov/Other', 
+            'Postal Code', 'Country', 'Telephone', 'Consignee Email',
+            'Service', 'Packaging Type', 'Weight', 'Unit of Measure'
         ];
 
         const internationalFields = [
-            'Contact Name', 'Company or Name', 'Country', 'Address 1', 'Address 2', 'City',
-            'State/Prov/Other', 'Postal Code', 'Telephone', 'Consignee Email', 'Packaging Type',
-            'Customs Value', 'Weight', 'Unit of Measure', 'Description of Goods',
-            'Documents of No Commercial Value', 'Service', 'Reference 1'
+            ...basicFields,
+            'Description of Goods', 'Customs Value', 'Documents of No Commercial Value'
         ];
 
         const advancedFields = [
-            'Contact Name', 'Company or Name', 'Country', 'Address 1', 'Address 2', 'Address 3',
-            'City', 'State/Prov/Other', 'Postal Code', 'Telephone', 'Ext', 'Residential Ind',
-            'Consignee Email', 'Packaging Type', 'Customs Value', 'Weight', 'Length', 'Width',
-            'Height', 'Unit of Measure', 'Description of Goods', 'Documents of No Commercial Value',
-            'GNIFC', 'Pkg Decl Value', 'Service', 'Delivery Confirm', 'Shipper Release',
-            'Ret of Documents', 'Saturday Deliver', 'Carbon Neutral', 'Large Package',
-            'Addl handling', 'Reference 1', 'Reference 2', 'Reference 3', 'UPS Premium Care',
+            'Contact Name', 'Company or Name', 'Address 1', 'Address 2', 'Address 3',
+            'City', 'State/Prov/Other', 'Postal Code', 'Country', 'Telephone', 'Ext',
+            'Residential Ind', 'Consignee Email', 'Service', 'Packaging Type', 'Weight',
+            'Unit of Measure', 'Length', 'Width', 'Height', 'Reference 1', 'Reference 2',
+            'Reference 3', 'Delivery Confirm', 'Description of Goods', 'Customs Value',
+            'Documents of No Commercial Value', 'GNIFC', 'Pkg Decl Value',
+            'Saturday Deliver', 'Shipper Release', 'Carbon Neutral', 'Large Package',
+            'Addl handling', 'Ret of Documents', 'UPS Premium Care',
             'Electronic Package Release Authentication', 'Lithium Ion Alone',
-            'Lithium Ion In Equipment', 'Lithium Ion With_Equipment', 'Lithium Metal Alone',
-            'Lithium Metal In Equipment', 'Lithium Metal With Equipment',
-            'Weekend Commercial Delivery', 'Dry Ice Weight', 'Merchandise Description'
+            'Lithium Ion In Equipment'
         ];
 
         switch (templateType) {
@@ -206,7 +167,6 @@ class TemplateHandlerDE {
             case 'international': return internationalFields;
             case 'advanced': return advancedFields;
             case 'example': return basicFields;
-            case 'complete': return allUPSFields; // Vollständige UPS-Spezifikation
             default: return basicFields;
         }
     }
@@ -262,10 +222,8 @@ class TemplateHandlerDE {
         const delimiter = this.getDelimiter(format);
         const lines = [];
 
-        // Header mit Feldnamen (nicht für complete template - UPS benötigt keine Header)
-        if (templateType !== 'complete') {
-            lines.push(fields.join(delimiter));
-        }
+        // Header mit Feldnamen
+        lines.push(fields.join(delimiter));
 
         // Beispieldaten für Example-Template
         if (templateType === 'example') {
@@ -278,18 +236,14 @@ class TemplateHandlerDE {
                 });
                 lines.push(values.join(delimiter));
             });
-        } else if (templateType === 'complete') {
-            // Für complete template: nur leere Zeile ohne Header
-            const emptyRow = fields.map(() => '').join(delimiter);
-            lines.push(emptyRow);
         } else {
             // Leere Datenzeile für andere Templates
             const emptyRow = fields.map(() => '').join(delimiter);
             lines.push(emptyRow);
         }
 
-        // Kommentare hinzufügen (nicht für complete template)
-        if (format !== 'xlsx' && templateType !== 'complete') {
+        // Kommentare hinzufügen
+        if (format !== 'xlsx') {
             lines.push('');
             lines.push('# UPS Batch-Manager Vorlage');
             lines.push(`# Template-Typ: ${this.templateTypes[templateType]}`);
@@ -431,7 +385,6 @@ class TemplateHandlerDE {
             basic: 'Enthält die wichtigsten Felder für Standard-Sendungen innerhalb Deutschlands',
             advanced: 'Vollständige Vorlage mit allen verfügbaren UPS-Feldern und Spezial-Services',
             international: 'Optimiert für internationale Sendungen mit Zoll- und Warenfeldern',
-            complete: 'Exakte Kopie der UPS-Vorlage mit allen 108 Feldern in Original-Reihenfolge',
             example: 'Vorlage mit 3 Beispiel-Sendungen zum Testen und als Referenz'
         };
         

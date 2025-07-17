@@ -10,6 +10,14 @@ class HilfePage {
         this.updateStats();
         this.loadFAQs();
         this.loadFromStorage();
+        
+        // Remove loading indicator after FAQ load
+        setTimeout(() => {
+            const loadingIndicator = document.querySelector('.faq-loading');
+            if (loadingIndicator) {
+                loadingIndicator.remove();
+            }
+        }, 100);
     }
 
     setupEventListeners() {
@@ -142,8 +150,10 @@ class HilfePage {
         faqList.innerHTML = faqsToRender.map((faq, index) => `
             <div class="faq-item" data-faq-id="${faq.id}">
                 <div class="faq-question" onclick="toggleFAQ('${faq.id}')">
-                    <span class="faq-category">${faq.category}</span>
-                    <span class="faq-question-text">${faq.question}</span>
+                    <div class="faq-question-content">
+                        <span class="faq-category">${faq.category}</span>
+                        <span class="faq-question-text">${faq.question}</span>
+                    </div>
                     <i class="fas fa-chevron-down"></i>
                 </div>
                 <div class="faq-answer" id="${faq.id}">
@@ -318,6 +328,18 @@ window.showContactInfo = () => {
 window.showKeyboardShortcuts = () => {
     if (window.hilfePage) {
         window.hilfePage.showKeyboardShortcuts();
+    }
+};
+
+window.showFullHelp = () => {
+    if (window.helpSystem) {
+        window.helpSystem.showHelpModal('overview');
+    }
+};
+
+window.showHelpCategory = (category) => {
+    if (window.helpSystem) {
+        window.helpSystem.showHelpModal(category);
     }
 };
 

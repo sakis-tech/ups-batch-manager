@@ -104,47 +104,115 @@
             </div>
 
             <div class="help-container">
-            <div class="help-search">
-                <input type="text" id="helpSearch" placeholder="Hilfe durchsuchen..." class="search-input">
-                <i class="fas fa-search search-icon"></i>
-            </div>
-
-            <div class="help-content">
-                <div class="help-section">
-                    <h3>Häufig gestellte Fragen</h3>
-                    <div class="faq-list" id="faqList">
-                        <!-- FAQ items will be populated by JavaScript -->
+                <!-- Help Navigation -->
+                <div class="help-navigation">
+                    <div class="help-nav-buttons">
+                        <button class="btn btn-primary" onclick="showFullHelp()">
+                            <i class="fas fa-book"></i> Vollständige Hilfe
+                        </button>
+                        <button class="btn btn-secondary" onclick="showContactInfo()">
+                            <i class="fas fa-info-circle"></i> Kontakt & Info
+                        </button>
+                        <button class="btn btn-ghost" onclick="showKeyboardShortcuts()">
+                            <i class="fas fa-keyboard"></i> Tastenkürzel
+                        </button>
                     </div>
                 </div>
 
-                <div class="help-section">
-                    <h3>Schnelleinstieg</h3>
-                    <div class="quick-guide">
-                        <div class="guide-step">
-                            <div class="step-number">1</div>
-                            <div class="step-content">
-                                <h4>Neue Sendung erstellen</h4>
-                                <p>Klicken Sie auf "Neue Sendung" und füllen Sie die erforderlichen Felder aus.</p>
+                <!-- Help Search -->
+                <div class="help-search">
+                    <div class="search-box">
+                        <input type="text" id="helpSearch" placeholder="Hilfe durchsuchen..." class="search-input">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                </div>
+
+                <!-- Help Content Grid -->
+                <div class="help-content">
+                    <!-- FAQ Section -->
+                    <div class="help-section">
+                        <div class="help-section-header">
+                            <i class="fas fa-question-circle"></i>
+                            <h3>Häufig gestellte Fragen</h3>
+                        </div>
+                        <div class="faq-list" id="faqList">
+                            <!-- FAQ items will be populated by JavaScript -->
+                            <div class="faq-loading">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <p>Lade FAQ-Inhalte...</p>
                             </div>
                         </div>
-                        <div class="guide-step">
-                            <div class="step-number">2</div>
-                            <div class="step-content">
-                                <h4>Daten validieren</h4>
-                                <p>Das System überprüft automatisch alle Eingaben und zeigt Fehler an.</p>
-                            </div>
+                    </div>
+
+                    <!-- Quick Guide Section -->
+                    <div class="help-section">
+                        <div class="help-section-header">
+                            <i class="fas fa-rocket"></i>
+                            <h3>Schnelleinstieg</h3>
                         </div>
-                        <div class="guide-step">
-                            <div class="step-number">3</div>
-                            <div class="step-content">
-                                <h4>Batch exportieren</h4>
-                                <p>Exportieren Sie Ihre Sendungen als CSV- oder SSV-Datei für UPS.</p>
+                        <div class="quick-guide">
+                            <div class="guide-step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h4>Neue Sendung erstellen</h4>
+                                    <p>Klicken Sie auf <strong>"Neue Sendung"</strong> im Dashboard oder gehen Sie zu <a href="sendungen.html" class="help-link">Sendungen</a> und füllen Sie die erforderlichen Felder aus.</p>
+                                </div>
+                            </div>
+                            <div class="guide-step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h4>Daten validieren</h4>
+                                    <p>Das System überprüft automatisch alle Eingaben und zeigt Fehler an. Rote Markierungen zeigen Probleme, grüne bestätigen korrekte Eingaben.</p>
+                                </div>
+                            </div>
+                            <div class="guide-step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h4>Batch exportieren</h4>
+                                    <p>Gehen Sie zum <a href="export.html" class="help-link">Export-Bereich</a> und exportieren Sie Ihre Sendungen als CSV- oder SSV-Datei für UPS WorldShip.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Help Categories -->
+                <div class="help-categories">
+                    <h3>Hilfe-Kategorien</h3>
+                    <div class="category-grid">
+                        <div class="category-item" onclick="showHelpCategory('sendungen')">
+                            <i class="fas fa-boxes"></i>
+                            <h4>Sendungen verwalten</h4>
+                            <p>Erstellen, bearbeiten und verwalten Sie Ihre Sendungen</p>
+                        </div>
+                        <div class="category-item" onclick="showHelpCategory('import')">
+                            <i class="fas fa-file-import"></i>
+                            <h4>CSV-Import</h4>
+                            <p>Importieren Sie Sendungsdaten aus CSV-Dateien</p>
+                        </div>
+                        <div class="category-item" onclick="showHelpCategory('export')">
+                            <i class="fas fa-file-export"></i>
+                            <h4>Batch-Export</h4>
+                            <p>Exportieren Sie UPS-kompatible Batch-Dateien</p>
+                        </div>
+                        <div class="category-item" onclick="showHelpCategory('validation')">
+                            <i class="fas fa-check-circle"></i>
+                            <h4>Validierung</h4>
+                            <p>Verstehen Sie die Validierungsregeln und Fehlerbehandlung</p>
+                        </div>
+                        <div class="category-item" onclick="showHelpCategory('templates')">
+                            <i class="fas fa-file-download"></i>
+                            <h4>Vorlagen</h4>
+                            <p>Nutzen Sie vorgefertigte CSV-Vorlagen für den Import</p>
+                        </div>
+                        <div class="category-item" onclick="showHelpCategory('troubleshooting')">
+                            <i class="fas fa-tools"></i>
+                            <h4>Problemlösung</h4>
+                            <p>Lösungen für häufige Probleme und Fehlerbehebung</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
         </div>
     </div>
 

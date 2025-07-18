@@ -245,10 +245,10 @@ class TemplateHandlerDE {
                             value = row.phone || row.telephone || '';
                             break;
                         case 'packagingType':
-                            value = row.packageType || row.packagingType || '2';
+                            value = row.packageType || row.packagingType || '';
                             break;
                         case 'service':
-                            value = row.serviceType || row.service || '11';
+                            value = row.serviceType || row.service || '';
                             break;
                         case 'goodsDescription':
                             value = row.description || row.goodsDescription || '';
@@ -392,10 +392,10 @@ class TemplateHandlerDE {
                             value = row.phone || row.telephone || '';
                             break;
                         case 'packagingType':
-                            value = row.packageType || row.packagingType || '2';
+                            value = row.packageType || row.packagingType || '';
                             break;
                         case 'service':
-                            value = row.serviceType || row.service || '11';
+                            value = row.serviceType || row.service || '';
                             break;
                         case 'goodsDescription':
                             value = row.description || row.goodsDescription || '';

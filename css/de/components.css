@@ -534,6 +534,17 @@
     transition: var(--transition-fast);
 }
 
+.checkbox:hover,
+.radio:hover {
+    border-color: var(--primary);
+}
+
+.checkbox:focus,
+.radio:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
 .radio {
     border-radius: 50%;
 }
@@ -578,6 +589,40 @@
     color: var(--text-primary);
     cursor: pointer;
     margin-bottom: var(--space-2);
+    line-height: 1.4;
+    user-select: none;
+}
+
+.checkbox-label:hover .checkbox-custom,
+.radio-label:hover .radio-custom {
+    border-color: var(--primary);
+}
+
+/* Improved accessibility for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .checkbox,
+    .radio,
+    .checkbox-custom,
+    .radio-custom {
+        transition: none;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .checkbox,
+    .radio,
+    .checkbox-custom,
+    .radio-custom {
+        border-width: 2px;
+    }
+    
+    .checkbox:checked,
+    .radio:checked,
+    input[type="checkbox"]:checked + .checkbox-custom,
+    input[type="radio"]:checked + .radio-custom {
+        border-width: 2px;
+    }
 }
 
 .checkbox-custom,
@@ -594,6 +639,12 @@
 
 .radio-custom {
     border-radius: 50%;
+}
+
+input[type="checkbox"]:focus + .checkbox-custom,
+input[type="radio"]:focus + .radio-custom {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
 }
 
 input[type="checkbox"]:checked + .checkbox-custom,
@@ -2826,6 +2877,19 @@ body.login-active {
     .checkbox-grid-3 {
         grid-template-columns: 1fr;
     }
+}
+
+/* Table checkboxes specific styles */
+.modern-table th .checkbox-label,
+.modern-table td .checkbox-label {
+    justify-content: center;
+    margin-bottom: 0;
+    padding: var(--space-1);
+}
+
+.modern-table th .checkbox-label {
+    font-weight: var(--font-weight-medium);
+}
     
     .accordion-header {
         padding: var(--space-3) var(--space-4);

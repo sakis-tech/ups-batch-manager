@@ -138,9 +138,13 @@ class SendungenPage {
             tbody.innerHTML = pageShipments.map(shipment => `
                 <tr>
                     <td>
-                        <input type="checkbox" class="checkbox shipment-checkbox" 
-                               value="${shipment.id}" 
-                               ${this.selectedShipments.has(shipment.id) ? 'checked' : ''}>
+                        <label class="checkbox-label" for="shipment-${shipment.id}" title="Sendung auswählen">
+                            <input type="checkbox" class="checkbox shipment-checkbox" 
+                                   id="shipment-${shipment.id}"
+                                   value="${shipment.id}" 
+                                   ${this.selectedShipments.has(shipment.id) ? 'checked' : ''}>
+                            <span class="checkbox-custom"></span>
+                        </label>
                     </td>
                     <td>
                         <div class="recipient-info">

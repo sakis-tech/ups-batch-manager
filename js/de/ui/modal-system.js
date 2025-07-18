@@ -1090,7 +1090,7 @@ class ModalSystem {
     }
 
     getDeliveryConfirmOptions(selected) {
-        return UPS_FIELDS['Delivery Confirm'].options.map(option => 
+        return UPS_FIELDS['Delivery Confirmation'].options.map(option => 
             `<option value="${option.value}" ${selected === option.value ? 'selected' : ''}>${option.label}</option>`
         ).join('');
     }

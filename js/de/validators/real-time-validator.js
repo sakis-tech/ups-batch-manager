@@ -292,14 +292,16 @@ class RealTimeValidator {
 
         // Live-Aktualisierung: Auch bei unvollständigen Werten anzeigen
         if (length > 0 || width > 0 || height > 0) {
+            const country = this.getCountryFromForm();
             const girth = this.calculateGirth(length, width, height);
-            const upsLimits = this.getUPSGirthLimits();
-            const status = this.checkGirthStatus(girth, upsLimits);
+            const lengthPlusGirth = this.calculateLengthPlusGirth(length, width, height);
+            const upsLimits = this.getUPSGirthLimits(country);
+            const status = this.checkGirthStatus(lengthPlusGirth, upsLimits, length, country);
             
-            console.log('Aktualisiere Gurtmaß-Container:', { girth, status });
+            console.log('Aktualisiere Gurtmaß-Container:', { girth, lengthPlusGirth, status });
             
             // Optimierte Container-Aktualisierung
-            this.updateGirthContainerOptimized(this.girthContainer, length, width, height, girth, status);
+            this.updateGirthContainerOptimized(this.girthContainer, length, width, height, girth, lengthPlusGirth, status);
             
             // Container anzeigen
             this.girthContainer.style.display = 'block';
@@ -367,17 +369,18 @@ class RealTimeValidator {
     }
 
     // Optimierte Gurtmaß-Container-Aktualisierung
-    updateGirthContainerOptimized(container, length, width, height, girth, status) {
+    updateGirthContainerOptimized(container, length, width, height, girth, lengthPlusGirth, status) {
         const hasAllValues = length > 0 && width > 0 && height > 0;
         const totalGirth = hasAllValues ? girth : 0;
+        const totalLengthPlusGirth = hasAllValues ? lengthPlusGirth : 0;
         
-        console.log('updateGirthContainerOptimized:', { container, length, width, height, girth, status, hasAllValues });
+        console.log('updateGirthContainerOptimized:', { container, length, width, height, girth, lengthPlusGirth, status, hasAllValues });
         
         // Immer aktualisieren für bessere Sichtbarkeit beim Debugging
         const displayStatus = hasAllValues ? status.status : 'pending';
         
         // Template für bessere Performance
-        const template = this.createGirthTemplate(length, width, height, totalGirth, status, hasAllValues);
+        const template = this.createGirthTemplate(length, width, height, totalGirth, totalLengthPlusGirth, status, hasAllValues);
         
         console.log('Template erstellt:', template);
         
@@ -404,13 +407,13 @@ class RealTimeValidator {
     }
 
     // Template für Gurtmaß-Anzeige
-    createGirthTemplate(length, width, height, totalGirth, status, hasAllValues) {
+    createGirthTemplate(length, width, height, totalGirth, totalLengthPlusGirth, status, hasAllValues) {
         // Formel mit Platzhaltern für fehlende Werte
         const lengthDisplay = length > 0 ? `${length}cm` : '?cm';
         const widthDisplay = width > 0 ? `${width}cm` : '?cm';
         const heightDisplay = height > 0 ? `${height}cm` : '?cm';
-        const girthCalc = hasAllValues ? `${(2 * (width + height)).toFixed(1)}cm` : '?cm';
-        const totalDisplay = hasAllValues ? `${totalGirth.toFixed(1)}cm` : '?cm';
+        const girthCalc = hasAllValues ? `${totalGirth.toFixed(1)}cm` : '?cm';
+        const totalDisplay = hasAllValues ? `${totalLengthPlusGirth.toFixed(1)}cm` : '?cm';
         
         const formula = `L: ${lengthDisplay} + G: ${girthCalc} = ${totalDisplay}`;
         const detailFormula = `(L: ${lengthDisplay} + 2 × (B: ${widthDisplay} + H: ${heightDisplay}))`;
@@ -418,7 +421,7 @@ class RealTimeValidator {
         return `
             <div class="girth-display">
                 <div class="girth-main">
-                    <span class="girth-label">Gurtmaß:</span>
+                    <span class="girth-label">Länge + Gurtmaß:</span>
                     <span class="girth-value">${totalDisplay}</span>
                     ${hasAllValues ? `<span class="girth-status">${status.message}</span>` : '<span class="girth-status">Eingabe erforderlich</span>'}
                 </div>
@@ -432,37 +435,72 @@ class RealTimeValidator {
         `;
     }
 
-    // Gurtmaß berechnen: Länge + 2 × (Breite + Höhe)
-    calculateGirth(length, width, height) {
-        return length + 2 * (width + height);
+    // Hilfsfunktion: Land aus Formular abrufen
+    getCountryFromForm() {
+        const form = document.querySelector('form');
+        if (!form) return 'DE';
+        
+        const countryField = form.querySelector('[name="country"]');
+        return countryField ? countryField.value : 'DE';
     }
 
-    // UPS Gurtmaß-Limits abrufen
-    getUPSGirthLimits() {
-        return {
-            standard: 165, // cm - Standard-Limit
-            maximum: 400   // cm - Absolutes Maximum
-        };
+    // Gurtmaß berechnen: 2 × (Breite + Höhe)
+    calculateGirth(length, width, height) {
+        return 2 * (width + height);
+    }
+
+    // Länge + Gurtmaß berechnen
+    calculateLengthPlusGirth(length, width, height) {
+        const girth = this.calculateGirth(length, width, height);
+        return length + girth;
+    }
+
+    // UPS Gurtmaß-Limits abrufen (basierend auf Land)
+    getUPSGirthLimits(country = 'DE') {
+        const countryValidation = window.COUNTRY_VALIDATIONS?.[country];
+        const isInches = countryValidation && countryValidation.dimensionUnit === 'IN';
+        
+        if (isInches) {
+            // US/PR: inches
+            return {
+                largePackage: 130,  // inches - Großpaket-Schwelle
+                maximum: 165        // inches - Absolutes Maximum
+            };
+        } else {
+            // International: centimeters
+            return {
+                largePackage: 330,  // cm - Großpaket-Schwelle
+                maximum: 400        // cm - Absolutes Maximum
+            };
+        }
     }
 
     // Gurtmaß-Status prüfen
-    checkGirthStatus(girth, limits) {
-        if (girth <= limits.standard) {
+    checkGirthStatus(lengthPlusGirth, limits, length = 0, country = 'DE') {
+        const countryValidation = window.COUNTRY_VALIDATIONS?.[country];
+        const isInches = countryValidation && countryValidation.dimensionUnit === 'IN';
+        const maxLength = isInches ? 96 : 244; // US: 96 inches, International: 244 cm
+        
+        // Prüfe einzelne Länge für Großpaket
+        const isLargeByLength = length > maxLength;
+        const isLargeByGirth = lengthPlusGirth > limits.largePackage;
+        
+        if (lengthPlusGirth <= limits.largePackage && !isLargeByLength) {
             return {
                 status: 'good',
                 message: 'Standard-Paket',
                 color: 'success'
             };
-        } else if (girth <= limits.maximum) {
+        } else if (lengthPlusGirth <= limits.maximum) {
             return {
                 status: 'oversized',
-                message: 'Übergroßes Paket',
+                message: `Großpaket ${isLargeByLength ? '(Länge >96"/244cm)' : '(Gurtmaß >130"/330cm)'}`,
                 color: 'warning'
             };
         } else {
             return {
                 status: 'rejected',
-                message: 'Paket zu groß',
+                message: 'Paket zu groß für UPS',
                 color: 'error'
             };
         }

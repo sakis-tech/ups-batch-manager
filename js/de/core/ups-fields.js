@@ -407,7 +407,7 @@ const UPS_FIELDS = {
             { value: '0', label: 'Nein' },
             { value: '1', label: 'Ja' }
         ],
-        description: 'Großpaket (>130 bis <165 Zoll bzw. >400cm)'
+        description: 'Großpaket (Länge >96 Zoll oder Länge+Gurtmaß >130 Zoll bzw. >244cm oder >330cm)'
     },
     'Additional Handling': {
         key: 'additionalHandling',
@@ -1210,29 +1210,64 @@ const FIELD_VALIDATORS = {
         const isInches = countryValidation && countryValidation.dimensionUnit === 'IN';
         
         if (isInches) {
-            // US/PR: inches, max 165 inches girth
+            // US/PR: inches, max 108 inches length, max 165 inches length + girth combined
             if (l > 0 && (l < 1 || l > 108)) return false;
             if (w > 0 && (w < 1 || w > 108)) return false;
             if (h > 0 && (h < 1 || h > 108)) return false;
             
             if (l > 0 && w > 0 && h > 0) {
-                const girth = l + 2 * (w + h);
-                return girth <= 165;
+                const girth = 2 * (w + h);
+                const lengthPlusGirth = l + girth;
+                return lengthPlusGirth <= 165;
             }
         } else {
-            // International: centimeters, max 400 cm girth
+            // International: centimeters, max 270 cm length, max 400 cm length + girth combined
             if (l > 0 && (l < 1 || l > 270)) return false;
             if (w > 0 && (w < 1 || w > 270)) return false;
             if (h > 0 && (h < 1 || h > 270)) return false;
             
             if (l > 0 && w > 0 && h > 0) {
-                const girth = l + 2 * (w + h);
-                return girth <= 400;
+                const girth = 2 * (w + h);
+                const lengthPlusGirth = l + girth;
+                return lengthPlusGirth <= 400;
             }
         }
         
         return true;
     },
+    
+    calculateGirth: (width, height) => {
+        const w = parseFloat(width) || 0;
+        const h = parseFloat(height) || 0;
+        return 2 * (w + h);
+    },
+    
+    calculateLengthPlusGirth: (length, width, height) => {
+        const l = parseFloat(length) || 0;
+        const girth = FIELD_VALIDATORS.calculateGirth(width, height);
+        return l + girth;
+    },
+    
+    isLargePackage: (length, width, height, country) => {
+        const l = parseFloat(length) || 0;
+        const w = parseFloat(width) || 0;
+        const h = parseFloat(height) || 0;
+        
+        if (l === 0 || w === 0 || h === 0) return false;
+        
+        const countryValidation = COUNTRY_VALIDATIONS[country];
+        const isInches = countryValidation && countryValidation.dimensionUnit === 'IN';
+        
+        if (isInches) {
+            // US/PR: Large package if length > 96 inches OR length + girth > 130 inches
+            const lengthPlusGirth = FIELD_VALIDATORS.calculateLengthPlusGirth(l, w, h);
+            return l > 96 || lengthPlusGirth > 130;
+        } else {
+            // International: Large package if length > 244 cm OR length + girth > 330 cm
+            const lengthPlusGirth = FIELD_VALIDATORS.calculateLengthPlusGirth(l, w, h);
+            return l > 244 || lengthPlusGirth > 330;
+        }
+    }
     
     validateLithiumBatteries: (values) => {
         // Max 3 lithium battery fields can be selected
@@ -1394,6 +1429,17 @@ const FIELD_HELPERS = {
         if (!field) return '';
         
         let processedValue = value || '';
+        
+        // Auto-detect large packages
+        if (fieldName === 'Large Package' && shipmentData) {
+            const isLarge = FIELD_VALIDATORS.isLargePackage(
+                shipmentData.length, 
+                shipmentData.width, 
+                shipmentData.height, 
+                shipmentData.country
+            );
+            processedValue = isLarge ? '1' : '0';
+        }
         
         // Handle different field types
         switch (field.type) {

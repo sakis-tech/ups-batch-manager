@@ -679,6 +679,17 @@ class FormHandlerDE {
                 const shipmentData = this.processShipmentData(formData);
                 window.shipmentManager.addShipment(shipmentData);
                 
+                // UI nach Sendung hinzufügen aktualisieren
+                if (window.pageManager && typeof window.pageManager.updateStats === 'function') {
+                    window.pageManager.updateStats();
+                }
+                if (window.pageManager && typeof window.pageManager.renderShipmentsTable === 'function') {
+                    window.pageManager.renderShipmentsTable();
+                }
+                if (window.pageManager && typeof window.pageManager.renderContent === 'function') {
+                    window.pageManager.renderContent();
+                }
+                
                 if (window.toastSystem) {
                     window.toastSystem.showSuccess('Sendung erfolgreich gespeichert');
                 }

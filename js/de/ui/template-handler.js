@@ -97,7 +97,7 @@ class TemplateHandlerDE {
                         <select name="templateFormat" class="form-select">
                             <option value="csv">CSV (Komma-getrennt)</option>
                             <option value="ssv" selected>SSV (Semikolon-getrennt) - Empfohlen</option>
-                            <option value="xlsx">Excel (XLSX)</option>
+                            <option value="xml">XML (Strukturiert)</option>
                         </select>
                         <div class="form-help">SSV wird für deutsche Excel-Versionen empfohlen</div>
                     </div>
@@ -128,7 +128,7 @@ class TemplateHandlerDE {
                 <span class="field-count">${fields.length} Felder:</span>
                 <div class="field-tags">
                     ${fields.slice(0, 8).map(field => 
-                        `<span class="field-tag">${UPS_FIELDS[field]?.label || field}</span>`
+                        `<span class="field-tag">${window.UPS_FIELDS[field]?.label || field}</span>`
                     ).join('')}
                     ${fields.length > 8 ? `<span class="field-tag more">+${fields.length - 8} weitere</span>` : ''}
                 </div>
@@ -136,11 +136,17 @@ class TemplateHandlerDE {
         `;
     }
 
-    // Template-Felder basierend auf Typ abrufen
+    // Template-Felder basierend auf Typ abrufen - UPS-konform
     getTemplateFields(templateType) {
+        if (!window.UPS_FIELDS) {
+            return [];
+        }
+        
+        const allFields = Object.keys(window.UPS_FIELDS);
+        
         const basicFields = [
-            'Company or Name', 'Address 1', 'City', 'State/Prov/Other', 
-            'Postal Code', 'Country', 'Telephone', 'Consignee Email',
+            'Company or Name', 'Address 1', 'City', 'State/Province/Other', 
+            'Postal Code', 'Country', 'Telephone', 'E-mail Address',
             'Service', 'Packaging Type', 'Weight', 'Unit of Measure'
         ];
 
@@ -149,25 +155,12 @@ class TemplateHandlerDE {
             'Description of Goods', 'Customs Value', 'Documents of No Commercial Value'
         ];
 
-        const advancedFields = [
-            'Contact Name', 'Company or Name', 'Address 1', 'Address 2', 'Address 3',
-            'City', 'State/Prov/Other', 'Postal Code', 'Country', 'Telephone', 'Ext',
-            'Residential Ind', 'Consignee Email', 'Service', 'Packaging Type', 'Weight',
-            'Unit of Measure', 'Length', 'Width', 'Height', 'Reference 1', 'Reference 2',
-            'Reference 3', 'Delivery Confirm', 'Description of Goods', 'Customs Value',
-            'Documents of No Commercial Value', 'GNIFC', 'Pkg Decl Value',
-            'Saturday Deliver', 'Shipper Release', 'Carbon Neutral', 'Large Package',
-            'Addl handling', 'Ret of Documents', 'UPS Premium Care',
-            'Electronic Package Release Authentication', 'Lithium Ion Alone',
-            'Lithium Ion In Equipment'
-        ];
-
         switch (templateType) {
-            case 'basic': return basicFields;
-            case 'international': return internationalFields;
-            case 'advanced': return advancedFields;
-            case 'example': return basicFields;
-            default: return basicFields;
+            case 'basic': return basicFields.filter(field => allFields.includes(field));
+            case 'international': return internationalFields.filter(field => allFields.includes(field));
+            case 'advanced': return allFields; // Alle UPS-Felder
+            case 'example': return basicFields.filter(field => allFields.includes(field));
+            default: return basicFields.filter(field => allFields.includes(field));
         }
     }
 
@@ -216,44 +209,77 @@ class TemplateHandlerDE {
         }
     }
 
-    // Template-Daten erstellen
+    // Template-Daten erstellen - UPS-konform
     createTemplateData(templateType, format) {
-        const fields = this.getTemplateFields(templateType);
+        if (!window.UPS_FIELD_ORDER || !window.UPS_FIELDS) {
+            throw new Error('UPS-Feldkonfiguration nicht verfügbar');
+        }
+
+        if (format === 'xml') {
+            return this.createXMLTemplate(templateType);
+        }
+
+        // Alle UPS-Felder in korrekter Reihenfolge verwenden
+        const fields = window.UPS_FIELD_ORDER;
         const delimiter = this.getDelimiter(format);
         const lines = [];
 
-        // Header mit Feldnamen
+        // Header mit UPS-Feldnamen
         lines.push(fields.join(delimiter));
 
         // Beispieldaten für Example-Template
         if (templateType === 'example') {
             const exampleData = this.getExampleData();
             exampleData.forEach(row => {
-                const values = fields.map(fieldName => {
-                    const field = UPS_FIELDS[fieldName];
-                    const value = row[field?.key] || '';
+                const values = window.UPS_FIELD_ORDER.map(upsFieldName => {
+                    const fieldConfig = window.UPS_FIELDS[upsFieldName];
+                    if (!fieldConfig) {
+                        console.warn(`Feldkonfiguration für ${upsFieldName} nicht gefunden`);
+                        return '';
+                    }
+                    let value = row[fieldConfig.key] || '';
+                    
+                    // Spezielle Behandlung für bestimmte Felder
+                    switch (fieldConfig.key) {
+                        case 'telephone':
+                            value = row.phone || row.telephone || '';
+                            break;
+                        case 'packagingType':
+                            value = row.packageType || row.packagingType || '2';
+                            break;
+                        case 'service':
+                            value = row.serviceType || row.service || '11';
+                            break;
+                        case 'goodsDescription':
+                            value = row.description || row.goodsDescription || '';
+                            break;
+                        case 'residential':
+                            value = row.residential ? '1' : '0';
+                            break;
+                    }
+                    
                     return this.formatFieldForTemplate(value, format);
                 });
                 lines.push(values.join(delimiter));
             });
         } else {
             // Leere Datenzeile für andere Templates
-            const emptyRow = fields.map(() => '').join(delimiter);
+            const emptyRow = window.UPS_FIELD_ORDER.map(() => '').join(delimiter);
             lines.push(emptyRow);
         }
 
         // Kommentare hinzufügen
-        if (format !== 'xlsx') {
-            lines.push('');
-            lines.push('# UPS Batch-Manager Vorlage');
-            lines.push(`# Template-Typ: ${this.templateTypes[templateType]}`);
-            lines.push(`# Erstellt am: ${new Date().toLocaleDateString('de-DE')}`);
-            lines.push('# Hinweise:');
-            lines.push('# - Pflichtfelder sind: Company or Name, Address 1, City, Postal Code, Country, Service, Packaging Type, Weight');
-            lines.push('# - Gewicht in kg oder lbs (siehe Unit of Measure)');
-            lines.push('# - Service-Codes: 03=Standard, 07=Express, 11=Saver, etc.');
-            lines.push('# - Land-Codes: DE=Deutschland, US=USA, GB=Großbritannien, etc.');
-        }
+        lines.push('');
+        lines.push('# UPS Batch-Manager Vorlage');
+        lines.push(`# Template-Typ: ${this.templateTypes[templateType]}`);
+        lines.push(`# Erstellt am: ${new Date().toLocaleDateString('de-DE')}`);
+        lines.push('# Hinweise:');
+        lines.push('# - Alle 79 UPS-Felder in korrekter Reihenfolge enthalten');
+        lines.push('# - Pflichtfelder sind: Company or Name, Address 1, City, Country, Service, Packaging Type');
+        lines.push('# - Gewicht in kg oder lbs (siehe Unit of Measure)');
+        lines.push('# - Service-Codes: 01=Next Day Air, 03=Ground, 07=International Express, 11=International Standard');
+        lines.push('# - Land-Codes: DE=Deutschland, US=USA, GB=Großbritannien, etc.');
+        lines.push('# - Boolean-Werte: 0=Nein, 1=Ja');
 
         return lines.join('\n');
     }
@@ -318,7 +344,7 @@ class TemplateHandlerDE {
         switch (format) {
             case 'csv': return ',';
             case 'ssv': return ';';
-            case 'xlsx': return ';'; // Excel bevorzugt Semikolon in Deutschland
+            case 'xml': return ''; // XML verwendet keine Delimiter
             default: return ';';
         }
     }
@@ -338,10 +364,100 @@ class TemplateHandlerDE {
         return stringValue;
     }
 
+    // XML-Template erstellen
+    createXMLTemplate(templateType) {
+        let xmlContent = '<?xml version="1.0" encoding="UTF-8"?>\n';
+        xmlContent += '<ups-batch-template>\n';
+        xmlContent += `  <template-type>${templateType}</template-type>\n`;
+        xmlContent += `  <created-at>${new Date().toISOString()}</created-at>\n`;
+        xmlContent += `  <description>UPS Batch-Manager Vorlage mit allen 79 UPS-Feldern</description>\n`;
+        xmlContent += '  <shipments>\n';
+        
+        if (templateType === 'example') {
+            const exampleData = this.getExampleData();
+            exampleData.forEach((row, index) => {
+                xmlContent += `    <shipment id="${index + 1}">\n`;
+                
+                window.UPS_FIELD_ORDER.forEach(upsFieldName => {
+                    const fieldConfig = window.UPS_FIELDS[upsFieldName];
+                    if (!fieldConfig) {
+                        console.warn(`Feldkonfiguration für ${upsFieldName} nicht gefunden`);
+                        return;
+                    }
+                    let value = row[fieldConfig.key] || '';
+                    
+                    // Spezielle Behandlung für bestimmte Felder
+                    switch (fieldConfig.key) {
+                        case 'telephone':
+                            value = row.phone || row.telephone || '';
+                            break;
+                        case 'packagingType':
+                            value = row.packageType || row.packagingType || '2';
+                            break;
+                        case 'service':
+                            value = row.serviceType || row.service || '11';
+                            break;
+                        case 'goodsDescription':
+                            value = row.description || row.goodsDescription || '';
+                            break;
+                        case 'residential':
+                            value = row.residential ? '1' : '0';
+                            break;
+                    }
+                    
+                    const xmlTagName = upsFieldName.toLowerCase()
+                        .replace(/[^a-z0-9\s]/g, '')
+                        .replace(/\s+/g, '-')
+                        .replace(/^-+|-+$/g, '');
+                    
+                    xmlContent += `      <${xmlTagName}>${this.escapeXMLField(String(value))}</${xmlTagName}>\n`;
+                });
+                
+                xmlContent += `    </shipment>\n`;
+            });
+        } else {
+            // Leere Vorlage
+            xmlContent += `    <shipment id="1">\n`;
+            
+            window.UPS_FIELD_ORDER.forEach(upsFieldName => {
+                const fieldConfig = window.UPS_FIELDS[upsFieldName];
+                if (!fieldConfig) {
+                    console.warn(`Feldkonfiguration für ${upsFieldName} nicht gefunden`);
+                    return;
+                }
+                const xmlTagName = upsFieldName.toLowerCase()
+                    .replace(/[^a-z0-9\s]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/^-+|-+$/g, '');
+                
+                xmlContent += `      <${xmlTagName}></${xmlTagName}>\n`;
+            });
+            
+            xmlContent += `    </shipment>\n`;
+        }
+        
+        xmlContent += '  </shipments>\n';
+        xmlContent += '</ups-batch-template>\n';
+        
+        return xmlContent;
+    }
+
+    // XML-Feld escapen
+    escapeXMLField(field) {
+        if (field === null || field === undefined) {
+            return '';
+        }
+        const str = String(field);
+        return str.replace(/&/g, '&amp;')
+                  .replace(/</g, '&lt;')
+                  .replace(/>/g, '&gt;')
+                  .replace(/"/g, '&quot;')
+                  .replace(/'/g, '&#39;');
+    }
+
     // Datei herunterladen
     downloadFile(content, format, filename) {
-        const extension = format === 'xlsx' ? 'csv' : format; // Excel kann CSV öffnen
-        const finalFilename = `${filename}.${extension}`;
+        const finalFilename = `${filename}.${format}`;
         
         const mimeType = this.getMimeType(format);
         const blob = new Blob([content], { type: mimeType });
@@ -364,7 +480,7 @@ class TemplateHandlerDE {
         switch (format) {
             case 'csv': return 'text/csv;charset=utf-8';
             case 'ssv': return 'text/csv;charset=utf-8';
-            case 'xlsx': return 'text/csv;charset=utf-8';
+            case 'xml': return 'application/xml;charset=utf-8';
             default: return 'text/plain;charset=utf-8';
         }
     }

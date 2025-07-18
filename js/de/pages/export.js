@@ -130,9 +130,12 @@ class ExportPage {
             let exportData;
             let filename;
             
-            if (format === 'xlsx') {
-                exportData = this.exportToXLSX(exportShipments, options);
-                filename = `ups-batch-${new Date().toISOString().slice(0, 10)}.xlsx`;
+            if (format === 'xml') {
+                exportData = this.exportToXML(exportShipments, options);
+                filename = `ups-batch-${new Date().toISOString().slice(0, 10)}.xml`;
+            } else if (format === 'ssv') {
+                exportData = this.exportToSSV(exportShipments, options);
+                filename = `ups-batch-${new Date().toISOString().slice(0, 10)}.ssv`;
             } else {
                 exportData = this.exportToCSV(exportShipments, options);
                 filename = `ups-batch-${new Date().toISOString().slice(0, 10)}.csv`;
@@ -164,38 +167,19 @@ class ExportPage {
     }
 
     exportToCSV(shipments, options) {
-        // UPS-konforme Feldnamen gemäß UPS Batch File Spezifikation
-        const headers = [
-            'Contact Name', 'Company or Name', 'Country', 'Address 1', 'Address 2', 'Address 3',
-            'City', 'State/Province/Other', 'Postal Code', 'Telephone', 'Extension',
-            'Residential Indicator', 'E-mail Address', 'Packaging Type', 'Customs Value',
-            'Weight', 'Length', 'Width', 'Height', 'Unit of Measure', 'Description of Goods',
-            'Documents of No Commercial Value', 'GNIFC (Goods not in Free Circulation)',
-            'Declared Value', 'Service', 'Delivery Confirmation',
-            'Shipper Release/Deliver Wthout Signature', 'Return of Document',
-            'Deliver on Saturday', 'UPS carbon neutral', 'Large Package', 'Additional Handling',
-            'Reference 1', 'Reference 2', 'Reference 3', 'E-mail Notification 1 - Address',
-            'E-mail Notification 1 - Ship', 'E-mail Notification 1 - Exception',
-            'E-mail Notification 1 - Delivery', 'E-mail Notification 2 - Address',
-            'E-mail Notification 2 - Ship', 'E-mail Notification 2 - Exception',
-            'E-mail Notification 2 - Delivery', 'E-mail Notification 3 - Address',
-            'E-mail Notification 3 - Ship', 'E-mail Notification 3 - Exception',
-            'E-mail Notification 3 - Delivery', 'E-mail Notification 4 - Address',
-            'E-mail Notification 4 - Ship', 'E-mail Notification 4 - Exception',
-            'E-mail Notification 4 - Delivery', 'E-mail Notification 5 - Address',
-            'E-mail Notification 5 - Ship', 'E-mail Notification 5 - Exception',
-            'E-mail Notification 5 - Delivery', 'E-mail Message', 'E-mail Failure Address',
-            'UPS Premium Care', 'Location ID', 'Notification Media Type',
-            'Notification Language', 'Notification Address', 'ADL COD Value',
-            'ADL Deliver to Addressee', 'ADL Shipper Media Type', 'ADL Shipper Language',
-            'ADL Shipper Notification', 'ADL Direct Delivery Only',
-            'Electronic Package Release Authentication', 'Lithium Ion Alone',
-            'Lithium Ion In Equipment', 'Lithium Ion With_Equipment', 'Lithium Metal Alone',
-            'Lithium Metal In Equipment', 'Lithium Metal With Equipment',
-            'Weekend Commercial Delivery', 'Dry Ice Weight', 'Merchandise Description',
-            'UPS SurePost®Limited Quantity/Lithium Battery'
-        ];
+        // Verwende Export-Handler für UPS-konforme CSV-Erstellung
+        if (window.exportHandler && typeof window.exportHandler.exportToCSV === 'function') {
+            return window.exportHandler.exportToCSV(shipments);
+        }
         
+        // Fallback wenn Export-Handler nicht verfügbar ist
+        console.warn('Export-Handler nicht verfügbar, verwende vereinfachten CSV-Export');
+        
+        if (!window.UPS_FIELDS) {
+            throw new Error('UPS-Feldkonfiguration nicht verfügbar');
+        }
+
+        const headers = Object.keys(window.UPS_FIELDS);
         let csvContent = '';
         
         if (options.includeHeaders) {
@@ -203,218 +187,84 @@ class ExportPage {
         }
         
         shipments.forEach(shipment => {
-            const row = [
-                this.escapeCSVField(shipment.contactName || ''),
-                this.escapeCSVField(shipment.companyName || ''),
-                this.escapeCSVField(shipment.country || ''),
-                this.escapeCSVField(shipment.address1 || ''),
-                this.escapeCSVField(shipment.address2 || ''),
-                this.escapeCSVField(''), // Address 3
-                this.escapeCSVField(shipment.city || ''),
-                this.escapeCSVField(''), // State/Province/Other
-                this.escapeCSVField(shipment.postalCode || ''),
-                this.escapeCSVField(shipment.phone || ''),
-                this.escapeCSVField(''), // Extension
-                this.escapeCSVField(''), // Residential Indicator
-                this.escapeCSVField(shipment.email || ''),
-                this.escapeCSVField(shipment.packageType || ''),
-                this.escapeCSVField(''), // Customs Value
-                this.escapeCSVField(shipment.weight || ''),
-                this.escapeCSVField(''), // Length
-                this.escapeCSVField(''), // Width
-                this.escapeCSVField(''), // Height
-                this.escapeCSVField(''), // Unit of Measure
-                this.escapeCSVField(shipment.description || ''),
-                this.escapeCSVField(''), // Documents of No Commercial Value
-                this.escapeCSVField(''), // GNIFC
-                this.escapeCSVField(shipment.value || ''),
-                this.escapeCSVField(shipment.service || ''),
-                this.escapeCSVField(''), // Delivery Confirmation
-                this.escapeCSVField(''), // Shipper Release
-                this.escapeCSVField(''), // Return of Document
-                this.escapeCSVField(''), // Deliver on Saturday
-                this.escapeCSVField(''), // UPS carbon neutral
-                this.escapeCSVField(''), // Large Package
-                this.escapeCSVField(''), // Additional Handling
-                this.escapeCSVField(shipment.reference || ''),
-                this.escapeCSVField(''), // Reference 2
-                this.escapeCSVField(''), // Reference 3
-                this.escapeCSVField(''), // E-mail Notification 1 - Address
-                this.escapeCSVField(''), // E-mail Notification 1 - Ship
-                this.escapeCSVField(''), // E-mail Notification 1 - Exception
-                this.escapeCSVField(''), // E-mail Notification 1 - Delivery
-                this.escapeCSVField(''), // E-mail Notification 2 - Address
-                this.escapeCSVField(''), // E-mail Notification 2 - Ship
-                this.escapeCSVField(''), // E-mail Notification 2 - Exception
-                this.escapeCSVField(''), // E-mail Notification 2 - Delivery
-                this.escapeCSVField(''), // E-mail Notification 3 - Address
-                this.escapeCSVField(''), // E-mail Notification 3 - Ship
-                this.escapeCSVField(''), // E-mail Notification 3 - Exception
-                this.escapeCSVField(''), // E-mail Notification 3 - Delivery
-                this.escapeCSVField(''), // E-mail Notification 4 - Address
-                this.escapeCSVField(''), // E-mail Notification 4 - Ship
-                this.escapeCSVField(''), // E-mail Notification 4 - Exception
-                this.escapeCSVField(''), // E-mail Notification 4 - Delivery
-                this.escapeCSVField(''), // E-mail Notification 5 - Address
-                this.escapeCSVField(''), // E-mail Notification 5 - Ship
-                this.escapeCSVField(''), // E-mail Notification 5 - Exception
-                this.escapeCSVField(''), // E-mail Notification 5 - Delivery
-                this.escapeCSVField(''), // E-mail Message
-                this.escapeCSVField(''), // E-mail Failure Address
-                this.escapeCSVField(''), // UPS Premium Care
-                this.escapeCSVField(''), // Location ID
-                this.escapeCSVField(''), // Notification Media Type
-                this.escapeCSVField(''), // Notification Language
-                this.escapeCSVField(''), // Notification Address
-                this.escapeCSVField(''), // ADL COD Value
-                this.escapeCSVField(''), // ADL Deliver to Addressee
-                this.escapeCSVField(''), // ADL Shipper Media Type
-                this.escapeCSVField(''), // ADL Shipper Language
-                this.escapeCSVField(''), // ADL Shipper Notification
-                this.escapeCSVField(''), // ADL Direct Delivery Only
-                this.escapeCSVField(''), // Electronic Package Release Authentication
-                this.escapeCSVField(''), // Lithium Ion Alone
-                this.escapeCSVField(''), // Lithium Ion In Equipment
-                this.escapeCSVField(''), // Lithium Ion With_Equipment
-                this.escapeCSVField(''), // Lithium Metal Alone
-                this.escapeCSVField(''), // Lithium Metal In Equipment
-                this.escapeCSVField(''), // Lithium Metal With Equipment
-                this.escapeCSVField(''), // Weekend Commercial Delivery
-                this.escapeCSVField(''), // Dry Ice Weight
-                this.escapeCSVField(''), // Merchandise Description
-                this.escapeCSVField('') // UPS SurePost®Limited Quantity/Lithium Battery
-            ];
+            const row = Object.entries(window.UPS_FIELDS).map(([upsFieldName, fieldConfig]) => {
+                let value = shipment[fieldConfig.key] || '';
+                return this.escapeCSVField(String(value));
+            });
             csvContent += row.join(',') + '\n';
         });
         
         return csvContent;
     }
 
-    exportToXLSX(shipments, options) {
-        // UPS-konforme XLSX-Export mit Tab-Trennzeichen
-        const headers = [
-            'Contact Name', 'Company or Name', 'Country', 'Address 1', 'Address 2', 'Address 3',
-            'City', 'State/Province/Other', 'Postal Code', 'Telephone', 'Extension',
-            'Residential Indicator', 'E-mail Address', 'Packaging Type', 'Customs Value',
-            'Weight', 'Length', 'Width', 'Height', 'Unit of Measure', 'Description of Goods',
-            'Documents of No Commercial Value', 'GNIFC (Goods not in Free Circulation)',
-            'Declared Value', 'Service', 'Delivery Confirmation',
-            'Shipper Release/Deliver Wthout Signature', 'Return of Document',
-            'Deliver on Saturday', 'UPS carbon neutral', 'Large Package', 'Additional Handling',
-            'Reference 1', 'Reference 2', 'Reference 3', 'E-mail Notification 1 - Address',
-            'E-mail Notification 1 - Ship', 'E-mail Notification 1 - Exception',
-            'E-mail Notification 1 - Delivery', 'E-mail Notification 2 - Address',
-            'E-mail Notification 2 - Ship', 'E-mail Notification 2 - Exception',
-            'E-mail Notification 2 - Delivery', 'E-mail Notification 3 - Address',
-            'E-mail Notification 3 - Ship', 'E-mail Notification 3 - Exception',
-            'E-mail Notification 3 - Delivery', 'E-mail Notification 4 - Address',
-            'E-mail Notification 4 - Ship', 'E-mail Notification 4 - Exception',
-            'E-mail Notification 4 - Delivery', 'E-mail Notification 5 - Address',
-            'E-mail Notification 5 - Ship', 'E-mail Notification 5 - Exception',
-            'E-mail Notification 5 - Delivery', 'E-mail Message', 'E-mail Failure Address',
-            'UPS Premium Care', 'Location ID', 'Notification Media Type',
-            'Notification Language', 'Notification Address', 'ADL COD Value',
-            'ADL Deliver to Addressee', 'ADL Shipper Media Type', 'ADL Shipper Language',
-            'ADL Shipper Notification', 'ADL Direct Delivery Only',
-            'Electronic Package Release Authentication', 'Lithium Ion Alone',
-            'Lithium Ion In Equipment', 'Lithium Ion With_Equipment', 'Lithium Metal Alone',
-            'Lithium Metal In Equipment', 'Lithium Metal With Equipment',
-            'Weekend Commercial Delivery', 'Dry Ice Weight', 'Merchandise Description',
-            'UPS SurePost®Limited Quantity/Lithium Battery'
-        ];
+    exportToXML(shipments, options) {
+        // Verwende Export-Handler für UPS-konforme XML-Erstellung
+        if (window.exportHandler && typeof window.exportHandler.exportToXML === 'function') {
+            return window.exportHandler.exportToXML(shipments);
+        }
         
-        let csvContent = '';
+        // Fallback wenn Export-Handler nicht verfügbar ist
+        console.warn('Export-Handler nicht verfügbar, verwende vereinfachten XML-Export');
+        
+        let xmlContent = '<?xml version="1.0" encoding="UTF-8"?>\n';
+        xmlContent += '<ups-batch>\n';
+        xmlContent += `  <created-at>${new Date().toISOString()}</created-at>\n`;
+        xmlContent += `  <shipment-count>${shipments.length}</shipment-count>\n`;
+        xmlContent += '  <shipments>\n';
+        
+        shipments.forEach((shipment, index) => {
+            xmlContent += `    <shipment id="${index + 1}">\n`;
+            
+            if (window.UPS_FIELDS) {
+                Object.entries(window.UPS_FIELDS).forEach(([upsFieldName, fieldConfig]) => {
+                    let value = shipment[fieldConfig.key] || '';
+                    const xmlTagName = upsFieldName.toLowerCase()
+                        .replace(/[^a-z0-9\s]/g, '')
+                        .replace(/\s+/g, '-')
+                        .replace(/^-+|-+$/g, '');
+                    
+                    xmlContent += `      <${xmlTagName}>${this.escapeXMLField(String(value))}</${xmlTagName}>\n`;
+                });
+            }
+            
+            xmlContent += `    </shipment>\n`;
+        });
+        
+        xmlContent += '  </shipments>\n';
+        xmlContent += '</ups-batch>\n';
+        
+        return xmlContent;
+    }
+
+    exportToSSV(shipments, options) {
+        // Verwende Export-Handler für UPS-konforme SSV-Erstellung
+        if (window.exportHandler && typeof window.exportHandler.exportToSSV === 'function') {
+            return window.exportHandler.exportToSSV(shipments);
+        }
+        
+        // Fallback wenn Export-Handler nicht verfügbar ist
+        console.warn('Export-Handler nicht verfügbar, verwende vereinfachten SSV-Export');
+        
+        if (!window.UPS_FIELDS) {
+            throw new Error('UPS-Feldkonfiguration nicht verfügbar');
+        }
+
+        const headers = Object.keys(window.UPS_FIELDS);
+        let ssvContent = '';
         
         if (options.includeHeaders) {
-            csvContent += headers.join(',') + '\n';
+            ssvContent += headers.join(';') + '\n';
         }
         
         shipments.forEach(shipment => {
-            const row = [
-                this.escapeCSVField(shipment.contactName || ''),
-                this.escapeCSVField(shipment.companyName || ''),
-                this.escapeCSVField(shipment.country || ''),
-                this.escapeCSVField(shipment.address1 || ''),
-                this.escapeCSVField(shipment.address2 || ''),
-                this.escapeCSVField(''), // Address 3
-                this.escapeCSVField(shipment.city || ''),
-                this.escapeCSVField(''), // State/Province/Other
-                this.escapeCSVField(shipment.postalCode || ''),
-                this.escapeCSVField(shipment.phone || ''),
-                this.escapeCSVField(''), // Extension
-                this.escapeCSVField(''), // Residential Indicator
-                this.escapeCSVField(shipment.email || ''),
-                this.escapeCSVField(shipment.packageType || ''),
-                this.escapeCSVField(''), // Customs Value
-                this.escapeCSVField(shipment.weight || ''),
-                this.escapeCSVField(''), // Length
-                this.escapeCSVField(''), // Width
-                this.escapeCSVField(''), // Height
-                this.escapeCSVField(''), // Unit of Measure
-                this.escapeCSVField(shipment.description || ''),
-                this.escapeCSVField(''), // Documents of No Commercial Value
-                this.escapeCSVField(''), // GNIFC
-                this.escapeCSVField(shipment.value || ''),
-                this.escapeCSVField(shipment.service || ''),
-                this.escapeCSVField(''), // Delivery Confirmation
-                this.escapeCSVField(''), // Shipper Release
-                this.escapeCSVField(''), // Return of Document
-                this.escapeCSVField(''), // Deliver on Saturday
-                this.escapeCSVField(''), // UPS carbon neutral
-                this.escapeCSVField(''), // Large Package
-                this.escapeCSVField(''), // Additional Handling
-                this.escapeCSVField(shipment.reference || ''),
-                this.escapeCSVField(''), // Reference 2
-                this.escapeCSVField(''), // Reference 3
-                this.escapeCSVField(''), // E-mail Notification 1 - Address
-                this.escapeCSVField(''), // E-mail Notification 1 - Ship
-                this.escapeCSVField(''), // E-mail Notification 1 - Exception
-                this.escapeCSVField(''), // E-mail Notification 1 - Delivery
-                this.escapeCSVField(''), // E-mail Notification 2 - Address
-                this.escapeCSVField(''), // E-mail Notification 2 - Ship
-                this.escapeCSVField(''), // E-mail Notification 2 - Exception
-                this.escapeCSVField(''), // E-mail Notification 2 - Delivery
-                this.escapeCSVField(''), // E-mail Notification 3 - Address
-                this.escapeCSVField(''), // E-mail Notification 3 - Ship
-                this.escapeCSVField(''), // E-mail Notification 3 - Exception
-                this.escapeCSVField(''), // E-mail Notification 3 - Delivery
-                this.escapeCSVField(''), // E-mail Notification 4 - Address
-                this.escapeCSVField(''), // E-mail Notification 4 - Ship
-                this.escapeCSVField(''), // E-mail Notification 4 - Exception
-                this.escapeCSVField(''), // E-mail Notification 4 - Delivery
-                this.escapeCSVField(''), // E-mail Notification 5 - Address
-                this.escapeCSVField(''), // E-mail Notification 5 - Ship
-                this.escapeCSVField(''), // E-mail Notification 5 - Exception
-                this.escapeCSVField(''), // E-mail Notification 5 - Delivery
-                this.escapeCSVField(''), // E-mail Message
-                this.escapeCSVField(''), // E-mail Failure Address
-                this.escapeCSVField(''), // UPS Premium Care
-                this.escapeCSVField(''), // Location ID
-                this.escapeCSVField(''), // Notification Media Type
-                this.escapeCSVField(''), // Notification Language
-                this.escapeCSVField(''), // Notification Address
-                this.escapeCSVField(''), // ADL COD Value
-                this.escapeCSVField(''), // ADL Deliver to Addressee
-                this.escapeCSVField(''), // ADL Shipper Media Type
-                this.escapeCSVField(''), // ADL Shipper Language
-                this.escapeCSVField(''), // ADL Shipper Notification
-                this.escapeCSVField(''), // ADL Direct Delivery Only
-                this.escapeCSVField(''), // Electronic Package Release Authentication
-                this.escapeCSVField(''), // Lithium Ion Alone
-                this.escapeCSVField(''), // Lithium Ion In Equipment
-                this.escapeCSVField(''), // Lithium Ion With_Equipment
-                this.escapeCSVField(''), // Lithium Metal Alone
-                this.escapeCSVField(''), // Lithium Metal In Equipment
-                this.escapeCSVField(''), // Lithium Metal With Equipment
-                this.escapeCSVField(''), // Weekend Commercial Delivery
-                this.escapeCSVField(''), // Dry Ice Weight
-                this.escapeCSVField(''), // Merchandise Description
-                this.escapeCSVField('') // UPS SurePost®Limited Quantity/Lithium Battery
-            ];
-            csvContent += row.join(',') + '\n';
+            const row = Object.entries(window.UPS_FIELDS).map(([upsFieldName, fieldConfig]) => {
+                let value = shipment[fieldConfig.key] || '';
+                return this.escapeSSVField(String(value));
+            });
+            ssvContent += row.join(';') + '\n';
         });
         
-        return csvContent;
+        return ssvContent;
     }
 
     escapeCSVField(field) {
@@ -423,6 +273,29 @@ class ExportPage {
         }
         const str = String(field);
         if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+            return '"' + str.replace(/"/g, '""') + '"';
+        }
+        return str;
+    }
+
+    escapeXMLField(field) {
+        if (field === null || field === undefined) {
+            return '';
+        }
+        const str = String(field);
+        return str.replace(/&/g, '&amp;')
+                  .replace(/</g, '&lt;')
+                  .replace(/>/g, '&gt;')
+                  .replace(/"/g, '&quot;')
+                  .replace(/'/g, '&#39;');
+    }
+
+    escapeSSVField(field) {
+        if (field === null || field === undefined) {
+            return '';
+        }
+        const str = String(field);
+        if (str.includes(';') || str.includes('"') || str.includes('\n')) {
             return '"' + str.replace(/"/g, '""') + '"';
         }
         return str;
@@ -448,7 +321,8 @@ class ExportPage {
     getMimeType(format) {
         switch (format) {
             case 'csv': return 'text/csv;charset=utf-8';
-            case 'xlsx': return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+            case 'xml': return 'application/xml;charset=utf-8';
+            case 'ssv': return 'text/plain;charset=utf-8';
             case 'txt': return 'text/plain;charset=utf-8';
             default: return 'text/plain;charset=utf-8';
         }
@@ -468,8 +342,8 @@ class ExportPage {
     }
 
     applyExportSettings(settings) {
-        // Apply export format preference (only CSV and XLSX supported)
-        if (settings.defaultFormat && (settings.defaultFormat === 'csv' || settings.defaultFormat === 'xlsx')) {
+        // Apply export format preference (CSV, XML, SSV supported)
+        if (settings.defaultFormat && ['csv', 'xml', 'ssv'].includes(settings.defaultFormat)) {
             const formatRadio = document.querySelector(`input[name="exportFormat"][value="${settings.defaultFormat}"]`);
             if (formatRadio) {
                 formatRadio.checked = true;
@@ -493,10 +367,10 @@ class ExportPage {
     }
 
     saveToStorage() {
-        // Save export preferences (only CSV and XLSX supported)
+        // Save export preferences (CSV, XML, SSV supported)
         const selectedFormat = document.querySelector('input[name="exportFormat"]:checked')?.value || 'csv';
         const settings = {
-            defaultFormat: (selectedFormat === 'csv' || selectedFormat === 'xlsx') ? selectedFormat : 'csv',
+            defaultFormat: ['csv', 'xml', 'ssv'].includes(selectedFormat) ? selectedFormat : 'csv',
             includeHeaders: document.getElementById('includeHeaders')?.checked || false,
             exportOnlyValid: document.getElementById('exportOnlyValid')?.checked || false
         };

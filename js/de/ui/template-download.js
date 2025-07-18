@@ -11,19 +11,30 @@ class TemplateDownloadManager {
     setupEventListeners() {
         // Download-Buttons für Templates
         const downloadCsvBtn = document.getElementById('downloadCsvTemplate');
-        const downloadXlsxBtn = document.getElementById('downloadXlsxTemplate');
+        const downloadXmlBtn = document.getElementById('downloadXmlTemplate');
+        const downloadSsvBtn = document.getElementById('downloadSsvTemplate');
 
         if (downloadCsvBtn) {
             downloadCsvBtn.addEventListener('click', () => this.downloadTemplate('csv'));
         }
 
-        if (downloadXlsxBtn) {
-            downloadXlsxBtn.addEventListener('click', () => this.downloadTemplate('xlsx'));
+        if (downloadXmlBtn) {
+            downloadXmlBtn.addEventListener('click', () => this.downloadTemplate('xml'));
+        }
+        
+        if (downloadSsvBtn) {
+            downloadSsvBtn.addEventListener('click', () => this.downloadTemplate('ssv'));
         }
     }
 
     // UPS Batch-Datei Felder basierend auf der offiziellen JSON-Spezifikation
     getUPSBatchFields() {
+        // Verwende die offizielle UPS_FIELD_ORDER-Konfiguration wenn verfügbar
+        if (window.UPS_FIELD_ORDER) {
+            return window.UPS_FIELD_ORDER;
+        }
+        
+        // Fallback: Komplette UPS-Feldliste (79 Felder)
         return [
             'Contact Name',
             'Company or Name',
@@ -32,12 +43,12 @@ class TemplateDownloadManager {
             'Address 2',
             'Address 3',
             'City',
-            'State/Province/Other',
+            'State/Prov/Other',
             'Postal Code',
             'Telephone',
-            'Extension',
-            'Residential Indicator',
-            'E-mail Address',
+            'Ext',
+            'Residential Ind',
+            'Consignee Email',
             'Packaging Type',
             'Customs Value',
             'Weight',
@@ -48,7 +59,7 @@ class TemplateDownloadManager {
             'Description of Goods',
             'Documents of No Commercial Value',
             'GNIFC (Goods not in Free Circulation)',
-            'Declared Value',
+            'Pkg Decl Value',
             'Service',
             'Delivery Confirmation',
             'Shipper Release/Deliver Wthout Signature',
@@ -56,7 +67,7 @@ class TemplateDownloadManager {
             'Deliver on Saturday',
             'UPS carbon neutral',
             'Large Package',
-            'Additional Handling',
+            'Addl handling',
             'Reference 1',
             'Reference 2',
             'Reference 3',
@@ -121,12 +132,12 @@ class TemplateDownloadManager {
             'Address 2': '',
             'Address 3': '',
             'City': 'Berlin',
-            'State/Province/Other': '',
+            'State/Prov/Other': '',
             'Postal Code': '10115',
             'Telephone': '+49301234567',
-            'Extension': '',
-            'Residential Indicator': '0',
-            'E-mail Address': 'max.mustermann@example.com',
+            'Ext': '',
+            'Residential Ind': '0',
+            'Consignee Email': 'max.mustermann@example.com',
             'Packaging Type': '2',
             'Customs Value': '',
             'Weight': '1.5',
@@ -137,7 +148,7 @@ class TemplateDownloadManager {
             'Description of Goods': 'Elektronik',
             'Documents of No Commercial Value': '',
             'GNIFC (Goods not in Free Circulation)': '',
-            'Declared Value': '',
+            'Pkg Decl Value': '',
             'Service': '11',
             'Delivery Confirmation': '',
             'Shipper Release/Deliver Wthout Signature': '',
@@ -145,7 +156,7 @@ class TemplateDownloadManager {
             'Deliver on Saturday': '',
             'UPS carbon neutral': '',
             'Large Package': '',
-            'Additional Handling': '',
+            'Addl handling': '',
             'Reference 1': 'Bestellung-12345',
             'Reference 2': '',
             'Reference 3': ''
@@ -166,8 +177,10 @@ class TemplateDownloadManager {
 
             if (format === 'csv') {
                 this.downloadCSV(fields, sampleData);
-            } else if (format === 'xlsx') {
-                this.downloadXLSX(fields, sampleData);
+            } else if (format === 'xml') {
+                this.downloadXML(fields, sampleData);
+            } else if (format === 'ssv') {
+                this.downloadSSV(fields, sampleData);
             }
 
             // Aktivität loggen
@@ -207,54 +220,78 @@ class TemplateDownloadManager {
         this.triggerDownload(blob, 'ups-batch-template.csv');
     }
 
-    async downloadXLSX(fields, sampleData) {
-        try {
-            // SheetJS dynamisch laden für XLSX-Export
-            if (!window.XLSX) {
-                await this.loadSheetJS();
-            }
-
-            // Arbeitsblatt erstellen
-            const worksheet = window.XLSX.utils.json_to_sheet([sampleData]);
+    downloadXML(fields, sampleData) {
+        // XML-Template erstellen
+        let xmlContent = '<?xml version="1.0" encoding="UTF-8"?>\n';
+        xmlContent += '<ups-batch-template>\n';
+        xmlContent += '  <template-info>\n';
+        xmlContent += `    <created-at>${new Date().toISOString()}</created-at>\n`;
+        xmlContent += '    <description>UPS Batch-Manager Template mit allen 79 UPS-Feldern</description>\n';
+        xmlContent += `    <field-count>${fields.length}</field-count>\n`;
+        xmlContent += '  </template-info>\n';
+        xmlContent += '  <shipments>\n';
+        xmlContent += '    <shipment id="1">\n';
+        
+        // Alle Felder mit Beispieldaten oder leeren Werten
+        fields.forEach(field => {
+            const value = sampleData[field] || '';
+            const xmlTagName = field.toLowerCase()
+                .replace(/[^a-z0-9\s]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/^-+|-+$/g, '');
             
-            // Arbeitsmappe erstellen
-            const workbook = window.XLSX.utils.book_new();
-            window.XLSX.utils.book_append_sheet(workbook, worksheet, 'UPS Batch Template');
-
-            // Spaltenbreiten anpassen
-            const colWidths = fields.map(field => ({
-                wch: Math.max(field.length, 15)
-            }));
-            worksheet['!cols'] = colWidths;
-
-            // XLSX-Datei erstellen und herunterladen
-            const xlsxBuffer = window.XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-            const blob = new Blob([xlsxBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            this.triggerDownload(blob, 'ups-batch-template.xlsx');
-
-        } catch (error) {
-            console.error('Fehler beim XLSX-Export:', error);
-            // Fallback auf CSV
-            this.downloadCSV(fields, sampleData);
-            if (window.toastSystem) {
-                window.toastSystem.showWarning('XLSX-Export nicht verfügbar, CSV-Download wurde verwendet');
-            }
-        }
+            xmlContent += `      <${xmlTagName}>${this.escapeXML(value)}</${xmlTagName}>\n`;
+        });
+        
+        xmlContent += '    </shipment>\n';
+        xmlContent += '  </shipments>\n';
+        xmlContent += '  <notes>\n';
+        xmlContent += '    <note>Alle 79 UPS-Felder in korrekter Reihenfolge enthalten</note>\n';
+        xmlContent += '    <note>Pflichtfelder: Company or Name, Address 1, City, Country, Service, Packaging Type</note>\n';
+        xmlContent += '    <note>Boolean-Werte: 0=Nein, 1=Ja</note>\n';
+        xmlContent += '  </notes>\n';
+        xmlContent += '</ups-batch-template>\n';
+        
+        // XML-Datei erstellen und herunterladen
+        const blob = new Blob([xmlContent], { type: 'application/xml;charset=utf-8' });
+        this.triggerDownload(blob, 'ups-batch-template.xml');
     }
 
-    async loadSheetJS() {
-        return new Promise((resolve, reject) => {
-            if (window.XLSX) {
-                resolve();
-                return;
-            }
+    downloadSSV(fields, sampleData) {
+        // SSV-Template erstellen (Semikolon-getrennte Werte)
+        const headerRow = fields.join(';');
+        
+        // Beispieldaten-Zeile erstellen
+        const dataRow = fields.map(field => {
+            const value = sampleData[field] || '';
+            // Werte mit Semikolons in Anführungszeichen setzen
+            return value.includes(';') ? `"${value}"` : value;
+        }).join(';');
 
-            const script = document.createElement('script');
-            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
-            script.onload = () => resolve();
-            script.onerror = () => reject(new Error('Fehler beim Laden der XLSX-Bibliothek'));
-            document.head.appendChild(script);
-        });
+        // SSV-Inhalt zusammensetzen
+        let ssvContent = '\uFEFF'; // BOM für bessere Excel-Kompatibilität
+        ssvContent += headerRow + '\n';
+        ssvContent += dataRow + '\n';
+        ssvContent += '\n';
+        ssvContent += '# UPS Batch-Manager SSV-Vorlage\n';
+        ssvContent += '# Alle 79 UPS-Felder in korrekter Reihenfolge\n';
+        ssvContent += `# Erstellt am: ${new Date().toLocaleDateString('de-DE')}\n`;
+        ssvContent += '# Empfohlen für deutsche Excel-Versionen\n';
+
+        // SSV-Datei erstellen und herunterladen
+        const blob = new Blob([ssvContent], { type: 'text/csv;charset=utf-8' });
+        this.triggerDownload(blob, 'ups-batch-template.ssv');
+    }
+
+    // XML-Text escapen
+    escapeXML(text) {
+        if (!text) return '';
+        return String(text)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
     }
 
     triggerDownload(blob, filename) {

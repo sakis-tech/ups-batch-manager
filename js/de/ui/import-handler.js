@@ -201,17 +201,19 @@ class ImportHandlerDE {
         headers.forEach((header, index) => {
             const cleanHeader = header.replace(/['"]/g, '').toLowerCase().trim();
             
-            // Direkte Übereinstimmungen
-            for (const [upsField, config] of Object.entries(UPS_FIELDS)) {
-                const upsFieldLower = upsField.toLowerCase();
-                const labelLower = config.label.toLowerCase();
-                
-                if (cleanHeader === upsFieldLower || 
-                    cleanHeader === labelLower ||
-                    cleanHeader.includes(upsFieldLower) ||
-                    cleanHeader.includes(labelLower)) {
-                    mapping[index] = config.key;
-                    break;
+            // Direkte Übereinstimmungen mit korrigierten UPS-Feldnamen
+            if (window.UPS_FIELDS) {
+                for (const [upsField, config] of Object.entries(window.UPS_FIELDS)) {
+                    const upsFieldLower = upsField.toLowerCase();
+                    const labelLower = config.label.toLowerCase();
+                    
+                    if (cleanHeader === upsFieldLower || 
+                        cleanHeader === labelLower ||
+                        cleanHeader.includes(upsFieldLower) ||
+                        cleanHeader.includes(labelLower)) {
+                        mapping[index] = config.key;
+                        break;
+                    }
                 }
             }
 
@@ -259,6 +261,29 @@ class ImportHandlerDE {
                     'email': 'email',
                     'mail': 'email',
                     'e-mail': 'email',
+                    'consignee email': 'email',
+                    'residential ind': 'residential',
+                    'state/prov/other': 'state',
+                    'pkg decl value': 'declaredValue',
+                    'shipper release': 'shipperRelease',
+                    'ret of documents': 'returnOfDocument',
+                    'saturday deliver': 'saturdayDelivery',
+                    'carbon neutral': 'carbonNeutral',
+                    'addl handling': 'additionalHandling',
+                    'qv notif': 'emailNotification1Address',
+                    'qv failure addr': 'emailFailureAddress',
+                    'qv notif msg': 'emailMessage',
+                    'adl location id': 'locationId',
+                    'adl media type': 'notificationMediaType',
+                    'adl language': 'notificationLanguage',
+                    'adl notification addr': 'notificationAddress',
+                    'adl failure addr': 'adlFailureAddress',
+                    'adl cod value': 'adlCodValue',
+                    'adl deliver to addressee': 'adlDeliverToAddressee',
+                    'adl shipper media type': 'adlShipperMediaType',
+                    'adl shipper language': 'adlShipperLanguage',
+                    'adl shipper notification addr': 'adlShipperNotification',
+                    'adl direct delivery only': 'adlDirectDeliveryOnly',
                     
                     // Paket-Informationen
                     'verpackung': 'packagingType',

@@ -1146,9 +1146,22 @@ class ModalSystem {
             window.activityLogger.logShipmentCreated(shipmentData);
         }
 
-        // Update UI
-        if (window.appDE) {
+        // Update UI - unterstützt verschiedene Seitentypen
+        if (window.pageManager && typeof window.pageManager.updateStats === 'function') {
+            window.pageManager.updateStats();
+        }
+        if (window.pageManager && typeof window.pageManager.renderShipmentsTable === 'function') {
+            window.pageManager.renderShipmentsTable();
+        }
+        if (window.pageManager && typeof window.pageManager.renderContent === 'function') {
+            window.pageManager.renderContent();
+        }
+        
+        // Fallback für andere Seitentypen
+        if (window.appDE && typeof window.appDE.updateStats === 'function') {
             window.appDE.updateStats();
+        }
+        if (window.appDE && typeof window.appDE.renderShipmentsTable === 'function') {
             window.appDE.renderShipmentsTable();
         }
 
@@ -1210,9 +1223,22 @@ class ModalSystem {
             return false;
         }
 
-        // Update UI
-        if (window.appDE) {
+        // Update UI - unterstützt verschiedene Seitentypen
+        if (window.pageManager && typeof window.pageManager.updateStats === 'function') {
+            window.pageManager.updateStats();
+        }
+        if (window.pageManager && typeof window.pageManager.renderShipmentsTable === 'function') {
+            window.pageManager.renderShipmentsTable();
+        }
+        if (window.pageManager && typeof window.pageManager.renderContent === 'function') {
+            window.pageManager.renderContent();
+        }
+        
+        // Fallback für andere Seitentypen
+        if (window.appDE && typeof window.appDE.updateStats === 'function') {
             window.appDE.updateStats();
+        }
+        if (window.appDE && typeof window.appDE.renderShipmentsTable === 'function') {
             window.appDE.renderShipmentsTable();
         }
 

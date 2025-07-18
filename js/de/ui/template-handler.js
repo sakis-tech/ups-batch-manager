@@ -254,7 +254,13 @@ class TemplateHandlerDE {
                             value = row.description || row.goodsDescription || '';
                             break;
                         case 'residential':
-                            value = row.residential ? '1' : '0';
+                            if (row.residential === true) {
+                                value = '1';
+                            } else if (row.residential === false) {
+                                value = '0';
+                            } else {
+                                value = '';
+                            }
                             break;
                     }
                     
@@ -401,7 +407,13 @@ class TemplateHandlerDE {
                             value = row.description || row.goodsDescription || '';
                             break;
                         case 'residential':
-                            value = row.residential ? '1' : '0';
+                            if (row.residential === true) {
+                                value = '1';
+                            } else if (row.residential === false) {
+                                value = '0';
+                            } else {
+                                value = '';
+                            }
                             break;
                     }
                     

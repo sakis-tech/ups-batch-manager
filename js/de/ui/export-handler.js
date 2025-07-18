@@ -116,10 +116,10 @@ class ExportHandlerDE {
                         value = shipment.phone || shipment.telephone || '';
                         break;
                     case 'packagingType':
-                        value = shipment.packageType || shipment.packagingType || '2';
+                        value = shipment.packageType || shipment.packagingType || '';
                         break;
                     case 'service':
-                        value = shipment.serviceType || shipment.service || '11';
+                        value = shipment.serviceType || shipment.service || '';
                         break;
                     case 'goodsDescription':
                         value = shipment.description || shipment.goodsDescription || '';
@@ -131,64 +131,185 @@ class ExportHandlerDE {
                         value = shipment.reference || shipment.reference1 || '';
                         break;
                     case 'residential':
-                        value = shipment.residential ? '1' : '0';
+                        // Nur wenn explizit gesetzt, sonst leer lassen
+                        if (shipment.residential === true) {
+                            value = '1';
+                        } else if (shipment.residential === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'documentsNoCommercialValue':
-                        value = shipment.documentsNoCommercialValue ? '1' : '0';
+                        if (shipment.documentsNoCommercialValue === true) {
+                            value = '1';
+                        } else if (shipment.documentsNoCommercialValue === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'gnifc':
-                        value = shipment.gnifc ? '1' : '0';
+                        if (shipment.gnifc === true) {
+                            value = '1';
+                        } else if (shipment.gnifc === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'shipperRelease':
-                        value = shipment.shipperRelease ? '1' : '0';
+                        if (shipment.shipperRelease === true) {
+                            value = '1';
+                        } else if (shipment.shipperRelease === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'returnOfDocument':
-                        value = shipment.returnOfDocuments ? '1' : '0';
+                        if (shipment.returnOfDocuments === true) {
+                            value = '1';
+                        } else if (shipment.returnOfDocuments === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'saturdayDelivery':
-                        value = shipment.saturdayDelivery ? '1' : '0';
+                        if (shipment.saturdayDelivery === true) {
+                            value = '1';
+                        } else if (shipment.saturdayDelivery === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'carbonNeutral':
-                        value = shipment.carbonNeutral ? '1' : '0';
+                        if (shipment.carbonNeutral === true) {
+                            value = '1';
+                        } else if (shipment.carbonNeutral === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'largePackage':
-                        value = shipment.largePackage ? '1' : '0';
+                        if (shipment.largePackage === true) {
+                            value = '1';
+                        } else if (shipment.largePackage === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'additionalHandling':
-                        value = shipment.additionalHandling ? '1' : '0';
+                        if (shipment.additionalHandling === true) {
+                            value = '1';
+                        } else if (shipment.additionalHandling === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'upsPremiumCare':
-                        value = shipment.upsPremiumCare ? '1' : '0';
+                        if (shipment.upsPremiumCare === true) {
+                            value = '1';
+                        } else if (shipment.upsPremiumCare === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'weekendCommercialDelivery':
-                        value = shipment.weekendCommercialDelivery ? '1' : '0';
+                        if (shipment.weekendCommercialDelivery === true) {
+                            value = '1';
+                        } else if (shipment.weekendCommercialDelivery === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'lithiumIonAlone':
-                        value = shipment.lithiumIonAlone ? '1' : '0';
+                        if (shipment.lithiumIonAlone === true) {
+                            value = '1';
+                        } else if (shipment.lithiumIonAlone === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'lithiumIonInEquipment':
-                        value = shipment.lithiumIonInEquipment ? '1' : '0';
+                        if (shipment.lithiumIonInEquipment === true) {
+                            value = '1';
+                        } else if (shipment.lithiumIonInEquipment === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'lithiumIonWithEquipment':
-                        value = shipment.lithiumIonWithEquipment ? '1' : '0';
+                        if (shipment.lithiumIonWithEquipment === true) {
+                            value = '1';
+                        } else if (shipment.lithiumIonWithEquipment === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'lithiumMetalAlone':
-                        value = shipment.lithiumMetalAlone ? '1' : '0';
+                        if (shipment.lithiumMetalAlone === true) {
+                            value = '1';
+                        } else if (shipment.lithiumMetalAlone === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'lithiumMetalInEquipment':
-                        value = shipment.lithiumMetalInEquipment ? '1' : '0';
+                        if (shipment.lithiumMetalInEquipment === true) {
+                            value = '1';
+                        } else if (shipment.lithiumMetalInEquipment === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'lithiumMetalWithEquipment':
-                        value = shipment.lithiumMetalWithEquipment ? '1' : '0';
+                        if (shipment.lithiumMetalWithEquipment === true) {
+                            value = '1';
+                        } else if (shipment.lithiumMetalWithEquipment === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'upsSurePostLimitedQuantity':
-                        value = shipment.upsSurePostLimitedQuantity ? '1' : '0';
+                        if (shipment.upsSurePostLimitedQuantity === true) {
+                            value = '1';
+                        } else if (shipment.upsSurePostLimitedQuantity === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'adlDeliverToAddressee':
-                        value = shipment.adlDeliverToAddressee ? '1' : '0';
+                        if (shipment.adlDeliverToAddressee === true) {
+                            value = '1';
+                        } else if (shipment.adlDeliverToAddressee === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'adlDirectDeliveryOnly':
-                        value = shipment.adlDirectDeliveryOnly ? '1' : '0';
+                        if (shipment.adlDirectDeliveryOnly === true) {
+                            value = '1';
+                        } else if (shipment.adlDirectDeliveryOnly === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'electronicPackageReleaseAuth':
                         value = shipment.electronicPackageRelease || shipment.electronicPackageReleaseAuth || '';
@@ -209,7 +330,13 @@ class ExportHandlerDE {
                     case 'emailNotification5Ship':
                     case 'emailNotification5Exception':
                     case 'emailNotification5Delivery':
-                        value = shipment[fieldConfig.key] ? '1' : '0';
+                        if (shipment[fieldConfig.key] === true) {
+                            value = '1';
+                        } else if (shipment[fieldConfig.key] === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                 }
                 
@@ -271,10 +398,10 @@ class ExportHandlerDE {
                         value = shipment.phone || shipment.telephone || '';
                         break;
                     case 'packagingType':
-                        value = shipment.packageType || shipment.packagingType || '2';
+                        value = shipment.packageType || shipment.packagingType || '';
                         break;
                     case 'service':
-                        value = shipment.serviceType || shipment.service || '11';
+                        value = shipment.serviceType || shipment.service || '';
                         break;
                     case 'goodsDescription':
                         value = shipment.description || shipment.goodsDescription || '';
@@ -286,64 +413,185 @@ class ExportHandlerDE {
                         value = shipment.reference || shipment.reference1 || '';
                         break;
                     case 'residential':
-                        value = shipment.residential ? '1' : '0';
+                        // Nur wenn explizit gesetzt, sonst leer lassen
+                        if (shipment.residential === true) {
+                            value = '1';
+                        } else if (shipment.residential === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'documentsNoCommercialValue':
-                        value = shipment.documentsNoCommercialValue ? '1' : '0';
+                        if (shipment.documentsNoCommercialValue === true) {
+                            value = '1';
+                        } else if (shipment.documentsNoCommercialValue === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'gnifc':
-                        value = shipment.gnifc ? '1' : '0';
+                        if (shipment.gnifc === true) {
+                            value = '1';
+                        } else if (shipment.gnifc === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'shipperRelease':
-                        value = shipment.shipperRelease ? '1' : '0';
+                        if (shipment.shipperRelease === true) {
+                            value = '1';
+                        } else if (shipment.shipperRelease === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'returnOfDocument':
-                        value = shipment.returnOfDocuments ? '1' : '0';
+                        if (shipment.returnOfDocuments === true) {
+                            value = '1';
+                        } else if (shipment.returnOfDocuments === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'saturdayDelivery':
-                        value = shipment.saturdayDelivery ? '1' : '0';
+                        if (shipment.saturdayDelivery === true) {
+                            value = '1';
+                        } else if (shipment.saturdayDelivery === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'carbonNeutral':
-                        value = shipment.carbonNeutral ? '1' : '0';
+                        if (shipment.carbonNeutral === true) {
+                            value = '1';
+                        } else if (shipment.carbonNeutral === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'largePackage':
-                        value = shipment.largePackage ? '1' : '0';
+                        if (shipment.largePackage === true) {
+                            value = '1';
+                        } else if (shipment.largePackage === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'additionalHandling':
-                        value = shipment.additionalHandling ? '1' : '0';
+                        if (shipment.additionalHandling === true) {
+                            value = '1';
+                        } else if (shipment.additionalHandling === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'upsPremiumCare':
-                        value = shipment.upsPremiumCare ? '1' : '0';
+                        if (shipment.upsPremiumCare === true) {
+                            value = '1';
+                        } else if (shipment.upsPremiumCare === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'weekendCommercialDelivery':
-                        value = shipment.weekendCommercialDelivery ? '1' : '0';
+                        if (shipment.weekendCommercialDelivery === true) {
+                            value = '1';
+                        } else if (shipment.weekendCommercialDelivery === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'lithiumIonAlone':
-                        value = shipment.lithiumIonAlone ? '1' : '0';
+                        if (shipment.lithiumIonAlone === true) {
+                            value = '1';
+                        } else if (shipment.lithiumIonAlone === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'lithiumIonInEquipment':
-                        value = shipment.lithiumIonInEquipment ? '1' : '0';
+                        if (shipment.lithiumIonInEquipment === true) {
+                            value = '1';
+                        } else if (shipment.lithiumIonInEquipment === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'lithiumIonWithEquipment':
-                        value = shipment.lithiumIonWithEquipment ? '1' : '0';
+                        if (shipment.lithiumIonWithEquipment === true) {
+                            value = '1';
+                        } else if (shipment.lithiumIonWithEquipment === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'lithiumMetalAlone':
-                        value = shipment.lithiumMetalAlone ? '1' : '0';
+                        if (shipment.lithiumMetalAlone === true) {
+                            value = '1';
+                        } else if (shipment.lithiumMetalAlone === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'lithiumMetalInEquipment':
-                        value = shipment.lithiumMetalInEquipment ? '1' : '0';
+                        if (shipment.lithiumMetalInEquipment === true) {
+                            value = '1';
+                        } else if (shipment.lithiumMetalInEquipment === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'lithiumMetalWithEquipment':
-                        value = shipment.lithiumMetalWithEquipment ? '1' : '0';
+                        if (shipment.lithiumMetalWithEquipment === true) {
+                            value = '1';
+                        } else if (shipment.lithiumMetalWithEquipment === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'upsSurePostLimitedQuantity':
-                        value = shipment.upsSurePostLimitedQuantity ? '1' : '0';
+                        if (shipment.upsSurePostLimitedQuantity === true) {
+                            value = '1';
+                        } else if (shipment.upsSurePostLimitedQuantity === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'adlDeliverToAddressee':
-                        value = shipment.adlDeliverToAddressee ? '1' : '0';
+                        if (shipment.adlDeliverToAddressee === true) {
+                            value = '1';
+                        } else if (shipment.adlDeliverToAddressee === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'adlDirectDeliveryOnly':
-                        value = shipment.adlDirectDeliveryOnly ? '1' : '0';
+                        if (shipment.adlDirectDeliveryOnly === true) {
+                            value = '1';
+                        } else if (shipment.adlDirectDeliveryOnly === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'electronicPackageReleaseAuth':
                         value = shipment.electronicPackageRelease || shipment.electronicPackageReleaseAuth || '';
@@ -364,7 +612,13 @@ class ExportHandlerDE {
                     case 'emailNotification5Ship':
                     case 'emailNotification5Exception':
                     case 'emailNotification5Delivery':
-                        value = shipment[fieldConfig.key] ? '1' : '0';
+                        if (shipment[fieldConfig.key] === true) {
+                            value = '1';
+                        } else if (shipment[fieldConfig.key] === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                 }
                 
@@ -428,10 +682,10 @@ class ExportHandlerDE {
                         value = shipment.phone || shipment.telephone || '';
                         break;
                     case 'packagingType':
-                        value = shipment.packageType || shipment.packagingType || '2';
+                        value = shipment.packageType || shipment.packagingType || '';
                         break;
                     case 'service':
-                        value = shipment.serviceType || shipment.service || '11';
+                        value = shipment.serviceType || shipment.service || '';
                         break;
                     case 'goodsDescription':
                         value = shipment.description || shipment.goodsDescription || '';
@@ -443,64 +697,185 @@ class ExportHandlerDE {
                         value = shipment.reference || shipment.reference1 || '';
                         break;
                     case 'residential':
-                        value = shipment.residential ? '1' : '0';
+                        // Nur wenn explizit gesetzt, sonst leer lassen
+                        if (shipment.residential === true) {
+                            value = '1';
+                        } else if (shipment.residential === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'documentsNoCommercialValue':
-                        value = shipment.documentsNoCommercialValue ? '1' : '0';
+                        if (shipment.documentsNoCommercialValue === true) {
+                            value = '1';
+                        } else if (shipment.documentsNoCommercialValue === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'gnifc':
-                        value = shipment.gnifc ? '1' : '0';
+                        if (shipment.gnifc === true) {
+                            value = '1';
+                        } else if (shipment.gnifc === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'shipperRelease':
-                        value = shipment.shipperRelease ? '1' : '0';
+                        if (shipment.shipperRelease === true) {
+                            value = '1';
+                        } else if (shipment.shipperRelease === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'returnOfDocument':
-                        value = shipment.returnOfDocuments ? '1' : '0';
+                        if (shipment.returnOfDocuments === true) {
+                            value = '1';
+                        } else if (shipment.returnOfDocuments === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'saturdayDelivery':
-                        value = shipment.saturdayDelivery ? '1' : '0';
+                        if (shipment.saturdayDelivery === true) {
+                            value = '1';
+                        } else if (shipment.saturdayDelivery === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'carbonNeutral':
-                        value = shipment.carbonNeutral ? '1' : '0';
+                        if (shipment.carbonNeutral === true) {
+                            value = '1';
+                        } else if (shipment.carbonNeutral === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'largePackage':
-                        value = shipment.largePackage ? '1' : '0';
+                        if (shipment.largePackage === true) {
+                            value = '1';
+                        } else if (shipment.largePackage === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'additionalHandling':
-                        value = shipment.additionalHandling ? '1' : '0';
+                        if (shipment.additionalHandling === true) {
+                            value = '1';
+                        } else if (shipment.additionalHandling === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'upsPremiumCare':
-                        value = shipment.upsPremiumCare ? '1' : '0';
+                        if (shipment.upsPremiumCare === true) {
+                            value = '1';
+                        } else if (shipment.upsPremiumCare === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'weekendCommercialDelivery':
-                        value = shipment.weekendCommercialDelivery ? '1' : '0';
+                        if (shipment.weekendCommercialDelivery === true) {
+                            value = '1';
+                        } else if (shipment.weekendCommercialDelivery === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'lithiumIonAlone':
-                        value = shipment.lithiumIonAlone ? '1' : '0';
+                        if (shipment.lithiumIonAlone === true) {
+                            value = '1';
+                        } else if (shipment.lithiumIonAlone === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'lithiumIonInEquipment':
-                        value = shipment.lithiumIonInEquipment ? '1' : '0';
+                        if (shipment.lithiumIonInEquipment === true) {
+                            value = '1';
+                        } else if (shipment.lithiumIonInEquipment === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'lithiumIonWithEquipment':
-                        value = shipment.lithiumIonWithEquipment ? '1' : '0';
+                        if (shipment.lithiumIonWithEquipment === true) {
+                            value = '1';
+                        } else if (shipment.lithiumIonWithEquipment === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'lithiumMetalAlone':
-                        value = shipment.lithiumMetalAlone ? '1' : '0';
+                        if (shipment.lithiumMetalAlone === true) {
+                            value = '1';
+                        } else if (shipment.lithiumMetalAlone === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'lithiumMetalInEquipment':
-                        value = shipment.lithiumMetalInEquipment ? '1' : '0';
+                        if (shipment.lithiumMetalInEquipment === true) {
+                            value = '1';
+                        } else if (shipment.lithiumMetalInEquipment === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'lithiumMetalWithEquipment':
-                        value = shipment.lithiumMetalWithEquipment ? '1' : '0';
+                        if (shipment.lithiumMetalWithEquipment === true) {
+                            value = '1';
+                        } else if (shipment.lithiumMetalWithEquipment === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'upsSurePostLimitedQuantity':
-                        value = shipment.upsSurePostLimitedQuantity ? '1' : '0';
+                        if (shipment.upsSurePostLimitedQuantity === true) {
+                            value = '1';
+                        } else if (shipment.upsSurePostLimitedQuantity === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'adlDeliverToAddressee':
-                        value = shipment.adlDeliverToAddressee ? '1' : '0';
+                        if (shipment.adlDeliverToAddressee === true) {
+                            value = '1';
+                        } else if (shipment.adlDeliverToAddressee === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'adlDirectDeliveryOnly':
-                        value = shipment.adlDirectDeliveryOnly ? '1' : '0';
+                        if (shipment.adlDirectDeliveryOnly === true) {
+                            value = '1';
+                        } else if (shipment.adlDirectDeliveryOnly === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                     case 'electronicPackageReleaseAuth':
                         value = shipment.electronicPackageRelease || shipment.electronicPackageReleaseAuth || '';
@@ -521,7 +896,13 @@ class ExportHandlerDE {
                     case 'emailNotification5Ship':
                     case 'emailNotification5Exception':
                     case 'emailNotification5Delivery':
-                        value = shipment[fieldConfig.key] ? '1' : '0';
+                        if (shipment[fieldConfig.key] === true) {
+                            value = '1';
+                        } else if (shipment[fieldConfig.key] === false) {
+                            value = '0';
+                        } else {
+                            value = '';
+                        }
                         break;
                 }
                 

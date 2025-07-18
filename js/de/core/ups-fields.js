@@ -1267,7 +1267,7 @@ const FIELD_VALIDATORS = {
             const lengthPlusGirth = FIELD_VALIDATORS.calculateLengthPlusGirth(l, w, h);
             return l > 244 || lengthPlusGirth > 330;
         }
-    }
+    },
     
     validateLithiumBatteries: (values) => {
         // Max 3 lithium battery fields can be selected

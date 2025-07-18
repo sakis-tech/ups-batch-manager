@@ -534,6 +534,79 @@
     padding: 20px;
 }
 
+/* Template Download Group */
+.template-download-group {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+}
+
+.template-download-group .btn {
+    min-width: 120px;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+}
+
+/* Template Info Box */
+.template-info-box {
+    background: linear-gradient(135deg, var(--primary-lighter), var(--primary-light));
+    border: 1px solid var(--primary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    margin-bottom: var(--space-6);
+    box-shadow: var(--shadow-sm);
+}
+
+.template-info-box .info-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+}
+
+.template-info-box .info-header i {
+    color: var(--primary);
+    font-size: var(--font-size-lg);
+}
+
+.template-info-box .info-header h4 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+}
+
+.template-info-box p {
+    margin: 0 0 var(--space-4) 0;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.template-features {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+}
+
+.feature-item i {
+    color: var(--success);
+    flex-shrink: 0;
+}
+
+.feature-item span {
+    color: var(--text-primary);
+    font-weight: var(--font-weight-medium);
+}
+
 .import-steps {
     display: flex;
     justify-content: space-between;
@@ -1403,6 +1476,25 @@
     
     .export-options {
         grid-template-columns: 1fr;
+    }
+    
+    .template-download-group {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .template-download-group .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .template-info-box {
+        padding: var(--space-4);
+        margin-bottom: var(--space-4);
+    }
+    
+    .template-features {
+        gap: var(--space-3);
     }
     
     .help-content {

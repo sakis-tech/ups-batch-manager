@@ -104,10 +104,16 @@
         <div class="section-header">
             <h2>CSV/SSV Datei importieren</h2>
             <div class="section-actions">
-                <button class="btn btn-info" onclick="downloadTemplate()">
-                    <i class="fas fa-download"></i>
-                    Vorlage herunterladen
-                </button>
+                <div class="template-download-group">
+                    <button class="btn btn-info" id="downloadCsvTemplate">
+                        <i class="fas fa-file-csv"></i>
+                        CSV-Vorlage
+                    </button>
+                    <button class="btn btn-success" id="downloadXlsxTemplate">
+                        <i class="fas fa-file-excel"></i>
+                        XLSX-Vorlage
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -137,6 +143,32 @@
             </div>
 
             <div class="import-content">
+                <!-- Template-Info-Box -->
+                <div class="template-info-box">
+                    <div class="info-header">
+                        <i class="fas fa-info-circle"></i>
+                        <h4>UPS-Batch-Vorlage verwenden</h4>
+                    </div>
+                    <p>
+                        Laden Sie eine UPS-konforme Vorlage herunter, die alle 72 offiziellen Batch-Felder enthält. 
+                        Die Vorlage ist sofort für den UPS-Batch-Import verwendbar.
+                    </p>
+                    <div class="template-features">
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Alle 72 UPS-Batch-Felder enthalten</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Beispieldaten für Deutsche Adressen</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Sofort UPS-kompatibel</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div id="importStep1" class="import-step active">
                     <div class="file-upload-area" id="fileUploadArea">
                         <div class="upload-icon">
@@ -215,6 +247,7 @@
     <script src="../js/de/ui/toast-system.js"></script>
     <script src="../js/de/ui/import-handler.js"></script>
     <script src="../js/de/ui/template-handler.js"></script>
+    <script src="../js/de/ui/template-download.js"></script>
     <script src="../js/de/validators/field-validators-de.js"></script>
     <script src="../js/de/validators/real-time-validator.js"></script>
     <script src="../js/de/pages/shared.js"></script>

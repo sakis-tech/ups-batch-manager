@@ -144,12 +144,40 @@ class UPSBatchManagerApp {
         });
 
         // Sidebar Toggle
-        this.getElement('toggleSidebar')?.addEventListener('click', () => {
+        this.getElement('toggleSidebar')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             this.toggleSidebar();
         });
 
-        this.getElement('sidebarToggle')?.addEventListener('click', () => {
+        this.getElement('sidebarToggle')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             this.toggleSidebar();
+        });
+
+        // Touch events for mobile
+        this.getElement('toggleSidebar')?.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this.toggleSidebar();
+        });
+
+        this.getElement('sidebarToggle')?.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this.toggleSidebar();
+        });
+
+        // Handle window resize to close mobile sidebar
+        window.addEventListener('resize', () => {
+            const sidebar = this.getElement('sidebar');
+            const backdrop = document.querySelector('.mobile-backdrop');
+            
+            if (window.innerWidth > 768 && sidebar && backdrop) {
+                sidebar.classList.remove('active');
+                backdrop.remove();
+            }
         });
 
         // Dark Mode Toggle
@@ -312,9 +340,36 @@ class UPSBatchManagerApp {
         const mainContent = this.getElement('mainContent');
         
         if (sidebar && mainContent) {
-            // CSS-Klassen-Umschaltung für Hardware-Beschleunigung
-            sidebar.classList.toggle('collapsed');
-            mainContent.classList.toggle('expanded');
+            // Check if we're on mobile (under 768px)
+            const isMobile = window.innerWidth <= 768;
+            
+            if (isMobile) {
+                // On mobile, toggle 'active' class for sidebar
+                sidebar.classList.toggle('active');
+                // Add backdrop for mobile
+                this.toggleMobileBackdrop();
+            } else {
+                // On desktop, toggle 'collapsed' class
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('expanded');
+            }
+        }
+    }
+
+    toggleMobileBackdrop() {
+        const existingBackdrop = document.querySelector('.mobile-backdrop');
+        
+        if (existingBackdrop) {
+            // Remove existing backdrop
+            existingBackdrop.remove();
+        } else {
+            // Create new backdrop
+            const backdrop = document.createElement('div');
+            backdrop.className = 'mobile-backdrop';
+            backdrop.addEventListener('click', () => {
+                this.toggleSidebar();
+            });
+            document.body.appendChild(backdrop);
         }
     }
 

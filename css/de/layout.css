@@ -59,6 +59,8 @@
     padding: var(--space-2);
     border-radius: var(--radius-md);
     transition: var(--transition-fast);
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .sidebar-toggle:hover {
@@ -1275,11 +1277,31 @@
     border-top-color: var(--border-dark);
 }
 
+/* Mobile backdrop for sidebar */
+.mobile-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    opacity: 0;
+    animation: fadeIn 0.3s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .sidebar {
         width: 100vw;
         transform: translateX(-100%);
+        z-index: 999;
     }
     
     .sidebar.active {
@@ -1288,12 +1310,26 @@
     
     .sidebar-toggle {
         display: block;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
     }
     
     .main-content {
         margin-left: 0;
     }
     
+    /* Mobile Touch-Targets verbessern */
+    .sidebar-toggle, 
+    #toggleSidebar {
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+
     /* Mobile Padding-Anpassungen */
     .main-content > *:not(.main-header) {
         padding-left: 15px;

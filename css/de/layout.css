@@ -1302,10 +1302,17 @@
         width: 100vw;
         transform: translateX(-100%);
         z-index: 999;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
     .sidebar.active {
         transform: translateX(0);
+    }
+    
+    /* Verbesserung für Touch-Scroll-Verhalten */
+    .sidebar.active {
+        -webkit-overflow-scrolling: touch;
+        overflow-y: auto;
     }
     
     .sidebar-toggle {
@@ -1328,6 +1335,27 @@
         justify-content: center;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-md);
+        transition: var(--transition-fast);
+        position: relative;
+    }
+    
+    .sidebar-toggle:active,
+    #toggleSidebar:active {
+        transform: scale(0.95);
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .sidebar-toggle:focus,
+    #toggleSidebar:focus {
+        outline: 2px solid var(--white);
+        outline-offset: 2px;
     }
 
     /* Mobile Padding-Anpassungen */

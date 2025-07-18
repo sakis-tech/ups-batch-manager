@@ -175,8 +175,8 @@ class ToastSystem {
 
     // Standard-Titel basierend auf Typ
     getDefaultTitle(type) {
-        if (
-            return 
+        if (!type) {
+            return 'Hinweis';
         }
         
         const titles = {

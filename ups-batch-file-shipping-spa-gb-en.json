@@ -1,0 +1,941 @@
+{
+  "Instructions": [
+    {
+      "Batch File Shipping enables you to create up to 250 shipments extremely quickly by importing a .CSV (comma separated value) or.SSV (semicolon separated value) file into ups.com (or UPS CampusShip).  The Ship From address and Payment option must be the same for all shipments in the batch file, but the Ship To address and other shipment options can be different. Note that batch file shipping does not support multi-package shipments.": "The Batch File Sample tab of this worksheet contains a template you may use to help create your CSV/SSV file."
+    },
+    {
+      "Batch File Shipping enables you to create up to 250 shipments extremely quickly by importing a .CSV (comma separated value) or.SSV (semicolon separated value) file into ups.com (or UPS CampusShip).  The Ship From address and Payment option must be the same for all shipments in the batch file, but the Ship To address and other shipment options can be different. Note that batch file shipping does not support multi-package shipments.": "After entering your shipment data into the Batch File Sample tab, save that tab (only that tab, not the entire worksheet) as a CSV or SSV file."
+    },
+    {
+      "Batch File Shipping enables you to create up to 250 shipments extremely quickly by importing a .CSV (comma separated value) or.SSV (semicolon separated value) file into ups.com (or UPS CampusShip).  The Ship From address and Payment option must be the same for all shipments in the batch file, but the Ship To address and other shipment options can be different. Note that batch file shipping does not support multi-package shipments.": "The import file uses a comma/semicolon as the field delimiter. Your file must include the comma/semicolon delimiter for all fields, even for optional fields. "
+    },
+    {
+      "Batch File Shipping enables you to create up to 250 shipments extremely quickly by importing a .CSV (comma separated value) or.SSV (semicolon separated value) file into ups.com (or UPS CampusShip).  The Ship From address and Payment option must be the same for all shipments in the batch file, but the Ship To address and other shipment options can be different. Note that batch file shipping does not support multi-package shipments.": "Column headers should not be included in your file, so delete that row prior to importing."
+    },
+    {
+      "Batch File Shipping enables you to create up to 250 shipments extremely quickly by importing a .CSV (comma separated value) or.SSV (semicolon separated value) file into ups.com (or UPS CampusShip).  The Ship From address and Payment option must be the same for all shipments in the batch file, but the Ship To address and other shipment options can be different. Note that batch file shipping does not support multi-package shipments.": "If a particular record fails validation during the import, the system will create an error file with the records that the system could not import. Review the report and make any corrections necessary. Once the errors have been resolved, try the import process again."
+    },
+    {
+      "Batch File Shipping enables you to create up to 250 shipments extremely quickly by importing a .CSV (comma separated value) or.SSV (semicolon separated value) file into ups.com (or UPS CampusShip).  The Ship From address and Payment option must be the same for all shipments in the batch file, but the Ship To address and other shipment options can be different. Note that batch file shipping does not support multi-package shipments.": "The File Specifications tab provides more detailed information about the values you may enter into each field of your batch file."
+    },
+    {
+      "Batch File Shipping enables you to create up to 250 shipments extremely quickly by importing a .CSV (comma separated value) or.SSV (semicolon separated value) file into ups.com (or UPS CampusShip).  The Ship From address and Payment option must be the same for all shipments in the batch file, but the Ship To address and other shipment options can be different. Note that batch file shipping does not support multi-package shipments.": "The Packaging Type Codes, Service Type Codes, and Notification Language Codes tabs provide valid codes for those fields."
+    }
+  ],
+  "Sheet1": [],
+  "Batch File Sample": [],
+  "File Specifications": [
+    {
+      "Field Name": "Contact Name",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "35",
+      "Required": "Conditional",
+      "Valid Values": "First and last name of recipient\r\nRequired for international/export shipments or UPS Next Day Air Early AM service"
+    },
+    {
+      "Field Name": "Company or Name",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "35",
+      "Required": "Yes",
+      "Valid Values": "Company name of recipient (or First and Last name of recipient if company is not applicable)"
+    },
+    {
+      "Field Name": "Country",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "2",
+      "Required": "Yes",
+      "Valid Values": "Recipient's country; only ISO Alpha-2 codes are accepted\r\n(e.g.: US=United States,JP=Japan, DE=Germany,etc.)"
+    },
+    {
+      "Field Name": "Address 1",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "35",
+      "Required": "Yes",
+      "Valid Values": "Address 1 for recipient (required)"
+    },
+    {
+      "Field Name": "Address 2",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "35",
+      "Required": "No",
+      "Valid Values": "Address 2 for recipient (optional)"
+    },
+    {
+      "Field Name": "Address 3",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "35",
+      "Required": "No",
+      "Valid Values": "Address 3 for recipient (optional)"
+    },
+    {
+      "Field Name": "City",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "30",
+      "Required": "Yes",
+      "Valid Values": "Recipient's city"
+    },
+    {
+      "Field Name": "State/Province/Other",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "30",
+      "Required": "Conditional",
+      "Valid Values": "Recipient's State or Province, if applicable\r\nRequired for certain destination countries"
+    },
+    {
+      "Field Name": "Postal Code",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "10",
+      "Required": "Conditional",
+      "Valid Values": "Recipient's Postal Code (ZIP Code)\r\nRequired for certain destination countries"
+    },
+    {
+      "Field Name": "Telephone",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "15",
+      "Required": "Conditional",
+      "Valid Values": "Recipient's telephone number\r\nRequired for international/export shipments or UPS Next Day Air Early AM service"
+    },
+    {
+      "Field Name": "Extension",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "5",
+      "Required": "No",
+      "Valid Values": "Recipient's telephone extension"
+    },
+    {
+      "Field Name": "Residential Indicator",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "Recipient's Address Classification\r\n1=Residential; 0=Commercial"
+    },
+    {
+      "Field Name": "E-mail Address",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "50",
+      "Required": "No",
+      "Valid Values": "Recipient's e-mail address"
+    },
+    {
+      "Field Name": "Packaging Type",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "2",
+      "Required": "Yes",
+      "Valid Values": "Type of packaging for the shipment\r\nSee Packaging Type Codes tab of this worksheet for list of valid codes"
+    },
+    {
+      "Field Name": "Customs Value",
+      "Field Type": "Numeric",
+      "Maximum Characters": "15",
+      "Required": "Conditional",
+      "Valid Values": "Value of the shipment for Customs clearance purposes\r\nRequired for US-to-CA and US-to-PR shipments. Currency defaults to USD. Decimals allowed."
+    },
+    {
+      "Field Name": "Weight",
+      "Field Type": "Numeric",
+      "Maximum Characters": "5",
+      "Required": "Conditional",
+      "Valid Values": "Required for a packaging type 2 (Other Packaging/Customer Packaging). Optional for packaging type 1 (UPS Letter/Envelope).\r\nIf you use a comma (10,0) you must encase the value in double-quotation marks (\"10,0\") - otherwise the CSV file will create a field delimitor"
+    },
+    {
+      "Field Name": "Length",
+      "Field Type": "Numeric",
+      "Maximum Characters": "4",
+      "Required": "No",
+      "Valid Values": "Defaults to inches for U.S./PR; centimeters everywhere else. CA has choice between inches and centimeters."
+    },
+    {
+      "Field Name": "Width",
+      "Field Type": "Numeric",
+      "Maximum Characters": "4",
+      "Required": "No",
+      "Valid Values": "Defaults to inches for U.S./PR; centimeters everywhere else. CA has choice between inches and centimeters."
+    },
+    {
+      "Field Name": "Height",
+      "Field Type": "Numeric",
+      "Maximum Characters": "4",
+      "Required": "No",
+      "Valid Values": "Defaults to inches for U.S./PR; centimeters everywhere else. CA has choice between inches and centimeters."
+    },
+    {
+      "Field Name": "Unit of Measure",
+      "Field Type": "LB/KG",
+      "Maximum Characters": "2",
+      "Required": "No",
+      "Valid Values": "Defaults to pounds/lbs. (U.S./PR) or kilograms/kgs. CA has choice between lbs./kgs."
+    },
+    {
+      "Field Name": "Description of Goods",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "35",
+      "Required": "Conditional",
+      "Valid Values": "Conditionally required when Ship to/Ship from countries or territories are not the same."
+    },
+    {
+      "Field Name": "Documents of No Commercial Value",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "Indicates the shipment does not contain any dutiable items"
+    },
+    {
+      "Field Name": "GNIFC (Goods not in Free Circulation)",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "Conditional",
+      "Valid Values": "Required for movements within the EU when the goods are dutiable"
+    },
+    {
+      "Field Name": "Declared Value",
+      "Field Type": "Numeric",
+      "Maximum Characters": "7",
+      "Required": "No",
+      "Valid Values": "Must be less than US$1000 or local equivalent if entered. Denominaton will default to the currency of the shipment origin country. UPS's liability for loss or damage to a package. No decimals allowed."
+    },
+    {
+      "Field Name": "Service",
+      "Field Type": "Numeric",
+      "Maximum Characters": "2",
+      "Required": "Yes",
+      "Valid Values": "See Service Type Codes tab of this worksheet for list of valid codes"
+    },
+    {
+      "Field Name": "Delivery Confirmation",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "For Delivery Confirmation service, enter the code for the desired delivery confirmation type:\r\nS=Signature Required\r\nN=Delivery Confirmation with No Signature\r\nA=Adult Signature Required\r\nV=Verbal Confirmation"
+    },
+    {
+      "Field Name": "Shipper Release/Deliver Wthout Signature",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "A shipper may request UPS release a package on the first delivery attempt without a signature. UPS will not be liable to shippers or third parties for any damages arising from the release of the package. (Not supported outside of U.S.)"
+    },
+    {
+      "Field Name": "Return of Document",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "Only used for Poland-to-Poland movements."
+    },
+    {
+      "Field Name": "Deliver on Saturday",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "Available with select services (Refer to service guide for additional information.)"
+    },
+    {
+      "Field Name": "UPS carbon neutral",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "Request the option to offset the climate impact of your shipment."
+    },
+    {
+      "Field Name": "Large Package",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "Applied when length plus girth (2 * width) + (2 * height) combined exceeds 130 inches but is less than 165 inches. Surcharge assessed. (Outside of U.S., large package limit is 400cms.)"
+    },
+    {
+      "Field Name": "Additional Handling",
+      "Field Type": "0/1",
+      "Maximum Characters": "4",
+      "Required": "No",
+      "Valid Values": "For U.S.: Applied when an article is encased in an outside shipping container made of metal or wood, packages exceed 70 lbs. or 32 kg., longest side exceeds 150cm. Refer to service guide for additional information. Outside of U.S.: If weight exceeds 32 kg. or the longest side exceeds 150cm then additional handling will be automatically supplied."
+    },
+    {
+      "Field Name": "Reference 1",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "35",
+      "Required": "No",
+      "Valid Values": "Used to record information about a package"
+    },
+    {
+      "Field Name": "Reference 2",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "35",
+      "Required": "No",
+      "Valid Values": "Used to record information about a package"
+    },
+    {
+      "Field Name": "Reference 3",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "35",
+      "Required": "No",
+      "Valid Values": "Only used in UPS CampusShip package level packaging (U.S., PR, and CA)"
+    },
+    {
+      "Field Name": "E-mail Notification 1 - Address",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "50",
+      "Required": "No",
+      "Valid Values": "E-mail address that will receive the specified notification (ship, exception, or delivery)"
+    },
+    {
+      "Field Name": "E-mail Notification 1 - Ship",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "E-mail notification sent when the package is shipped"
+    },
+    {
+      "Field Name": "E-mail Notification 1 - Exception",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "E-mail notification sent when there has been an exception in delivering the package"
+    },
+    {
+      "Field Name": "E-mail Notification 1 - Delivery",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "E-mail notification sent upon package delivery"
+    },
+    {
+      "Field Name": "E-mail Notification 2 - Address",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "50",
+      "Required": "No",
+      "Valid Values": "E-mail address that will receive the specified notification (ship, exception, or delivery)"
+    },
+    {
+      "Field Name": "E-mail Notification 2 - Ship",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "E-mail notification sent when the package is shipped"
+    },
+    {
+      "Field Name": "E-mail Notification 2 - Exception",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "E-mail notification sent when there has been an exception in delivering the package"
+    },
+    {
+      "Field Name": "E-mail Notification 2 - Delivery",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "E-mail notification sent upon package delivery"
+    },
+    {
+      "Field Name": "E-mail Notification 3 - Address",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "50",
+      "Required": "No",
+      "Valid Values": "E-mail address that will receive the specified notification (ship, exception, or delivery)"
+    },
+    {
+      "Field Name": "E-mail Notification 3 - Ship",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "E-mail notification sent when the package is shipped"
+    },
+    {
+      "Field Name": "E-mail Notification 3 - Exception",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "E-mail notification sent when there has been an exception in delivering the package"
+    },
+    {
+      "Field Name": "E-mail Notification 3 - Delivery",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "E-mail notification sent upon package delivery"
+    },
+    {
+      "Field Name": "E-mail Notification 4 - Address",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "50",
+      "Required": "No",
+      "Valid Values": "E-mail address that will receive the specified notification (ship, exception, or delivery)"
+    },
+    {
+      "Field Name": "E-mail Notification 4 - Ship",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "E-mail notification sent when the package is shipped"
+    },
+    {
+      "Field Name": "E-mail Notification 4 - Exception",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "E-mail notification sent when there has been an exception in delivering the package"
+    },
+    {
+      "Field Name": "E-mail Notification 4 - Delivery",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "E-mail notification sent upon package delivery"
+    },
+    {
+      "Field Name": "E-mail Notification 5 - Address",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "50",
+      "Required": "No",
+      "Valid Values": "E-mail address that will receive the specified notification (ship, exception, or delivery)"
+    },
+    {
+      "Field Name": "E-mail Notification 5 - Ship",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "E-mail notification sent when the package is shipped"
+    },
+    {
+      "Field Name": "E-mail Notification 5 - Exception",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "E-mail notification sent when there has been an exception in delivering the package"
+    },
+    {
+      "Field Name": "E-mail Notification 5 - Delivery",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "E-mail notification sent upon package delivery"
+    },
+    {
+      "Field Name": "E-mail Message",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "150",
+      "Required": "No",
+      "Valid Values": "Additional messaging or special instructions to be provided in the e-mail notification"
+    },
+    {
+      "Field Name": "E-mail Failure Address",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "50",
+      "Required": "No",
+      "Valid Values": "E-mail address that will receive a notification if the e-mail notification to the recipient failed delivery"
+    },
+    {
+      "Field Name": "UPS Premium Care",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "If 1, indicates the shipment will be made with UPS Premium Care"
+    },
+    {
+      "Field Name": "Location ID",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "10",
+      "Required": "No",
+      "Valid Values": "Unique identifier for an alternate delivery location such as a UPS Access Point™ location"
+    },
+    {
+      "Field Name": "Notification Media Type",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "2",
+      "Required": "No",
+      "Valid Values": "01=Voice\r\n03=Email\r\n12=SMS Text"
+    },
+    {
+      "Field Name": "Notification Language",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "6",
+      "Required": "No",
+      "Valid Values": "A list of valid country/language pairs. Default value based on origin/destination of shipment. See Notification Language Codes tab for valid values."
+    },
+    {
+      "Field Name": "Notification Address",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "50",
+      "Required": "No",
+      "Valid Values": "Email address or mobile number used to receive delivery notification for packages delivered to an alternate delivery location"
+    },
+    {
+      "Field Name": "ADL COD Value",
+      "Field Type": "Numeric/Money",
+      "Maximum Characters": "10",
+      "Required": "No",
+      "Valid Values": "Monetary amount to be collected at the UPS Access Point location must be specified in the currency of that location. Decimals allowed."
+    },
+    {
+      "Field Name": "ADL Deliver to Addressee",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "0 = option not requested 1 = Deliver To address only option requested"
+    },
+    {
+      "Field Name": "ADL Shipper Media Type",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "2",
+      "Required": "No",
+      "Valid Values": "01=Voice\r\n03=Email\r\n12=SMS Text"
+    },
+    {
+      "Field Name": "ADL Shipper Language",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "6",
+      "Required": "No",
+      "Valid Values": "A list of valid country/language pairs. Default value based on origin/destination of shipment. See Notification Language Codes tab for valid values."
+    },
+    {
+      "Field Name": "ADL Shipper Notification",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "50",
+      "Required": "No",
+      "Valid Values": "Email address or mobile number used for the shipper to receive notification when the package has arrived at the UPS Access Point location and when it has been picked up."
+    },
+    {
+      "Field Name": "ADL Direct Delivery Only",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "If 1, only allows the package to be delivered to the provided residential or commercial address."
+    },
+    {
+      "Field Name": "Electronic Package Release Authentication",
+      "Field Type": "Numeric",
+      "Maximum Characters": "6-Apr",
+      "Required": "Conditional",
+      "Valid Values": "If using an Access Point, the code the customer needs to pick up their package from the Access Point."
+    },
+    {
+      "Field Name": "Lithium Ion Alone",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "If the package is contained with Lithium Ion Alone battery the column will display 1 (yes) otherwise it will be empty or 0 (Lightly Regulated Lithium Batteries was Sunset) "
+    },
+    {
+      "Field Name": "Lithium Ion In Equipment",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "If the package is contained with Lithium Ion In Equipment battery the column will display 1 (yes) otherwise it will be empty or 0 (Lightly Regulated Lithium Batteries was Sunset) "
+    },
+    {
+      "Field Name": "Lithium Ion With_Equipment",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "If the package is contained with Lithium Ion With Equipment battery the column will display 1 (yes) otherwise it will be empty or 0 (Lightly Regulated Lithium Batteries was Sunset) "
+    },
+    {
+      "Field Name": "Lithium Metal Alone",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "If the package is contained with Lithium Metal Alone battery the column will display 1 (yes) otherwise it will be empty or 0 (Lightly Regulated Lithium Batteries was Sunset) "
+    },
+    {
+      "Field Name": "Lithium Metal In Equipment",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "If the package is contained with Lithium Metal In Equipment battery the column will display 1 (yes) otherwise it will be empty or 0 (Lightly Regulated Lithium Batteries was Sunset) "
+    },
+    {
+      "Field Name": "Lithium Metal With Equipment",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "If the package is contained with Lithium Metal With Equipment battery the column will display 1 (yes) otherwise it will be empty or 0 (Lightly Regulated Lithium Batteries was Sunset) "
+    },
+    {
+      "Valid Values": "NOTE: If more than 3 Lithium Battery fields are selected, the shipment is rejected, and the error message is added to the error file. (Lightly Regulated Lithium Batteries was Sunset) "
+    },
+    {
+      "Field Name": "Weekend Commercial Delivery",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "Available with select services (Refer to service guide for additional information.)"
+    },
+    {
+      "Field Name": "Dry Ice Weight",
+      "Field Type": "Numeric",
+      "Maximum Characters": "16",
+      "Required": "No",
+      "Valid Values": "Dry Ice weight must be a whole number and cannot exceed the total package weight. The Dry Ice weight unit of measure will match the package unit of measure as defined above."
+    },
+    {
+      "Field Name": "Merchandise Description",
+      "Field Type": "Alphanumeric",
+      "Maximum Characters": "35",
+      "Required": "Conditional",
+      "Valid Values": "Conditionally required when Ship to/Ship from country is Mexico."
+    },
+    {
+      "Field Name": "UPS SurePost®Limited Quantity/Lithium Battery",
+      "Field Type": "0/1",
+      "Maximum Characters": "1",
+      "Required": "No",
+      "Valid Values": "If the package is contained with UPS SurePost®Limited Quantity/Lithium Battery the column will display 1 (yes) otherwise it will be empty or 0"
+    }
+  ],
+  "Packaging Type Codes": [
+    {
+      "Code": "1",
+      "Description": "UPS Letter/Envelope"
+    },
+    {
+      "Code": "4",
+      "Description": "UPS PAK"
+    },
+    {
+      "Code": "3",
+      "Description": "UPS Tube"
+    },
+    {
+      "Code": "S",
+      "Description": "UPS Express Box (Small)"
+    },
+    {
+      "Code": "M",
+      "Description": "UPS Express Box (Medium)"
+    },
+    {
+      "Code": "L",
+      "Description": "UPS Express Box (Large)"
+    },
+    {
+      "Code": "21",
+      "Description": "UPS Box"
+    },
+    {
+      "Code": "25",
+      "Description": "UPS 10 KG Box"
+    },
+    {
+      "Code": "24",
+      "Description": "UPS 25 KG Box"
+    },
+    {
+      "Code": "2",
+      "Description": "Other Packaging/Customer Packaging"
+    },
+    {
+      "Code": "30",
+      "Description": "Pallet (valid only for PL to PL)"
+    }
+  ],
+  "Service Type Codes": [
+    {
+      "Code": "01",
+      "Description": "Next Day Air"
+    },
+    {
+      "Code": "02",
+      "Description": "2nd Day Air"
+    },
+    {
+      "Code": "03",
+      "Description": "Ground"
+    },
+    {
+      "Code": "07",
+      "Description": "International Express"
+    },
+    {
+      "Code": "08",
+      "Description": "International Expedited"
+    },
+    {
+      "Code": "11",
+      "Description": "International Standard"
+    },
+    {
+      "Code": "12",
+      "Description": "3 Day Select"
+    },
+    {
+      "Code": "13",
+      "Description": "Next Day Air Saver"
+    },
+    {
+      "Code": "14",
+      "Description": "Next Day Air Early"
+    },
+    {
+      "Code": "54",
+      "Description": "International Express Plus"
+    },
+    {
+      "Code": "59",
+      "Description": "2 Day Air A.M"
+    },
+    {
+      "Code": "64",
+      "Description": "UPS Express NA1"
+    },
+    {
+      "Code": "65",
+      "Description": "UPS Saver"
+    },
+    {
+      "Code": "70",
+      "Description": "UPS Access Point Economy"
+    },
+    {
+      "Code": "74",
+      "Description": "UPS Express 12:00"
+    },
+    {
+      "Code": "82",
+      "Description": "UPS Today Standard"
+    },
+    {
+      "Code": "83",
+      "Description": "UPS Today Dedicated Courier"
+    },
+    {
+      "Code": "84",
+      "Description": "UPS Today Intercity"
+    },
+    {
+      "Code": "85",
+      "Description": "UPS Today Express"
+    },
+    {
+      "Code": "86",
+      "Description": "UPS Today Express Saver"
+    },
+    {
+      "Code": "92",
+      "Description": "SurePost Standard Parcel (not supported)"
+    },
+    {
+      "Code": "93",
+      "Description": "SurePost Parcel Select"
+    },
+    {
+      "Code": "94",
+      "Description": "SurePost Bound Printed Matter"
+    },
+    {
+      "Code": "95",
+      "Description": "SurePost Media Mail"
+    }
+  ],
+  "Notification Language Codes": [
+    {
+      "Code": "\"DAN_97\"",
+      "Description": "Danish"
+    },
+    {
+      "Code": "\"DEU_97\"",
+      "Description": "German"
+    },
+    {
+      "Code": "\"ENG_CA\"",
+      "Description": "Canadian English"
+    },
+    {
+      "Code": "\"ENG_GB\"",
+      "Description": "Queen's English"
+    },
+    {
+      "Code": "\"ENG_US\"",
+      "Description": "U.S. English"
+    },
+    {
+      "Code": "\"FIN_97\"",
+      "Description": "Finnish"
+    },
+    {
+      "Code": "\"FRA_97\"",
+      "Description": "Canadian French"
+    },
+    {
+      "Code": "\"FRA_CA\"",
+      "Description": "France French"
+    },
+    {
+      "Code": "\"ITA_97\"",
+      "Description": "Italian"
+    },
+    {
+      "Code": "\"NLD_97\"",
+      "Description": "Netherlands Dutch"
+    },
+    {
+      "Code": "\"NOR_97\"",
+      "Description": "Norwegian"
+    },
+    {
+      "Code": "\"POL_97\"",
+      "Description": "Polish"
+    },
+    {
+      "Code": "\"SPA_97\"",
+      "Description": "Spanish"
+    },
+    {
+      "Code": "\"SPA_MX\"",
+      "Description": "Mexican Spanish"
+    },
+    {
+      "Code": "\"SPA_PR\"",
+      "Description": "Puerto Rican Spanish"
+    },
+    {
+      "Code": "\"SWE_97\"",
+      "Description": "Swedish"
+    }
+  ],
+  "Frequent Asked Questions": [
+    {
+      "#": "1",
+      "Description": "Common Errors",
+      "Question": "Do I still need to include a column for a field that is not required/not being used?",
+      "Answer": "Yes, you must account for any fields, even optional fields, that you are not entering details for. These columns can be left blank but must not be deleted."
+    },
+    {
+      "#": "2",
+      "Description": "Data",
+      "Question": "What are the valid services and pickup days for my origin and destination?",
+      "Answer": "You can find service and pickup information on ups.com's Calculate Time and Cost page."
+    },
+    {
+      "#": "3",
+      "Description": "Errors",
+      "Question": "Why am I receiving an error for the address?",
+      "Answer": "Look out for misspelled cities. Make sure you are not using street type abbreviations:\r\n* EX: Use \"suite\" instead of \"ste\""
+    },
+    {
+      "#": "4",
+      "Description": "Errors",
+      "Question": "Would I receive an error if the file is incorrect?",
+      "Answer": "Yes, you will receive an error if format is not correct. Pay attention to any error message you receive during the Batch Import Process."
+    },
+    {
+      "#": "5",
+      "Description": "Errors",
+      "Question": "If I do not include required fields, will I get an error?",
+      "Answer": "Yes, if you are missing a required field you will get an error. Occassionally the file will fail to import, and a field that is marked 'Not Required' will be indicated as a required field in the error message.\r\n*Compare your file to the required fields to determine if another field marked as 'Not Required' has been filled in.\r\n*Refer to the \"Required\" and \"Valid Values\" column on the File Specifications tab to see what may be required for your shipment."
+    },
+    {
+      "#": "6",
+      "Description": "File Format",
+      "Question": "Can I leave the header row in my batch file when I upload it?",
+      "Answer": "The header should not included in the batch file. Make sure to remove the header row if there is one before uploading your file."
+    },
+    {
+      "#": "7",
+      "Description": "File Format",
+      "Question": "Which fields are required when uploading the file? ",
+      "Answer": "The file will contain required fields and optional fields in the File Specifications sheet."
+    },
+    {
+      "#": "8",
+      "Description": "File Format",
+      "Question": "Do I need to use a specific format with my batch file?",
+      "Answer": "The field data needs to be properly formatted and the file needs to be properly saved. The import file must be in a .CSV (comma separated values) or .SSV (semicolon separated values) file type."
+    },
+    {
+      "#": "9",
+      "Description": "Format",
+      "Question": "Do I need to enter my fields in a specific order?",
+      "Answer": "The fields must be entered in your import file in the same order as they appear in the template batch file."
+    },
+    {
+      "#": "10",
+      "Description": "Format",
+      "Question": "What characters are allowed within the batch file?",
+      "Answer": "Review the File Specifications sheet for the allowed Field Types for each Field Name. Look for special characters that can cause issues where they are least expected, and may create errors, such as:\r\n*parantheses\r\n*hyphens\r\n*periods\r\n*quotations\r\n*spaces"
+    },
+    {
+      "#": "11",
+      "Description": "Format",
+      "Question": "Are there any characters that cannot be used in the .CSV or .SSV file?",
+      "Answer": "Excel does not display every special character. You can open the .CSV or .SSV file in a text editor (Notepad for Windows or Notes for Apple) on your device to review the whole file and verify the file is accurate."
+    },
+    {
+      "#": "12",
+      "Description": "Format",
+      "Question": "Will there be any issues if I add extra spaces into my file?",
+      "Answer": "Look for any cells that may include extra spaces in the data, which can cause errors. If information was copied and pasted into the .CSV or .SSV file, it may cause extra spaces."
+    },
+    {
+      "#": "13",
+      "Description": "Format",
+      "Question": "Can I have a page break in my file?",
+      "Answer": "No, please ensure that there are no page breaks in the .CSV or .SSV file."
+    },
+    {
+      "#": "14",
+      "Description": "Format",
+      "Question": "If I delete a field, would it cause any issues with my upload? ",
+      "Answer": "If any fields have been deleted from the .CSV or .SSV file, it can cause your entries to be misaligned and create errors."
+    },
+    {
+      "#": "15",
+      "Description": "Format",
+      "Question": "Will my file be validated prior to me starting the batch process?",
+      "Answer": "Yes, it will validate based on the file format. You may receive an error next to the file prior to submitting the file or after submitting the file. Review the file format and content if any errors are received."
+    },
+    {
+      "#": "16",
+      "Description": "Format",
+      "Question": "Why am I getting an error saying my postal code or service type code is invalid?",
+      "Answer": "Look for zip codes, service type codes, and any other codes that require a leading zero. Open the .CSV or .SSV file in a text editor (Notepad for Windows or Notes for Apple) and ensure that the first zero is not missing."
+    },
+    {
+      "#": "17",
+      "Description": "Format",
+      "Question": "Do I need to provide a Description of Goods or Unit of Measure for an international shipment?",
+      "Answer": "Yes, international shipments must have a Description of Goods and a Unit of Measure."
+    },
+    {
+      "#": "18",
+      "Description": "Format",
+      "Question": "How do I enter a Unit of Measure?",
+      "Answer": "You must enter either LB for pounds or KG for kilograms."
+    },
+    {
+      "#": "19",
+      "Description": "Format",
+      "Question": "Do the fields have a limit?",
+      "Answer": "Yes, make sure the fields do not exceed the maximum length, which can be located on the File Specifications tab. Look for any field data that exceeds the maximum characters allowed."
+    },
+    {
+      "#": "20",
+      "Description": "Format",
+      "Question": "What format should I use to enter in a Country?",
+      "Answer": "The valid format is to use the two-character ISO Country abbreviation.\r\n* EX: Use \"DE\" instead of \"Germany\" or \"US\" instead of \"United States\""
+    },
+    {
+      "#": "21",
+      "Description": "Format",
+      "Question": "If I am shipping to the US what do I enter for the State/Province/Other field?",
+      "Answer": "The valid format is to use the two-character State abbreviation.\r\n*EX: Use \"PA\" instead of \"Pennsylvania\" or \"NJ\" instead of \"New Jersey\""
+    },
+    {
+      "#": "22",
+      "Description": "Format",
+      "Question": "Can I include extra spaces in the file?",
+      "Answer": "No, extra spaces in the .CSV or .SSV file will create errors if it exceeds the limits of the File Specifications fields."
+    },
+    {
+      "#": "23",
+      "Description": "Format",
+      "Question": "Can I include commas in my fields, such as in my address?",
+      "Answer": "Please do not include any commas in any of your fields. Including commas will cause an error when your file is processed."
+    },
+    {
+      "#": "24",
+      "Description": "Services",
+      "Question": "Can I make batch shipments with SurePost services?",
+      "Answer": "Yes, as long as you are shipping with an account with a SurePost contract, you can make batch shipments with SurePost services."
+    }
+  ]
+}

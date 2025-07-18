@@ -241,7 +241,7 @@ class ActivityLogger {
         if (window.undoManager) {
             window.undoManager.registerUndo(activity.id, 'shipment_created', {
                 type: 'shipment_created',
-                description: 
+                description: 'Sendung erstellt',
                 payload: {
                     shipmentId: shipment.id
                 }
@@ -273,7 +273,7 @@ class ActivityLogger {
         if (window.undoManager && previousState) {
             window.undoManager.registerUndo(activity.id, 'shipment_updated', {
                 type: 'shipment_updated',
-                description: 
+                description: 'Sendung aktualisiert',
                 payload: {
                     shipmentId: shipment.id,
                     previousState: previousState
@@ -304,7 +304,7 @@ class ActivityLogger {
         if (window.undoManager) {
             window.undoManager.registerUndo(activity.id, 'shipment_deleted', {
                 type: 'shipment_deleted',
-                description: 
+                description: 'Sendung gelöscht',
                 payload: {
                     shipmentData: { ...shipment } // Vollständige Sendungsdaten für Wiederherstellung
                 }
@@ -335,7 +335,7 @@ class ActivityLogger {
         if (window.undoManager) {
             window.undoManager.registerUndo(activity.id, 'shipment_duplicated', {
                 type: 'shipment_duplicated',
-                description: 
+                description: 'Sendung dupliziert',
                 payload: {
                     newShipmentId: newShipment.id
                 }
@@ -367,7 +367,7 @@ class ActivityLogger {
         if (window.undoManager && importResult.importedShipmentIds) {
             window.undoManager.registerUndo(activity.id, 'csv_imported', {
                 type: 'csv_imported',
-                description: 
+                description: 'CSV importiert',
                 payload: {
                     importedShipmentIds: importResult.importedShipmentIds
                 }
@@ -660,8 +660,8 @@ class ActivityLogger {
      * @returns {string} Lokalisierter Text
      */
     getLocalizedText(key) {
-        if (
-            return 
+        if (!key) {
+            return '';
         }
         return key;
     }

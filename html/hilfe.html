@@ -14,6 +14,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Theme-Initialisierung vor DOM-Load -->
+    <script src="../js/de/core/theme-init.js"></script>
 </head>
 <body>
     <!-- Loading Overlay -->
@@ -100,6 +103,7 @@
         <!-- Help Content -->
         <div class="section-header">
             <h2>Hilfe & Dokumentation</h2>
+            <p class="section-description">Vollständige Anleitung zum UPS Batch-Manager und zur Erstellung UPS-konformer Batch-Dateien</p>
         </div>
 
         <div class="help-container">
@@ -108,36 +112,570 @@
                 <i class="fas fa-search search-icon"></i>
             </div>
 
+            <div class="help-tabs">
+                <button class="help-tab active" data-tab="app-usage">Anwendung nutzen</button>
+                <button class="help-tab" data-tab="ups-batch">UPS Batch-Datei</button>
+                <button class="help-tab" data-tab="troubleshooting">Problembehebung</button>
+            </div>
+
             <div class="help-content">
-                <div class="help-section">
-                    <h3>Häufig gestellte Fragen</h3>
-                    <div class="faq-list" id="faqList">
-                        <!-- FAQ items will be populated by JavaScript -->
+                <!-- Tab 1: Anwendung nutzen -->
+                <div class="help-tab-content active" id="app-usage">
+                    <div class="help-section">
+                        <h3><i class="fas fa-play-circle"></i> Schnelleinstieg</h3>
+                        <div class="quick-guide">
+                            <div class="guide-step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h4>Sendungen erfassen</h4>
+                                    <p>Erstellen Sie neue Sendungen über "Sendungen" → "Neue Sendung" oder importieren Sie bestehende Daten über "Importieren".</p>
+                                    <div class="step-details">
+                                        <strong>Tipp:</strong> Nutzen Sie die CSV/Excel-Import-Funktion für große Mengen.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="guide-step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h4>Daten validieren</h4>
+                                    <p>Das System überprüft automatisch alle Eingaben nach UPS-Standards und markiert fehlerhafte Felder rot.</p>
+                                    <div class="step-details">
+                                        <strong>Wichtig:</strong> Nur gültige Sendungen können erfolgreich bei UPS hochgeladen werden.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="guide-step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h4>UPS-Batch exportieren</h4>
+                                    <p>Exportieren Sie Ihre Sendungen als SSV-Datei (empfohlen für deutsche Nutzer) ohne Header-Zeile für den direkten UPS-Upload.</p>
+                                    <div class="step-details">
+                                        <strong>Achtung:</strong> UPS akzeptiert nur Dateien ohne Header-Zeile und mit maximal 250 Sendungen.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <h3><i class="fas fa-file-import"></i> Import-Funktionen</h3>
+                        <div class="feature-grid">
+                            <div class="feature-card">
+                                <h4>CSV/Excel-Import</h4>
+                                <p>Importieren Sie Sendungen aus CSV-, SSV- oder Excel-Dateien. Das System erkennt automatisch deutsche und englische Spaltennamen.</p>
+                                <ul>
+                                    <li>Drag & Drop Unterstützung</li>
+                                    <li>Automatische Feldmappings</li>
+                                    <li>Validierung während Import</li>
+                                    <li>Fehlerberichte mit Zeilennummern</li>
+                                </ul>
+                            </div>
+                            <div class="feature-card">
+                                <h4>Intelligente Feldmappings</h4>
+                                <p>Das System erkennt über 120 verschiedene Feldbezeichnungen und ordnet sie automatisch den korrekten UPS-Feldern zu.</p>
+                                <ul>
+                                    <li>Deutsche und englische Begriffe</li>
+                                    <li>Häufige Schreibvarianten</li>
+                                    <li>Branchenspezifische Begriffe</li>
+                                    <li>Vorschau vor Import</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <h3><i class="fas fa-file-export"></i> Export-Funktionen</h3>
+                        <div class="export-formats">
+                            <div class="format-card ups-recommended">
+                                <h4><i class="fas fa-star"></i> SSV-Export (Empfohlen)</h4>
+                                <p>Semikolon-getrennte Datei - optimal für deutsche Excel-Nutzer und direkte UPS-Uploads.</p>
+                                <div class="format-features">
+                                    <span class="feature-tag">UPS-konform</span>
+                                    <span class="feature-tag">Excel-kompatibel</span>
+                                    <span class="feature-tag">Deutsche Standards</span>
+                                </div>
+                            </div>
+                            <div class="format-card">
+                                <h4>CSV-Export</h4>
+                                <p>Komma-getrennte Datei - universell kompatibel mit allen Tabellenkalkulationsprogrammen.</p>
+                                <div class="format-features">
+                                    <span class="feature-tag">Universal</span>
+                                    <span class="feature-tag">UPS-konform</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <h3><i class="fas fa-shield-alt"></i> Validierung & Qualitätskontrolle</h3>
+                        <div class="validation-info">
+                            <div class="validation-rules">
+                                <h4>Automatische Validierung</h4>
+                                <ul>
+                                    <li><strong>Pflichtfelder:</strong> Firma/Name, Land, Adresse, Stadt, Verpackungsart, Service</li>
+                                    <li><strong>Bedingte Felder:</strong> Kontaktname und Telefon für internationale Sendungen</li>
+                                    <li><strong>Formatprüfung:</strong> Postleitzahlen, E-Mail-Adressen, Telefonnummern</li>
+                                    <li><strong>Geschäftslogik:</strong> Gewicht bei Kundenverpackung, Zollwerte, etc.</li>
+                                    <li><strong>UPS-Limits:</strong> Maximale Zeichenlängen, Gewichtsgrenzen, Dimensionen</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <h3><i class="fas fa-cog"></i> Erweiterte Funktionen</h3>
+                        <div class="advanced-features">
+                            <div class="feature-item">
+                                <h4><i class="fas fa-history"></i> Aktivitätsverlauf</h4>
+                                <p>Verfolgen Sie alle Änderungen und Aktionen in Ihrem Batch-Manager.</p>
+                            </div>
+                            <div class="feature-item">
+                                <h4><i class="fas fa-undo"></i> Rückgängig/Wiederholen</h4>
+                                <p>Machen Sie Änderungen rückgängig oder wiederholen Sie sie mit Strg+Z/Strg+Y.</p>
+                            </div>
+                            <div class="feature-item">
+                                <h4><i class="fas fa-save"></i> Automatisches Speichern</h4>
+                                <p>Alle Daten werden automatisch lokal gespeichert - kein Datenverlust möglich.</p>
+                            </div>
+                            <div class="feature-item">
+                                <h4><i class="fas fa-moon"></i> Dunkler Modus</h4>
+                                <p>Arbeiten Sie komfortabel auch bei schlechten Lichtverhältnissen.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="help-section">
-                    <h3>Schnelleinstieg</h3>
-                    <div class="quick-guide">
-                        <div class="guide-step">
-                            <div class="step-number">1</div>
-                            <div class="step-content">
-                                <h4>Neue Sendung erstellen</h4>
-                                <p>Klicken Sie auf "Neue Sendung" und füllen Sie die erforderlichen Felder aus.</p>
+                <!-- Tab 2: UPS Batch-Datei -->
+                <div class="help-tab-content" id="ups-batch">
+                    <div class="help-section">
+                        <h3><i class="fas fa-info-circle"></i> Was ist eine UPS Batch-Datei?</h3>
+                        <div class="info-box">
+                            <p>Die UPS Batch-Datei ist eine spezielle CSV/SSV-Datei, mit der Sie bis zu 250 Sendungen gleichzeitig bei UPS erstellen können. Die Absenderadresse und Zahlungsoption müssen für alle Sendungen identisch sein, während Empfängeradressen und andere Optionen unterschiedlich sein können.</p>
+                            <div class="important-note">
+                                <strong>Wichtig:</strong> Batch-Dateien unterstützen keine Mehrpaket-Sendungen. Jede Zeile entspricht genau einem Paket.
                             </div>
                         </div>
-                        <div class="guide-step">
-                            <div class="step-number">2</div>
-                            <div class="step-content">
-                                <h4>Daten validieren</h4>
-                                <p>Das System überprüft automatisch alle Eingaben und zeigt Fehler an.</p>
+                    </div>
+
+                    <div class="help-section">
+                        <h3><i class="fas fa-file-alt"></i> Dateiformat-Anforderungen</h3>
+                        <div class="requirements-grid">
+                            <div class="requirement-card critical">
+                                <h4><i class="fas fa-exclamation-triangle"></i> Kritische Anforderungen</h4>
+                                <ul>
+                                    <li><strong>Keine Header-Zeile:</strong> Die erste Zeile darf keine Spaltennamen enthalten</li>
+                                    <li><strong>Exakte Feldreihenfolge:</strong> Alle 66 Felder müssen in der korrekten Reihenfolge stehen</li>
+                                    <li><strong>Alle Felder vorhanden:</strong> Auch leere Felder müssen als leere Spalten existieren</li>
+                                    <li><strong>Maximum 250 Sendungen:</strong> Mehr werden von UPS nicht akzeptiert</li>
+                                </ul>
+                            </div>
+                            <div class="requirement-card">
+                                <h4><i class="fas fa-check-circle"></i> Technische Anforderungen</h4>
+                                <ul>
+                                    <li><strong>Dateityp:</strong> .CSV (Komma) oder .SSV (Semikolon)</li>
+                                    <li><strong>Zeichenkodierung:</strong> UTF-8 oder ASCII</li>
+                                    <li><strong>Trennzeichen:</strong> Konsistent Komma oder Semikolon</li>
+                                    <li><strong>Textqualifizierer:</strong> Anführungszeichen bei Sonderzeichen</li>
+                                </ul>
                             </div>
                         </div>
-                        <div class="guide-step">
-                            <div class="step-number">3</div>
-                            <div class="step-content">
-                                <h4>Batch exportieren</h4>
-                                <p>Exportieren Sie Ihre Sendungen als CSV- oder SSV-Datei für UPS.</p>
+                    </div>
+
+                    <div class="help-section">
+                        <h3><i class="fas fa-list-ol"></i> UPS Feldstruktur (66 Felder)</h3>
+                        <div class="field-categories">
+                            <div class="category-accordion">
+                                <div class="accordion-item">
+                                    <button class="accordion-header">
+                                        <i class="fas fa-user"></i> Empfänger-Informationen (13 Felder)
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <div class="accordion-content">
+                                        <div class="field-list">
+                                            <div class="field-item required">
+                                                <span class="field-name">Kontaktname</span>
+                                                <span class="field-req">Bedingt erforderlich</span>
+                                                <span class="field-desc">Erforderlich für internationale Sendungen</span>
+                                            </div>
+                                            <div class="field-item required">
+                                                <span class="field-name">Firma oder Name</span>
+                                                <span class="field-req">Pflichtfeld</span>
+                                                <span class="field-desc">Firmenname oder Privatperson</span>
+                                            </div>
+                                            <div class="field-item required">
+                                                <span class="field-name">Land</span>
+                                                <span class="field-req">Pflichtfeld</span>
+                                                <span class="field-desc">ISO Alpha-2 Code (z.B. DE, US, GB)</span>
+                                            </div>
+                                            <div class="field-item required">
+                                                <span class="field-name">Adresse 1</span>
+                                                <span class="field-req">Pflichtfeld</span>
+                                                <span class="field-desc">Straße und Hausnummer</span>
+                                            </div>
+                                            <div class="field-item">
+                                                <span class="field-name">Adresse 2</span>
+                                                <span class="field-req">Optional</span>
+                                                <span class="field-desc">Zusätzliche Adressinformationen</span>
+                                            </div>
+                                            <div class="field-item">
+                                                <span class="field-name">Adresse 3</span>
+                                                <span class="field-req">Optional</span>
+                                                <span class="field-desc">Weitere Adressinformationen</span>
+                                            </div>
+                                            <div class="field-item required">
+                                                <span class="field-name">Stadt</span>
+                                                <span class="field-req">Pflichtfeld</span>
+                                                <span class="field-desc">Zielstadt</span>
+                                            </div>
+                                            <div class="field-item conditional">
+                                                <span class="field-name">Bundesland/Provinz</span>
+                                                <span class="field-req">Bedingt erforderlich</span>
+                                                <span class="field-desc">Erforderlich für USA, Kanada, Mexiko</span>
+                                            </div>
+                                            <div class="field-item conditional">
+                                                <span class="field-name">Postleitzahl</span>
+                                                <span class="field-req">Bedingt erforderlich</span>
+                                                <span class="field-desc">Erforderlich für die meisten Länder</span>
+                                            </div>
+                                            <div class="field-item conditional">
+                                                <span class="field-name">Telefon</span>
+                                                <span class="field-req">Bedingt erforderlich</span>
+                                                <span class="field-desc">Erforderlich für internationale Sendungen</span>
+                                            </div>
+                                            <div class="field-item">
+                                                <span class="field-name">Durchwahl</span>
+                                                <span class="field-req">Optional</span>
+                                                <span class="field-desc">Telefon-Durchwahl</span>
+                                            </div>
+                                            <div class="field-item">
+                                                <span class="field-name">Privat-Indikator</span>
+                                                <span class="field-req">Optional</span>
+                                                <span class="field-desc">1=Privat, 0=Geschäftlich</span>
+                                            </div>
+                                            <div class="field-item">
+                                                <span class="field-name">E-Mail-Adresse</span>
+                                                <span class="field-req">Optional</span>
+                                                <span class="field-desc">E-Mail des Empfängers</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="accordion-item">
+                                    <button class="accordion-header">
+                                        <i class="fas fa-box"></i> Paket-Informationen (12 Felder)
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <div class="accordion-content">
+                                        <div class="field-list">
+                                            <div class="field-item required">
+                                                <span class="field-name">Verpackungsart</span>
+                                                <span class="field-req">Pflichtfeld</span>
+                                                <span class="field-desc">UPS-Verpackungscodes (1, 2, 3, 4, S, M, L, 21, 24, 25, 30)</span>
+                                            </div>
+                                            <div class="field-item conditional">
+                                                <span class="field-name">Zollwert</span>
+                                                <span class="field-req">Bedingt erforderlich</span>
+                                                <span class="field-desc">Erforderlich für USA→Kanada/Puerto Rico</span>
+                                            </div>
+                                            <div class="field-item conditional">
+                                                <span class="field-name">Gewicht</span>
+                                                <span class="field-req">Bedingt erforderlich</span>
+                                                <span class="field-desc">Erforderlich bei Verpackungsart "2" (Kundenverpackung)</span>
+                                            </div>
+                                            <div class="field-item">
+                                                <span class="field-name">Länge</span>
+                                                <span class="field-req">Optional</span>
+                                                <span class="field-desc">Paketlänge (USA: Zoll, International: cm)</span>
+                                            </div>
+                                            <div class="field-item">
+                                                <span class="field-name">Breite</span>
+                                                <span class="field-req">Optional</span>
+                                                <span class="field-desc">Paketbreite (USA: Zoll, International: cm)</span>
+                                            </div>
+                                            <div class="field-item">
+                                                <span class="field-name">Höhe</span>
+                                                <span class="field-req">Optional</span>
+                                                <span class="field-desc">Pakethöhe (USA: Zoll, International: cm)</span>
+                                            </div>
+                                            <div class="field-item">
+                                                <span class="field-name">Maßeinheit</span>
+                                                <span class="field-req">Optional</span>
+                                                <span class="field-desc">LB (Pfund) oder KG (Kilogramm)</span>
+                                            </div>
+                                            <div class="field-item conditional">
+                                                <span class="field-name">Warenbeschreibung</span>
+                                                <span class="field-req">Bedingt erforderlich</span>
+                                                <span class="field-desc">Erforderlich wenn Versender-/Empfängerland unterschiedlich</span>
+                                            </div>
+                                            <div class="field-item">
+                                                <span class="field-name">Dokumente ohne Handelswert</span>
+                                                <span class="field-req">Optional</span>
+                                                <span class="field-desc">Keine zollpflichtigen Gegenstände</span>
+                                            </div>
+                                            <div class="field-item conditional">
+                                                <span class="field-name">GNIFC</span>
+                                                <span class="field-req">Bedingt erforderlich</span>
+                                                <span class="field-desc">Erforderlich für EU-Bewegungen zollpflichtiger Waren</span>
+                                            </div>
+                                            <div class="field-item">
+                                                <span class="field-name">Angegebener Wert</span>
+                                                <span class="field-req">Optional</span>
+                                                <span class="field-desc">UPS-Haftung (max. 1000 USD)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <button class="accordion-header">
+                                        <i class="fas fa-shipping-fast"></i> Service-Optionen (10 Felder)
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <div class="accordion-content">
+                                        <div class="field-list">
+                                            <div class="field-item required">
+                                                <span class="field-name">Service</span>
+                                                <span class="field-req">Pflichtfeld</span>
+                                                <span class="field-desc">UPS Service-Code (01-95, z.B. 11=International Standard)</span>
+                                            </div>
+                                            <div class="field-item">
+                                                <span class="field-name">Zustellbestätigung</span>
+                                                <span class="field-req">Optional</span>
+                                                <span class="field-desc">S=Unterschrift, N=Ohne Unterschrift, A=Erwachsenen-Unterschrift</span>
+                                            </div>
+                                            <div class="field-item">
+                                                <span class="field-name">Versender-Freigabe</span>
+                                                <span class="field-req">Optional</span>
+                                                <span class="field-desc">Zustellung ohne Unterschrift (nur USA)</span>
+                                            </div>
+                                            <div class="field-item">
+                                                <span class="field-name">Dokumentenrückgabe</span>
+                                                <span class="field-req">Optional</span>
+                                                <span class="field-desc">Nur für Polen-zu-Polen Sendungen</span>
+                                            </div>
+                                            <div class="field-item">
+                                                <span class="field-name">Samstag-Zustellung</span>
+                                                <span class="field-req">Optional</span>
+                                                <span class="field-desc">Verfügbar für bestimmte Services</span>
+                                            </div>
+                                            <div class="field-item">
+                                                <span class="field-name">UPS Klimaneutral</span>
+                                                <span class="field-req">Optional</span>
+                                                <span class="field-desc">Klimaauswirkungen kompensieren</span>
+                                            </div>
+                                            <div class="field-item">
+                                                <span class="field-name">Großpaket</span>
+                                                <span class="field-req">Optional</span>
+                                                <span class="field-desc">Umfang >130 aber <165 Zoll (USA) oder >400cm (International)</span>
+                                            </div>
+                                            <div class="field-item">
+                                                <span class="field-name">Zusätzliche Behandlung</span>
+                                                <span class="field-req">Optional</span>
+                                                <span class="field-desc">Metall/Holz-Verpackung, >70lbs/32kg, >150cm</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <button class="accordion-header">
+                                        <i class="fas fa-tags"></i> Referenzen & Benachrichtigungen (31 Felder)
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <div class="accordion-content">
+                                        <div class="field-list">
+                                            <div class="field-item">
+                                                <span class="field-name">Referenz 1-3</span>
+                                                <span class="field-req">Optional</span>
+                                                <span class="field-desc">Eigene Referenznummern für Tracking</span>
+                                            </div>
+                                            <div class="field-item">
+                                                <span class="field-name">E-Mail-Benachrichtigungen 1-5</span>
+                                                <span class="field-req">Optional</span>
+                                                <span class="field-desc">E-Mail-Adressen und Benachrichtigungstypen (Versand, Ausnahme, Zustellung)</span>
+                                            </div>
+                                            <div class="field-item">
+                                                <span class="field-name">E-Mail-Nachricht</span>
+                                                <span class="field-req">Optional</span>
+                                                <span class="field-desc">Zusätzlicher Text für E-Mail-Benachrichtigungen</span>
+                                            </div>
+                                            <div class="field-item">
+                                                <span class="field-name">E-Mail-Fehleradresse</span>
+                                                <span class="field-req">Optional</span>
+                                                <span class="field-desc">Benachrichtigung bei fehlgeschlagener E-Mail-Zustellung</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <h3><i class="fas fa-tools"></i> Service Type Codes</h3>
+                        <div class="service-codes">
+                            <div class="service-category">
+                                <h4>Inland (USA/Kanada/Puerto Rico)</h4>
+                                <div class="code-list">
+                                    <span class="service-code">01 - Next Day Air</span>
+                                    <span class="service-code">02 - 2nd Day Air</span>
+                                    <span class="service-code">03 - Ground</span>
+                                    <span class="service-code">12 - 3 Day Select</span>
+                                    <span class="service-code">13 - Next Day Air Saver</span>
+                                    <span class="service-code">14 - Next Day Air Early</span>
+                                    <span class="service-code">59 - 2 Day Air A.M</span>
+                                </div>
+                            </div>
+                            <div class="service-category">
+                                <h4>International</h4>
+                                <div class="code-list">
+                                    <span class="service-code highlight">11 - International Standard</span>
+                                    <span class="service-code">07 - International Express</span>
+                                    <span class="service-code">08 - International Expedited</span>
+                                    <span class="service-code">54 - International Express Plus</span>
+                                    <span class="service-code">65 - UPS Saver</span>
+                                    <span class="service-code">70 - UPS Access Point Economy</span>
+                                    <span class="service-code">74 - UPS Express 12:00</span>
+                                </div>
+                            </div>
+                            <div class="service-category">
+                                <h4>Spezial-Services</h4>
+                                <div class="code-list">
+                                    <span class="service-code">82-86 - UPS Today Services</span>
+                                    <span class="service-code">93-95 - SurePost Services</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Häufige Upload-Fehler vermeiden</h3>
+                        <div class="error-prevention">
+                            <div class="error-item">
+                                <h4><i class="fas fa-times-circle"></i> Header-Zeile vorhanden</h4>
+                                <p><strong>Problem:</strong> Datei enthält Spaltennamen in der ersten Zeile</p>
+                                <p><strong>Lösung:</strong> Exportieren Sie ohne Header oder löschen Sie die erste Zeile vor dem Upload</p>
+                            </div>
+                            <div class="error-item">
+                                <h4><i class="fas fa-times-circle"></i> Falsche Feldreihenfolge</h4>
+                                <p><strong>Problem:</strong> Spalten sind nicht in der korrekten UPS-Reihenfolge</p>
+                                <p><strong>Lösung:</strong> Verwenden Sie nur Exporte aus diesem UPS Batch-Manager</p>
+                            </div>
+                            <div class="error-item">
+                                <h4><i class="fas fa-times-circle"></i> Fehlende Pflichtfelder</h4>
+                                <p><strong>Problem:</strong> Firma/Name, Land, Adresse oder Service fehlen</p>
+                                <p><strong>Lösung:</strong> Füllen Sie alle als "Pflichtfeld" markierten Felder aus</p>
+                            </div>
+                            <div class="error-item">
+                                <h4><i class="fas fa-times-circle"></i> Ungültige Ländercodes</h4>
+                                <p><strong>Problem:</strong> Vollständige Ländernamen statt ISO-Codes (z.B. "Deutschland" statt "DE")</p>
+                                <p><strong>Lösung:</strong> Verwenden Sie nur 2-stellige ISO Alpha-2 Codes</p>
+                            </div>
+                            <div class="error-item">
+                                <h4><i class="fas fa-times-circle"></i> Zu viele Sendungen</h4>
+                                <p><strong>Problem:</strong> Mehr als 250 Sendungen in einer Datei</p>
+                                <p><strong>Lösung:</strong> Teilen Sie große Batches in mehrere Dateien mit max. 250 Sendungen auf</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Problembehebung -->
+                <div class="help-tab-content" id="troubleshooting">
+                    <div class="help-section">
+                        <h3><i class="fas fa-question-circle"></i> Häufig gestellte Fragen</h3>
+                        <div class="faq-list" id="faqList">
+                            <!-- FAQ items will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <h3><i class="fas fa-bug"></i> Problembehebung</h3>
+                        <div class="troubleshooting-grid">
+                            <div class="trouble-card">
+                                <h4>Import funktioniert nicht</h4>
+                                <ul>
+                                    <li>Überprüfen Sie das Dateiformat (CSV, SSV, TXT)</li>
+                                    <li>Maximale Dateigröße: 10MB</li>
+                                    <li>Stellen Sie sicher, dass die Datei nicht beschädigt ist</li>
+                                    <li>Verwenden Sie UTF-8 Zeichenkodierung</li>
+                                </ul>
+                            </div>
+                            <div class="trouble-card">
+                                <h4>Felder werden falsch zugeordnet</h4>
+                                <ul>
+                                    <li>Verwenden Sie eindeutige Spaltennamen</li>
+                                    <li>Nutzen Sie deutsche oder englische Standardbegriffe</li>
+                                    <li>Überprüfen Sie die Feldmapping-Vorschau</li>
+                                    <li>Entfernen Sie Sonderzeichen aus Spaltennamen</li>
+                                </ul>
+                            </div>
+                            <div class="trouble-card">
+                                <h4>UPS lehnt Upload ab</h4>
+                                <ul>
+                                    <li>Exportieren Sie ohne Header-Zeile</li>
+                                    <li>Überprüfen Sie alle Pflichtfelder</li>
+                                    <li>Verwenden Sie korrekte Service-Codes</li>
+                                    <li>Beachten Sie die 250-Sendungen-Grenze</li>
+                                </ul>
+                            </div>
+                            <div class="trouble-card">
+                                <h4>Daten gehen verloren</h4>
+                                <ul>
+                                    <li>Alle Daten werden automatisch lokal gespeichert</li>
+                                    <li>Überprüfen Sie Ihren Browser-Speicher</li>
+                                    <li>Exportieren Sie regelmäßig Sicherungskopien</li>
+                                    <li>Verwenden Sie die Aktivitätsverlauf-Funktion</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <h3><i class="fas fa-keyboard"></i> Tastenkombinationen</h3>
+                        <div class="shortcuts-grid">
+                            <div class="shortcut-item">
+                                <kbd>Strg</kbd> + <kbd>Z</kbd>
+                                <span>Rückgängig</span>
+                            </div>
+                            <div class="shortcut-item">
+                                <kbd>Strg</kbd> + <kbd>Y</kbd>
+                                <span>Wiederholen</span>
+                            </div>
+                            <div class="shortcut-item">
+                                <kbd>Strg</kbd> + <kbd>S</kbd>
+                                <span>Speichern</span>
+                            </div>
+                            <div class="shortcut-item">
+                                <kbd>F11</kbd>
+                                <span>Vollbild</span>
+                            </div>
+                            <div class="shortcut-item">
+                                <kbd>Strg</kbd> + <kbd>N</kbd>
+                                <span>Neue Sendung</span>
+                            </div>
+                            <div class="shortcut-item">
+                                <kbd>Strg</kbd> + <kbd>E</kbd>
+                                <span>Export</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="help-section">
+                        <h3><i class="fas fa-shield-alt"></i> Datenschutz & Sicherheit</h3>
+                        <div class="privacy-info">
+                            <div class="privacy-card">
+                                <h4><i class="fas fa-laptop"></i> 100% Lokal</h4>
+                                <p>Alle Ihre Daten bleiben auf Ihrem Computer. Es werden keine Informationen an externe Server übertragen.</p>
+                            </div>
+                            <div class="privacy-card">
+                                <h4><i class="fas fa-wifi-slash"></i> Offline-fähig</h4>
+                                <p>Der UPS Batch-Manager funktioniert vollständig offline. Eine Internetverbindung ist nur für den UPS-Upload erforderlich.</p>
+                            </div>
+                            <div class="privacy-card">
+                                <h4><i class="fas fa-save"></i> Automatisches Speichern</h4>
+                                <p>Ihre Eingaben werden automatisch im Browser-Speicher gesichert und gehen nicht verloren.</p>
                             </div>
                         </div>
                     </div>

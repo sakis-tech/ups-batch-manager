@@ -43,7 +43,9 @@ class UserManager {
      * Initialisiert das User-System
      */
     initialize() {
+        console.log('UserManager wird initialisiert...');
         this.loadUserData();
+        console.log('Aktueller Benutzer:', this.currentUser);
         this.checkLoginRequired();
         this.setupEventListeners();
     }
@@ -91,8 +93,21 @@ class UserManager {
     checkLoginRequired() {
         this.loginRequired = !this.currentUser || !this.currentUser.name;
         
+        console.log('Login erforderlich:', this.loginRequired);
+        
         if (this.loginRequired) {
-            this.showLoginScreen();
+            // Sicherstellen, dass DOM bereit ist
+            if (document.readyState === 'loading') {
+                console.log('DOM lädt noch, warte auf DOMContentLoaded...');
+                document.addEventListener('DOMContentLoaded', () => {
+                    console.log('DOM ist bereit, zeige Login-Screen...');
+                    this.showLoginScreen();
+                });
+            } else {
+                // DOM ist bereits bereit, Login-Screen sofort anzeigen
+                console.log('DOM ist bereit, zeige Login-Screen in 100ms...');
+                setTimeout(() => this.showLoginScreen(), 100);
+            }
         }
     }
     
@@ -120,6 +135,18 @@ class UserManager {
      * Login-Screen anzeigen
      */
     showLoginScreen() {
+        // Überprüfen, ob bereits ein Login-Overlay existiert
+        const existingOverlay = document.getElementById('loginOverlay');
+        if (existingOverlay) {
+            existingOverlay.remove();
+        }
+        
+        // Sicherstellen, dass DOM bereit ist
+        if (!document.body) {
+            console.error('DOM ist noch nicht bereit für Login-Screen');
+            return;
+        }
+        
         // Overlay erstellen
         const overlay = document.createElement('div');
         overlay.id = 'loginOverlay';
@@ -129,16 +156,19 @@ class UserManager {
         // Zum Body hinzufügen
         document.body.appendChild(overlay);
         
-        // Focus auf Name-Eingabe
+        // Focus auf Name-Eingabe mit längerer Verzögerung
         setTimeout(() => {
             const nameInput = document.getElementById('loginNameInput');
             if (nameInput) {
                 nameInput.focus();
             }
-        }, 100);
+        }, 200);
         
         // Prevent body scroll
         document.body.classList.add('login-active');
+        
+        // Debug-Ausgabe
+        console.log('Login-Screen wurde angezeigt');
     }
     
     /**
@@ -147,11 +177,11 @@ class UserManager {
      * @returns {string} HTML für Login-Screen
      */
     getLoginScreenHTML() {
-        const welcome = 
-        const subtitle = 
-        const namePlaceholder = 
-        const loginButton = 
-        const nameRequired = 
+        const welcome = 'Willkommen';
+        const subtitle = 'Bitte gib deinen Namen ein';
+        const namePlaceholder = 'Name eingeben';
+        const loginButton = 'Anmelden';
+        const nameRequired = 'Name ist erforderlich';
         
         return `
             <div class="login-container">
@@ -205,7 +235,7 @@ class UserManager {
         const userName = formData.get('userName')?.trim();
         
         if (!userName) {
-            this.showLoginError(
+            this.showLoginError('Name ist erforderlich');
             return;
         }
         
@@ -279,7 +309,7 @@ class UserManager {
         // Welcome Toast
         if (window.toastSystem) {
             window.toastSystem.showSuccess(
-                `${
+                `Willkommen zurück, ${this.currentUser.name}!`
             );
         }
         
@@ -350,9 +380,7 @@ class UserManager {
         
         // Toast Notification
         if (window.toastSystem) {
-            window.toastSystem.showSuccess(
-                
-            );
+            window.toastSystem.showSuccess('Name erfolgreich geändert');
         }
         
         // UI-Update für Settings-Bereich
@@ -444,6 +472,15 @@ class UserManager {
     }
     
     /**
+     * Login-Screen manuell anzeigen (für Debugging/Testing)
+     */
+    forceShowLogin() {
+        console.log('Login-Screen wird manuell angezeigt...');
+        this.loginRequired = true;
+        this.showLoginScreen();
+    }
+    
+    /**
      * Nutzer-Statistiken abrufen
      * 
      * @returns {Object} Nutzer-Statistiken
@@ -500,29 +537,29 @@ class UserManager {
         
         return `
             <div class="user-settings-section">
-                <h4>${
+                <h4>Benutzer-Einstellungen</h4>
                 <div class="setting-item">
-                    <label class="form-label">${:</label>
+                    <label class="form-label">Name:</label>
                     <input type="text" 
                            id="userNameInput" 
                            class="form-input" 
                            value="${currentName}"
                            maxlength="50"
-                           placeholder="${
-                    <div class="form-help">${
+                           placeholder="Dein Name">
+                    <div class="form-help">Änderungen werden automatisch gespeichert</div>
                 </div>
                 
                 <div class="user-info">
                     <div class="info-item">
-                        <span class="info-label">${:</span>
+                        <span class="info-label">Registriert:</span>
                         <span class="info-value">${createdAt}</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">${:</span>
+                        <span class="info-label">Letzter Login:</span>
                         <span class="info-value">${lastLogin}</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">${:</span>
+                        <span class="info-label">Logins:</span>
                         <span class="info-value">${this.currentUser.loginCount || 1}</span>
                     </div>
                 </div>
@@ -530,7 +567,7 @@ class UserManager {
                 <div class="user-actions">
                     <button class="btn btn-warning btn-sm" onclick="window.userManager.logout()">
                         <i class="fas fa-sign-out-alt"></i>
-                        ${
+                        Abmelden
                     </button>
                 </div>
             </div>
@@ -545,7 +582,7 @@ class UserManager {
     getUserTag() {
         if (!this.currentUser) return '';
         
-        return `${: ${this.currentUser.name}`;
+        return `Benutzer: ${this.currentUser.name}`;
     }
     
     /**
@@ -566,7 +603,18 @@ class UserManager {
 // UserManager global verfügbar machen
 window.UserManager = UserManager;
 
-// Initialisierung nach DOM Load
-document.addEventListener('DOMContentLoaded', () => {
-    window.userManager = new UserManager();
-});
+// Initialisierung nach DOM Load - sicherstellen, dass es nur einmal passiert
+if (!window.userManager) {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!window.userManager) {
+                console.log('UserManager wird initialisiert...');
+                window.userManager = new UserManager();
+            }
+        });
+    } else {
+        // DOM ist bereits bereit
+        console.log('UserManager wird sofort initialisiert...');
+        window.userManager = new UserManager();
+    }
+}

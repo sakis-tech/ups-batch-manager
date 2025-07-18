@@ -150,9 +150,7 @@ class UndoManager {
                 // Success-Toast
                 if (window.toastSystem) {
                     window.toastSystem.showSuccess(
-                        undoOperation.undoData.description || 
-                        
-                        'Aktion rückgängig gemacht'
+                        undoOperation.undoData.description || 'Aktion rückgängig gemacht'
                     );
                 }
                 
@@ -181,10 +179,7 @@ class UndoManager {
             console.error('Fehler beim Undo:', error);
             
             if (window.toastSystem) {
-                window.toastSystem.showError(
-                    
-                    'Fehler beim Rückgängigmachen'
-                );
+                window.toastSystem.showError('Fehler beim Rückgängigmachen');
             }
             
             return false;
@@ -397,7 +392,7 @@ class UndoManager {
             return '';
         }
         
-        const undoText = 
+        const undoText = 'Rückgängig';
         
         return `
             <button class="undo-button" 

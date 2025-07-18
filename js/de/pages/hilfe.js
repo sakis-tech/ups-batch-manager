@@ -2,6 +2,7 @@
 class HilfePage {
     constructor() {
         this.faqs = [];
+        this.currentTab = 'app-usage';
         this.initialize();
     }
 
@@ -9,7 +10,8 @@ class HilfePage {
         this.setupEventListeners();
         this.updateStats();
         this.loadFAQs();
-        this.loadFromStorage();
+        this.setupTabs();
+        this.setupAccordions();
     }
 
     setupEventListeners() {
@@ -31,6 +33,62 @@ class HilfePage {
         }
     }
 
+    setupTabs() {
+        // Tab switching functionality
+        const tabButtons = document.querySelectorAll('.help-tab');
+        const tabContents = document.querySelectorAll('.help-tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetTab = button.getAttribute('data-tab');
+                
+                // Remove active class from all tabs and contents
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                button.classList.add('active');
+                const targetContent = document.getElementById(targetTab);
+                if (targetContent) {
+                    targetContent.classList.add('active');
+                }
+                
+                this.currentTab = targetTab;
+            });
+        });
+    }
+
+    setupAccordions() {
+        // UPS field categories accordion
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const accordionItem = header.parentElement;
+                const content = header.nextElementSibling;
+                const isActive = accordionItem.classList.contains('active');
+                
+                // Close all accordion items
+                accordionHeaders.forEach(otherHeader => {
+                    const otherItem = otherHeader.parentElement;
+                    const otherContent = otherHeader.nextElementSibling;
+                    otherItem.classList.remove('active');
+                    if (otherContent) {
+                        otherContent.style.maxHeight = null;
+                    }
+                });
+                
+                // Open clicked item if it wasn't active
+                if (!isActive) {
+                    accordionItem.classList.add('active');
+                    if (content) {
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                    }
+                }
+            });
+        });
+    }
+
     debounce(func, delay) {
         let timeoutId;
         return function (...args) {
@@ -46,76 +104,150 @@ class HilfePage {
     }
 
     loadFAQs() {
+        // FAQs basierend auf der UPS-JSON-Spezifikation und allgemeine Nutzung
         this.faqs = [
+            // Aus UPS JSON - Frequent Asked Questions
             {
-                id: 'faq-1',
+                id: 'faq-ups-1',
+                question: 'Muss ich alle Felder in der Batch-Datei ausfüllen, auch wenn sie nicht erforderlich sind?',
+                answer: 'Ja, Sie müssen alle Spalten berücksichtigen, auch optionale Felder, die Sie nicht verwenden. Diese Spalten können leer bleiben, dürfen aber nicht gelöscht werden. UPS erwartet alle 66 Felder in der korrekten Reihenfolge.',
+                category: 'UPS-Batch',
+                keywords: ['felder', 'spalten', 'optional', 'leer', 'löschen', 'erforderlich']
+            },
+            {
+                id: 'faq-ups-2',
+                question: 'Welche Services und Abholtage sind für mein Herkunfts- und Zielland gültig?',
+                answer: 'Sie finden Service- und Abholinformationen auf der UPS-Website unter "Zeit und Kosten berechnen". Die verfügbaren Services hängen von der Route und dem Zielland ab.',
+                category: 'UPS-Services',
+                keywords: ['service', 'abholtage', 'herkunft', 'ziel', 'kosten', 'berechnen']
+            },
+            {
+                id: 'faq-ups-3',
+                question: 'Warum erhalte ich einen Adressfehler?',
+                answer: 'Achten Sie auf falsch geschriebene Städte. Verwenden Sie keine Straßentyp-Abkürzungen wie "Str." - schreiben Sie "Straße" aus. Vermeiden Sie Sonderzeichen und ungewöhnliche Abkürzungen.',
+                category: 'UPS-Validierung',
+                keywords: ['adresse', 'fehler', 'stadt', 'straße', 'abkürzung', 'sonderzeichen']
+            },
+            {
+                id: 'faq-ups-4',
+                question: 'Erhalte ich einen Fehler, wenn die Datei nicht korrekt ist?',
+                answer: 'Ja, Sie erhalten einen Fehler, wenn das Format nicht korrekt ist. Achten Sie auf alle Fehlermeldungen, die Sie während des Batch-Import-Prozesses erhalten.',
+                category: 'UPS-Import',
+                keywords: ['fehler', 'format', 'korrekt', 'fehlermeldung', 'import', 'prozess']
+            },
+            {
+                id: 'faq-ups-5',
+                question: 'Kann ich die Header-Zeile in meiner Batch-Datei belassen?',
+                answer: 'Nein, die Header-Zeile darf nicht in der Batch-Datei enthalten sein. Löschen Sie die Header-Zeile vor dem Upload zu UPS.',
+                category: 'UPS-Format',
+                keywords: ['header', 'zeile', 'belassen', 'löschen', 'upload', 'batch']
+            },
+            {
+                id: 'faq-ups-6',
+                question: 'Muss ich die Felder in einer bestimmten Reihenfolge eingeben?',
+                answer: 'Ja, die Felder müssen in Ihrer Import-Datei in derselben Reihenfolge eingegeben werden, wie sie in der UPS-Vorlage erscheinen. Diese Anwendung stellt automatisch die korrekte Reihenfolge sicher.',
+                category: 'UPS-Format',
+                keywords: ['reihenfolge', 'felder', 'eingeben', 'vorlage', 'korrekt']
+            },
+            {
+                id: 'faq-ups-7',
+                question: 'Welches Format sollte ich für das Land verwenden?',
+                answer: 'Verwenden Sie das zweistellige ISO-Länder-Kürzel. Beispiel: "DE" statt "Deutschland", "US" statt "United States".',
+                category: 'UPS-Format',
+                keywords: ['format', 'land', 'iso', 'kürzel', 'deutschland', 'zweistellig']
+            },
+            {
+                id: 'faq-ups-8',
+                question: 'Was gebe ich für das Bundesland/Provinz-Feld bei USA-Sendungen ein?',
+                answer: 'Verwenden Sie die zweistellige Bundesland-Abkürzung. Beispiel: "PA" statt "Pennsylvania", "NJ" statt "New Jersey".',
+                category: 'UPS-Format',
+                keywords: ['bundesland', 'provinz', 'usa', 'abkürzung', 'pennsylvania', 'zweistellig']
+            },
+            {
+                id: 'faq-ups-9',
+                question: 'Kann ich Kommas in meinen Feldern verwenden, z.B. in der Adresse?',
+                answer: 'Nein, verwenden Sie keine Kommas in Ihren Feldern. Kommas würden Fehler bei der Verarbeitung Ihrer Datei verursachen.',
+                category: 'UPS-Format',
+                keywords: ['kommas', 'felder', 'adresse', 'verwenden', 'fehler', 'verarbeitung']
+            },
+            {
+                id: 'faq-ups-10',
+                question: 'Kann ich Batch-Sendungen mit SurePost-Services erstellen?',
+                answer: 'Ja, solange Sie einen Account mit einem SurePost-Vertrag haben, können Sie Batch-Sendungen mit SurePost-Services erstellen.',
+                category: 'UPS-Services',
+                keywords: ['batch', 'surepost', 'services', 'account', 'vertrag']
+            },
+            
+            // Anwendungs-spezifische FAQs
+            {
+                id: 'faq-app-1',
                 question: 'Wie erstelle ich eine neue Sendung?',
-                answer: 'Klicken Sie auf "Neue Sendung" im Dashboard oder in der Sendungen-Übersicht. Füllen Sie alle erforderlichen Felder aus und klicken Sie auf "Speichern". Das System validiert automatisch alle Eingaben.',
-                category: 'Grundlagen',
-                keywords: ['sendung', 'erstellen', 'neu', 'hinzufügen']
+                answer: 'Klicken Sie auf "Sendungen" im Menü und dann auf "Neue Sendung". Füllen Sie alle erforderlichen Felder aus. Pflichtfelder sind mit einem roten Stern markiert.',
+                category: 'Anwendung',
+                keywords: ['sendung', 'erstellen', 'neu', 'hinzufügen', 'pflichtfelder']
             },
             {
-                id: 'faq-2',
+                id: 'faq-app-2',
                 question: 'Welche Dateiformate werden für den Import unterstützt?',
-                answer: 'CSV (Comma Separated Values) und SSV (Semicolon Separated Values) Dateien werden unterstützt. Die maximale Dateigröße beträgt 10MB. Stellen Sie sicher, dass die erste Zeile die Spaltenüberschriften enthält.',
+                answer: 'CSV (Komma-getrennt), SSV (Semikolon-getrennt) und TXT-Dateien werden unterstützt. Die maximale Dateigröße beträgt 10MB.',
                 category: 'Import',
-                keywords: ['csv', 'ssv', 'import', 'datei', 'format']
+                keywords: ['csv', 'ssv', 'txt', 'import', 'datei', 'format', 'größe']
             },
             {
-                id: 'faq-3',
-                question: 'Wie kann ich Sendungen in großen Mengen bearbeiten?',
-                answer: 'Wählen Sie mehrere Sendungen in der Tabelle aus, indem Sie die Checkboxen aktivieren. Anschließend können Sie Bulk-Aktionen wie "Auswahl löschen" verwenden. Sie können auch alle Sendungen auf einmal auswählen.',
-                category: 'Verwaltung',
-                keywords: ['bulk', 'mehrere', 'auswahl', 'löschen', 'bearbeiten']
-            },
-            {
-                id: 'faq-4',
-                question: 'Was bedeuten die Validierungsfehler?',
-                answer: 'Validierungsfehler zeigen an, dass bestimmte Felder nicht den UPS-Anforderungen entsprechen. Überprüfen Sie Pflichtfelder wie Firmenname, Adresse und Postleitzahl. Achten Sie auf das korrekte Format und die Längenbeschränkungen.',
-                category: 'Validierung',
-                keywords: ['validierung', 'fehler', 'pflichtfelder', 'format']
-            },
-            {
-                id: 'faq-5',
-                question: 'Wo werden meine Daten gespeichert?',
-                answer: 'Alle Daten werden lokal in Ihrem Browser gespeichert (localStorage). Es werden keine Daten an externe Server übertragen. Ihre Daten bleiben 100% privat und lokal auf Ihrem Computer.',
-                category: 'Datenschutz',
-                keywords: ['speichern', 'daten', 'lokal', 'privat', 'sicherheit']
-            },
-            {
-                id: 'faq-6',
-                question: 'Wie exportiere ich meine Sendungen?',
-                answer: 'Gehen Sie zur Export-Seite und wählen Sie das gewünschte Format (CSV oder SSV). Sie können zwischen allen Sendungen oder nur gültigen Sendungen wählen. Für schnelle Exports verwenden Sie die Schnell-Export Buttons.',
+                id: 'faq-app-3',
+                question: 'Was ist der Unterschied zwischen CSV und SSV Export?',
+                answer: 'CSV verwendet Kommas als Trennzeichen, SSV verwendet Semikolons. SSV wird für deutsche Excel-Nutzer empfohlen, da es besser mit deutschen Zahlenformaten funktioniert.',
                 category: 'Export',
-                keywords: ['export', 'exportieren', 'csv', 'ssv', 'download']
+                keywords: ['csv', 'ssv', 'unterschied', 'komma', 'semikolon', 'excel', 'deutsch']
             },
             {
-                id: 'faq-7',
-                question: 'Welche UPS Services werden unterstützt?',
-                answer: 'Alle Standard UPS Services werden unterstützt: Next Day Air, 2nd Day Air, Ground, Express, Expedited und Standard. Wählen Sie den passenden Service für Ihre Sendung aus.',
-                category: 'Services',
-                keywords: ['ups', 'service', 'versand', 'express', 'standard']
+                id: 'faq-app-4',
+                question: 'Wo werden meine Daten gespeichert?',
+                answer: 'Alle Daten werden zu 100% lokal in Ihrem Browser gespeichert. Es werden keine Daten an externe Server übertragen. Ihre Daten bleiben vollständig privat.',
+                category: 'Datenschutz',
+                keywords: ['daten', 'speichern', 'lokal', 'browser', 'privat', 'sicherheit']
             },
             {
-                id: 'faq-8',
-                question: 'Wie kann ich meine Einstellungen anpassen?',
-                answer: 'Öffnen Sie die Einstellungen-Seite über das Menü. Dort können Sie Standard-Werte für Land, Service und Maßeinheiten festlegen, das Thema ändern und Dateneinstellungen verwalten.',
+                id: 'faq-app-5',
+                question: 'Funktioniert die Anwendung ohne Internetverbindung?',
+                answer: 'Ja, nach dem ersten Laden funktioniert die Anwendung vollständig offline. Eine Internetverbindung ist nur für den finalen UPS-Upload erforderlich.',
+                category: 'Offline',
+                keywords: ['offline', 'internetverbindung', 'ohne', 'internet', 'ups', 'upload']
+            },
+            {
+                id: 'faq-app-6',
+                question: 'Wie kann ich Sendungen in großen Mengen bearbeiten?',
+                answer: 'Wählen Sie mehrere Sendungen mit den Checkboxen aus und verwenden Sie die Bulk-Aktionen. Sie können auch alle Sendungen auf einmal auswählen.',
+                category: 'Verwaltung',
+                keywords: ['bulk', 'mehrere', 'auswahl', 'checkbox', 'alle', 'bearbeiten']
+            },
+            {
+                id: 'faq-app-7',
+                question: 'Was bedeuten die verschiedenen Validierungsfarben?',
+                answer: 'Grün = Gültige Sendung, Rot = Fehlerhafte Sendung mit Pflichtfeld-Problemen, Gelb = Warnung (z.B. ungewöhnliche Werte). Nur grüne Sendungen können erfolgreich zu UPS hochgeladen werden.',
+                category: 'Validierung',
+                keywords: ['farben', 'grün', 'rot', 'gelb', 'gültig', 'fehler', 'warnung']
+            },
+            {
+                id: 'faq-app-8',
+                question: 'Kann ich meine eigenen Standard-Werte festlegen?',
+                answer: 'Ja, in den Einstellungen können Sie Standard-Werte für Land, Service-Art, Maßeinheiten und andere häufig verwendete Felder festlegen.',
                 category: 'Einstellungen',
-                keywords: ['einstellungen', 'konfiguration', 'standard', 'thema']
+                keywords: ['standard', 'werte', 'einstellungen', 'land', 'service', 'maßeinheiten']
             },
             {
-                id: 'faq-9',
+                id: 'faq-app-9',
+                question: 'Wie kann ich meine Arbeit rückgängig machen?',
+                answer: 'Verwenden Sie Strg+Z zum Rückgängigmachen oder Strg+Y zum Wiederholen. Die Anwendung merkt sich mehrere Schritte Ihres Verlaufs.',
+                category: 'Bedienung',
+                keywords: ['rückgängig', 'undo', 'strg+z', 'strg+y', 'wiederholen', 'verlauf']
+            },
+            {
+                id: 'faq-app-10',
                 question: 'Was ist bei internationalen Sendungen zu beachten?',
-                answer: 'Für internationale Sendungen (außerhalb Deutschlands) sind zusätzliche Felder erforderlich: Zollwert, Warenbeschreibung und ggf. GNIFC-Code. Stellen Sie sicher, dass alle Zollformulare korrekt ausgefüllt sind.',
+                answer: 'Für internationale Sendungen (außerhalb des Versender-Landes) sind zusätzliche Felder erforderlich: Kontaktname, Telefon, Zollwert und Warenbeschreibung.',
                 category: 'International',
-                keywords: ['international', 'zoll', 'zollwert', 'warenbeschreibung']
-            },
-            {
-                id: 'faq-10',
-                question: 'Wie kann ich Fehler in meinen Sendungen finden?',
-                answer: 'Fehlerhafte Sendungen werden rot markiert. Klicken Sie auf eine Sendung, um Details zu den Validierungsfehlern zu sehen. Sie können auch einen Fehler-Report exportieren, um alle Probleme zu analysieren.',
-                category: 'Fehlerbehebung',
-                keywords: ['fehler', 'validierung', 'problem', 'rot', 'markiert']
+                keywords: ['international', 'kontaktname', 'telefon', 'zollwert', 'warenbeschreibung', 'ausland']
             }
         ];
 
@@ -139,18 +271,45 @@ class HilfePage {
             return;
         }
 
-        faqList.innerHTML = faqsToRender.map((faq, index) => `
-            <div class="faq-item" data-faq-id="${faq.id}">
-                <div class="faq-question" onclick="toggleFAQ('${faq.id}')">
-                    <span class="faq-category">${faq.category}</span>
-                    <span class="faq-question-text">${faq.question}</span>
-                    <i class="fas fa-chevron-down"></i>
+        // Group FAQs by category
+        const groupedFAQs = faqsToRender.reduce((groups, faq) => {
+            const category = faq.category;
+            if (!groups[category]) {
+                groups[category] = [];
+            }
+            groups[category].push(faq);
+            return groups;
+        }, {});
+
+        let html = '';
+        Object.entries(groupedFAQs).forEach(([category, faqs]) => {
+            html += `
+                <div class="faq-category">
+                    <h4 class="faq-category-title">${category}</h4>
+                    <div class="faq-category-items">
+            `;
+            
+            faqs.forEach(faq => {
+                html += `
+                    <div class="faq-item" data-faq-id="${faq.id}">
+                        <div class="faq-question" onclick="toggleFAQ('${faq.id}')">
+                            <span class="faq-question-text">${faq.question}</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer" id="${faq.id}">
+                            <p>${faq.answer}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                    </div>
                 </div>
-                <div class="faq-answer" id="${faq.id}">
-                    <p>${faq.answer}</p>
-                </div>
-            </div>
-        `).join('');
+            `;
+        });
+
+        faqList.innerHTML = html;
     }
 
     handleHelpSearch(searchTerm) {
@@ -160,14 +319,62 @@ class HilfePage {
         }
 
         const searchLower = searchTerm.toLowerCase();
-        const filteredFAQs = this.faqs.filter(faq => 
-            faq.question.toLowerCase().includes(searchLower) ||
-            faq.answer.toLowerCase().includes(searchLower) ||
-            faq.category.toLowerCase().includes(searchLower) ||
-            faq.keywords.some(keyword => keyword.includes(searchLower))
+        
+        // Search in all content, not just FAQ tab
+        if (this.currentTab === 'troubleshooting') {
+            // Filter FAQs
+            const filteredFAQs = this.faqs.filter(faq => 
+                faq.question.toLowerCase().includes(searchLower) ||
+                faq.answer.toLowerCase().includes(searchLower) ||
+                faq.category.toLowerCase().includes(searchLower) ||
+                faq.keywords.some(keyword => keyword.includes(searchLower))
+            );
+            this.renderFAQs(filteredFAQs);
+        } else {
+            // Search in other tab content
+            this.highlightSearchTerms(searchTerm);
+        }
+    }
+
+    highlightSearchTerms(searchTerm) {
+        // Remove previous highlights
+        const highlights = document.querySelectorAll('.search-highlight');
+        highlights.forEach(highlight => {
+            const parent = highlight.parentNode;
+            parent.replaceChild(document.createTextNode(highlight.textContent), highlight);
+            parent.normalize();
+        });
+
+        if (!searchTerm.trim()) return;
+
+        // Add new highlights
+        const walker = document.createTreeWalker(
+            document.querySelector(`#${this.currentTab}`),
+            NodeFilter.SHOW_TEXT,
+            null,
+            false
         );
 
-        this.renderFAQs(filteredFAQs);
+        const textNodes = [];
+        let node;
+        while (node = walker.nextNode()) {
+            textNodes.push(node);
+        }
+
+        const searchRegex = new RegExp(`(${searchTerm})`, 'gi');
+        textNodes.forEach(textNode => {
+            if (searchRegex.test(textNode.textContent)) {
+                const parent = textNode.parentNode;
+                const html = textNode.textContent.replace(searchRegex, '<span class="search-highlight">$1</span>');
+                const wrapper = document.createElement('div');
+                wrapper.innerHTML = html;
+                
+                while (wrapper.firstChild) {
+                    parent.insertBefore(wrapper.firstChild, textNode);
+                }
+                parent.removeChild(textNode);
+            }
+        });
     }
 
     toggleFAQ(faqId) {
@@ -176,124 +383,29 @@ class HilfePage {
         
         if (!answer || !question) return;
 
-        // Close all other FAQs
-        document.querySelectorAll('.faq-answer').forEach(otherAnswer => {
-            if (otherAnswer !== answer) {
-                otherAnswer.classList.remove('active');
-                const otherQuestion = otherAnswer.previousElementSibling;
-                if (otherQuestion) {
-                    otherQuestion.classList.remove('active');
+        const isActive = answer.classList.contains('active');
+
+        // Close all other FAQs in same category
+        const categoryContainer = answer.closest('.faq-category-items');
+        if (categoryContainer) {
+            categoryContainer.querySelectorAll('.faq-answer').forEach(otherAnswer => {
+                if (otherAnswer !== answer) {
+                    otherAnswer.classList.remove('active');
+                    const otherQuestion = otherAnswer.previousElementSibling;
+                    if (otherQuestion) {
+                        otherQuestion.classList.remove('active');
+                    }
                 }
-            }
-        });
+            });
+        }
 
         // Toggle current FAQ
-        answer.classList.toggle('active');
-        question.classList.toggle('active');
-    }
-
-    showContactInfo() {
-        const contactInfo = `
-            <div class="contact-info">
-                <h3>Kontakt & Support</h3>
-                <div class="contact-item">
-                    <i class="fas fa-info-circle"></i>
-                    <div>
-                        <strong>Lokale Anwendung</strong>
-                        <p>Diese Anwendung läuft vollständig lokal in Ihrem Browser. Es wird keine Verbindung zu externen Servern hergestellt.</p>
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-book"></i>
-                    <div>
-                        <strong>Dokumentation</strong>
-                        <p>Alle Funktionen sind in der integrierten Hilfe dokumentiert. Verwenden Sie die Suchfunktion, um spezifische Informationen zu finden.</p>
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-shield-alt"></i>
-                    <div>
-                        <strong>Datenschutz</strong>
-                        <p>Ihre Daten werden zu 100% lokal gespeichert und verlassen niemals Ihren Computer.</p>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        if (window.modalSystem && typeof window.modalSystem.createModal === 'function') {
-            window.modalSystem.createModal('contactModal', {
-                title: 'Kontakt & Support',
-                content: contactInfo,
-                size: 'medium'
-            });
-            window.modalSystem.showModal('contactModal');
-        }
-    }
-
-    showKeyboardShortcuts() {
-        const shortcuts = `
-            <div class="keyboard-shortcuts">
-                <h3>Tastenkombinationen</h3>
-                <div class="shortcut-grid">
-                    <div class="shortcut-item">
-                        <kbd>Strg</kbd> + <kbd>S</kbd>
-                        <span>Neue Sendung erstellen</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <kbd>Strg</kbd> + <kbd>I</kbd>
-                        <span>Zur Import-Seite</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <kbd>Strg</kbd> + <kbd>E</kbd>
-                        <span>Zur Export-Seite</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <kbd>Strg</kbd> + <kbd>D</kbd>
-                        <span>Vorlage herunterladen</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <kbd>Esc</kbd>
-                        <span>Filter zurücksetzen</span>
-                    </div>
-                    <div class="shortcut-item">
-                        <kbd>F11</kbd>
-                        <span>Vollbild umschalten</span>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        if (window.modalSystem && typeof window.modalSystem.createModal === 'function') {
-            window.modalSystem.createModal('shortcutsModal', {
-                title: 'Tastenkombinationen',
-                content: shortcuts,
-                size: 'medium'
-            });
-            window.modalSystem.showModal('shortcutsModal');
-        }
-    }
-
-    loadFromStorage() {
-        // Load any help-specific settings
-        const helpSettings = localStorage.getItem('helpSettings');
-        if (helpSettings) {
-            try {
-                const settings = JSON.parse(helpSettings);
-                this.applyHelpSettings(settings);
-            } catch (error) {
-                console.error('Error loading help settings:', error);
-            }
-        }
-    }
-
-    applyHelpSettings(settings) {
-        // Apply help-specific settings
-        if (settings.expandedFAQs) {
-            settings.expandedFAQs.forEach(faqId => {
-                setTimeout(() => {
-                    this.toggleFAQ(faqId);
-                }, 100);
-            });
+        if (!isActive) {
+            answer.classList.add('active');
+            question.classList.add('active');
+        } else {
+            answer.classList.remove('active');
+            question.classList.remove('active');
         }
     }
 
@@ -306,18 +418,6 @@ class HilfePage {
 window.toggleFAQ = (faqId) => {
     if (window.hilfePage) {
         window.hilfePage.toggleFAQ(faqId);
-    }
-};
-
-window.showContactInfo = () => {
-    if (window.hilfePage) {
-        window.hilfePage.showContactInfo();
-    }
-};
-
-window.showKeyboardShortcuts = () => {
-    if (window.hilfePage) {
-        window.hilfePage.showKeyboardShortcuts();
     }
 };
 

@@ -101,9 +101,7 @@ class UnsavedChangesManager {
     setupBeforeUnloadHandler() {
         window.addEventListener('beforeunload', (e) => {
             if (this.hasUnsavedChanges) {
-                const message = 
-                    :
-                    'Du hast ungespeicherte Änderungen. Möchtest du wirklich fortfahren?';
+                const message = 'Du hast ungespeicherte Änderungen. Möchtest du wirklich fortfahren?';
                 
                 e.preventDefault();
                 e.returnValue = message;
@@ -309,21 +307,13 @@ class UnsavedChangesManager {
      * @param {Function} continueAction - Aktion bei Fortsetzung
      */
     showNavigationWarning(continueAction) {
-        const message = 
-            :
-            'Du hast ungespeicherte Änderungen. Möchtest du wirklich fortfahren?';
+        const message = 'Du hast ungespeicherte Änderungen. Möchtest du wirklich fortfahren?';
         
-        const saveText = 
-            :
-            'Änderungen speichern';
+        const saveText = 'Änderungen speichern';
         
-        const discardText = 
-            :
-            'Verwerfen';
+        const discardText = 'Verwerfen';
         
-        const cancelText = 
-            :
-            'Abbrechen';
+        const cancelText = 'Abbrechen';
         
         window.modalSystem?.createModal('unsavedChangesWarning', {
             title: '⚠️ Ungespeicherte Änderungen',
@@ -427,9 +417,7 @@ class UnsavedChangesManager {
         
         // Toast-Benachrichtigung
         if (window.toastSystem) {
-            const message = 
-                :
-                'Änderungen verworfen';
+            const message = 'Änderungen verworfen';
             
             window.toastSystem.showInfo(message);
         }

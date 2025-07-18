@@ -641,7 +641,7 @@ class ShipmentManager {
         }
     }
 
-    // Export für UPS-Format
+    // Export für UPS-Format - vollständig UPS-konform
     exportToUPSFormat(options = {}) {
         const shipments = options.onlyValid ? 
             this.shipments.filter(s => s.isValid) : 
@@ -654,36 +654,159 @@ class ShipmentManager {
         const delimiter = options.format === 'ssv' ? ';' : ',';
         const lines = [];
 
-        // Header erstellen (falls gewünscht)
+        // WICHTIG: UPS erlaubt KEINE Header-Zeile - diese muss vor dem Upload entfernt werden
         if (options.includeHeaders && window.UPS_FIELDS) {
             const headers = Object.keys(window.UPS_FIELDS);
             lines.push(headers.join(delimiter));
         }
 
-        // Sendungsdaten
+        // Sendungsdaten verarbeiten
         if (window.UPS_FIELDS) {
             shipments.forEach(shipment => {
                 const values = Object.entries(window.UPS_FIELDS).map(([upsField, config]) => {
-                    const value = shipment[config.key] || '';
-                    return this.formatCSVValue(value, delimiter);
+                    let value = shipment[config.key] || '';
+                    
+                    // UPS-spezifische Feldverarbeitung
+                    if (window.FIELD_HELPERS && window.FIELD_HELPERS.processFieldForExport) {
+                        value = window.FIELD_HELPERS.processFieldForExport(upsField, value, shipment);
+                    }
+                    
+                    // Standardwerte für leere Felder setzen
+                    if (value === '' && window.DEFAULT_VALUES && window.DEFAULT_VALUES[config.key]) {
+                        value = window.DEFAULT_VALUES[config.key];
+                    }
+                    
+                    // CSV-Formatierung anwenden
+                    return this.formatUPSCSVValue(value, delimiter);
                 });
                 lines.push(values.join(delimiter));
             });
         }
 
         // Aktivität hinzufügen
-        this.addActivity('export', `${shipments.length} Sendungen exportiert`);
+        this.addActivity('export', `${shipments.length} Sendungen als UPS-Batch exportiert`);
 
         return lines.join('\n');
     }
 
-    // CSV-Wert formatieren
-    formatCSVValue(value, delimiter) {
-        const stringValue = String(value);
-        if (stringValue.includes(delimiter) || stringValue.includes('"') || stringValue.includes('\n')) {
+    // UPS-spezifische CSV-Wert-Formatierung
+    formatUPSCSVValue(value, delimiter) {
+        const stringValue = String(value || '');
+        
+        // UPS-spezifische Regeln:
+        // - Keine Kommas in Feldern erlaubt (außer in Anführungszeichen)
+        // - Spezielle Zeichen müssen escaped werden
+        // - Leere Felder müssen trotzdem durch Delimiter getrennt werden
+        
+        if (stringValue.includes(delimiter) || 
+            stringValue.includes('"') || 
+            stringValue.includes('\n') || 
+            stringValue.includes('\r')) {
             return `"${stringValue.replace(/"/g, '""')}"`;
         }
+        
         return stringValue;
+    }
+    
+    // CSV-Wert formatieren (Legacy-Kompatibilität)
+    formatCSVValue(value, delimiter) {
+        return this.formatUPSCSVValue(value, delimiter);
+    }
+    
+    // UPS-Batch-Validierung vor Export
+    validateUPSBatch(shipments) {
+        const errors = [];
+        
+        if (!shipments || shipments.length === 0) {
+            errors.push('Keine Sendungen zum Validieren vorhanden');
+            return errors;
+        }
+        
+        if (shipments.length > 250) {
+            errors.push('UPS-Batch-Dateien dürfen maximal 250 Sendungen enthalten');
+        }
+        
+        shipments.forEach((shipment, index) => {
+            // Validierung der Pflichtfelder
+            if (window.UPS_FIELDS && window.FIELD_VALIDATORS) {
+                Object.entries(window.UPS_FIELDS).forEach(([fieldName, fieldConfig]) => {
+                    const value = shipment[fieldConfig.key];
+                    
+                    // Bedingte Pflichtfelder prüfen
+                    if (fieldConfig.required === 'conditional' && window.FIELD_DEPENDENCIES) {
+                        const dependency = window.FIELD_DEPENDENCIES[fieldConfig.key];
+                        if (dependency && dependency.condition(shipment)) {
+                            if (!value || value === '') {
+                                errors.push(`Sendung ${index + 1}: ${fieldName} ist erforderlich`);
+                            }
+                        }
+                    }
+                    
+                    // Absolute Pflichtfelder prüfen
+                    if (fieldConfig.required === true) {
+                        if (!value || value === '') {
+                            errors.push(`Sendung ${index + 1}: ${fieldName} ist erforderlich`);
+                        }
+                    }
+                    
+                    // Feldvalidierung
+                    if (value && fieldConfig.validation) {
+                        if (!fieldConfig.validation.test(value)) {
+                            errors.push(`Sendung ${index + 1}: ${fieldName} hat ungültiges Format`);
+                        }
+                    }
+                    
+                    // Längenvalidierung
+                    if (value && fieldConfig.maxLength) {
+                        if (String(value).length > fieldConfig.maxLength) {
+                            errors.push(`Sendung ${index + 1}: ${fieldName} ist zu lang (max. ${fieldConfig.maxLength} Zeichen)`);
+                        }
+                    }
+                });
+            }
+            
+            // Lithium-Batterien-Validierung
+            if (window.FIELD_VALIDATORS && window.FIELD_VALIDATORS.validateLithiumBatteries) {
+                if (!window.FIELD_VALIDATORS.validateLithiumBatteries(shipment)) {
+                    errors.push(`Sendung ${index + 1}: Maximal 3 Lithium-Batterie-Felder dürfen ausgewählt werden`);
+                }
+            }
+            
+            // Gewichts- und Dimensionsvalidierung
+            if (window.FIELD_VALIDATORS) {
+                if (shipment.weight && shipment.unitOfMeasure) {
+                    if (!window.FIELD_VALIDATORS.validateWeight(shipment.weight, shipment.unitOfMeasure)) {
+                        errors.push(`Sendung ${index + 1}: Gewicht ist ungültig`);
+                    }
+                }
+                
+                if (shipment.length || shipment.width || shipment.height) {
+                    if (!window.FIELD_VALIDATORS.validateDimensions(
+                        shipment.length, shipment.width, shipment.height, shipment.country
+                    )) {
+                        errors.push(`Sendung ${index + 1}: Paketdimensionen sind ungültig`);
+                    }
+                }
+            }
+        });
+        
+        return errors;
+    }
+    
+    // UPS-Export mit Validierung
+    exportValidatedUPSFormat(options = {}) {
+        const shipments = options.onlyValid ? 
+            this.shipments.filter(s => s.isValid) : 
+            this.shipments;
+            
+        // Validierung durchführen
+        const validationErrors = this.validateUPSBatch(shipments);
+        
+        if (validationErrors.length > 0 && !options.ignoreValidation) {
+            throw new Error('UPS-Validierung fehlgeschlagen:\n' + validationErrors.join('\n'));
+        }
+        
+        return this.exportToUPSFormat(options);
     }
 }
 

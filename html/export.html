@@ -132,7 +132,7 @@
                             Spaltenüberschriften einschließen
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" id="exportOnlyValid">
+                            <input type="checkbox" id="exportOnlyValid" checked>
                             <span class="checkbox-custom"></span>
                             Nur gültige Sendungen exportieren
                         </label>
@@ -140,7 +140,7 @@
                 </div>
 
                 <div class="option-group">
-                    <h3>Sendungen auswählen</h3>
+                    <h3>Sendungen-Statistik</h3>
                     <div class="selection-stats">
                         <div class="stat-item">
                             <span>Gesamt:</span>
@@ -151,21 +151,17 @@
                             <span id="exportValidCount">0</span>
                         </div>
                         <div class="stat-item">
-                            <span>Auswahl:</span>
-                            <span id="exportSelectedCount">0</span>
+                            <span>Fehlerhaft:</span>
+                            <span id="exportInvalidCount">0</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="export-actions">
-                <button class="btn btn-primary" id="quickExportCSV">
-                    <i class="fas fa-file-csv"></i>
-                    CSV exportieren
-                </button>
-                <button class="btn btn-secondary" id="quickExportXLSX">
-                    <i class="fas fa-file-excel"></i>
-                    XLSX exportieren
+                <button class="btn btn-primary btn-large" id="performExport">
+                    <i class="fas fa-file-export"></i>
+                    <span id="exportButtonText">Daten exportieren</span>
                 </button>
                 <button class="btn btn-warning" onclick="exportErrors()">
                     <i class="fas fa-exclamation-triangle"></i>

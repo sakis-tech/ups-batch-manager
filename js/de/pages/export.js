@@ -10,22 +10,40 @@ class ExportPage {
         this.updateStats();
         this.updateExportStats();
         this.loadFromStorage();
+        this.updateExportButtonText();
     }
 
     setupEventListeners() {
-        // Export buttons
-        const quickExportCSV = document.getElementById('quickExportCSV');
-        const quickExportXLSX = document.getElementById('quickExportXLSX');
-
-        if (quickExportCSV) {
-            quickExportCSV.addEventListener('click', () => {
-                this.performQuickExport('csv');
+        // Unified export button
+        const performExportBtn = document.getElementById('performExport');
+        if (performExportBtn) {
+            performExportBtn.addEventListener('click', () => {
+                this.performExport();
             });
         }
 
-        if (quickExportXLSX) {
-            quickExportXLSX.addEventListener('click', () => {
-                this.performQuickExport('xlsx');
+        // Format selection listeners
+        const formatRadios = document.querySelectorAll('input[name="exportFormat"]');
+        formatRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                this.updateExportButtonText();
+            });
+        });
+
+        // Option change listeners
+        const includeHeaders = document.getElementById('includeHeaders');
+        const exportOnlyValid = document.getElementById('exportOnlyValid');
+        
+        if (includeHeaders) {
+            includeHeaders.addEventListener('change', () => {
+                this.saveToStorage();
+            });
+        }
+
+        if (exportOnlyValid) {
+            exportOnlyValid.addEventListener('change', () => {
+                this.saveToStorage();
+                this.updateExportStats();
             });
         }
 
@@ -52,26 +70,52 @@ class ExportPage {
             
             const exportTotalCount = document.getElementById('exportTotalCount');
             const exportValidCount = document.getElementById('exportValidCount');
-            const exportSelectedCount = document.getElementById('exportSelectedCount');
+            const exportInvalidCount = document.getElementById('exportInvalidCount');
             
             if (exportTotalCount) exportTotalCount.textContent = stats.total;
             if (exportValidCount) exportValidCount.textContent = stats.valid;
-            if (exportSelectedCount) exportSelectedCount.textContent = this.selectedShipments.size;
+            if (exportInvalidCount) exportInvalidCount.textContent = stats.invalid;
         }
     }
 
-    performQuickExport(format) {
+    updateExportButtonText() {
+        const selectedFormat = document.querySelector('input[name="exportFormat"]:checked');
+        const buttonText = document.getElementById('exportButtonText');
+        
+        if (selectedFormat && buttonText) {
+            const format = selectedFormat.value.toUpperCase();
+            buttonText.textContent = `Als ${format} exportieren`;
+        }
+    }
+
+    performExport() {
         if (!window.shipmentManager) {
             console.error('ShipmentManager not available');
             return;
         }
 
-        const shipments = window.shipmentManager.getAllShipments();
-        const validShipments = shipments.filter(s => s.isValid);
-        
-        if (validShipments.length === 0) {
+        // Get selected format
+        const selectedFormat = document.querySelector('input[name="exportFormat"]:checked');
+        if (!selectedFormat) {
             if (window.toastSystem && typeof window.toastSystem.showWarning === 'function') {
-                window.toastSystem.showWarning('Keine gültigen Sendungen zum Exportieren vorhanden');
+                window.toastSystem.showWarning('Bitte wählen Sie ein Export-Format aus');
+            }
+            return;
+        }
+
+        const format = selectedFormat.value;
+        const includeHeaders = document.getElementById('includeHeaders')?.checked || false;
+        const exportOnlyValid = document.getElementById('exportOnlyValid')?.checked || false;
+
+        const shipments = window.shipmentManager.getAllShipments();
+        const exportShipments = exportOnlyValid ? shipments.filter(s => s.isValid) : shipments;
+        
+        if (exportShipments.length === 0) {
+            const message = exportOnlyValid 
+                ? 'Keine gültigen Sendungen zum Exportieren vorhanden'
+                : 'Keine Sendungen zum Exportieren vorhanden';
+            if (window.toastSystem && typeof window.toastSystem.showWarning === 'function') {
+                window.toastSystem.showWarning(message);
             }
             return;
         }
@@ -79,34 +123,82 @@ class ExportPage {
         try {
             const options = {
                 format: format,
-                includeHeaders: true,
-                onlyValid: true
+                includeHeaders: includeHeaders,
+                onlyValid: exportOnlyValid
             };
 
             let exportData;
             let filename;
             
             if (format === 'xlsx') {
-                exportData = this.exportToXLSX(validShipments, options);
+                exportData = this.exportToXLSX(exportShipments, options);
                 filename = `ups-batch-${new Date().toISOString().slice(0, 10)}.xlsx`;
             } else {
-                exportData = window.shipmentManager.exportToUPSFormat(options);
-                filename = `ups-batch-${new Date().toISOString().slice(0, 10)}.${format}`;
+                exportData = this.exportToCSV(exportShipments, options);
+                filename = `ups-batch-${new Date().toISOString().slice(0, 10)}.csv`;
             }
             
             this.downloadFile(exportData, filename, format);
 
+            // Save preferences
+            this.saveToStorage();
+
             if (window.toastSystem && typeof window.toastSystem.showSuccess === 'function') {
                 window.toastSystem.showSuccess(
-                    `${validShipments.length} Sendungen erfolgreich als ${format.toUpperCase()} exportiert`
+                    `${exportShipments.length} Sendungen erfolgreich als ${format.toUpperCase()} exportiert`
+                );
+            }
+
+            // Log activity
+            if (window.activityLogger) {
+                window.activityLogger.log('export', 
+                    `${exportShipments.length} Sendungen als ${format.toUpperCase()} exportiert`
                 );
             }
         } catch (error) {
-            console.error('Quick export error:', error);
+            console.error('Export error:', error);
             if (window.toastSystem && typeof window.toastSystem.showError === 'function') {
                 window.toastSystem.showError(`Export fehlgeschlagen: ${error.message}`);
             }
         }
+    }
+
+    exportToCSV(shipments, options) {
+        const headers = [
+            'Firmenname', 'Kontakt', 'Adresse1', 'Adresse2', 'Stadt', 'PLZ', 'Land',
+            'Telefon', 'Email', 'Service', 'Gewicht', 'Paket-Typ', 'Beschreibung',
+            'Referenz', 'Wert', 'Währung'
+        ];
+        
+        let csvContent = '';
+        
+        if (options.includeHeaders) {
+            csvContent += headers.join(',') + '\n';
+        }
+        
+        shipments.forEach(shipment => {
+            const row = [
+                this.escapeCSVField(shipment.companyName || ''),
+                this.escapeCSVField(shipment.contactName || ''),
+                this.escapeCSVField(shipment.address1 || ''),
+                this.escapeCSVField(shipment.address2 || ''),
+                this.escapeCSVField(shipment.city || ''),
+                this.escapeCSVField(shipment.postalCode || ''),
+                this.escapeCSVField(shipment.country || ''),
+                this.escapeCSVField(shipment.phone || ''),
+                this.escapeCSVField(shipment.email || ''),
+                this.escapeCSVField(shipment.service || ''),
+                this.escapeCSVField(shipment.weight || ''),
+                this.escapeCSVField(shipment.packageType || ''),
+                this.escapeCSVField(shipment.description || ''),
+                this.escapeCSVField(shipment.reference || ''),
+                this.escapeCSVField(shipment.value || ''),
+                this.escapeCSVField(shipment.currency || '')
+            ];
+            csvContent += row.join(',') + '\n';
+        });
+        
+        return csvContent;
     }
 
     exportToXLSX(shipments, options) {
